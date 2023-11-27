@@ -5,7 +5,7 @@ import commands from './commands'
 import { loadDB, initDB, dbExists } from './db'
 
 const y = yArgs
-  .scriptName('time-tracker-cli')
+  .scriptName('track-time-cli')
   .middleware(async (argv) => {
     const doesDBExist = await dbExists()
 
