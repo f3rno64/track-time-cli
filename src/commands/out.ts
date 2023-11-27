@@ -37,7 +37,7 @@ const COMMAND_CONFIG = {
 
 const handler = async (args: OutCommandArgs) => {
   const { at, sheet: inputSheetName, entry: inputEntry, db } = args
-  const atDate = parseDate(at)
+  const endDate = _isEmpty(at) ? new Date() : parseDate(at)
 
   const { activeSheetName } = db
   const finalSheetName = _isEmpty(inputSheetName)
@@ -79,7 +79,7 @@ const handler = async (args: OutCommandArgs) => {
       )} ${C.clError('not found')}`
     )
   } else {
-    entry.end = atDate
+    entry.end = endDate
     sheet.activeEntryID = null
 
     await saveDB(db)
