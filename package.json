@@ -1,6 +1,6 @@
 {
   "name": "@f3rno64/time-tracker-cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A CLI utility for tracking tasks in time sheets, inspired by timetrap.",
   "main": "index.js",
   "repository": "https://github.com/f3rno64/time-tracker-cli",
