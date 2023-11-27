@@ -7,7 +7,7 @@ import { type TimeSheetEntry } from '../types'
 
 const printSheetEntry = (entry: TimeSheetEntry, isActive?: boolean): void => {
   const { id, start, end, description } = entry
-  const idUI = C.clID(`${id + 1}`)
+  const idUI = C.clID(`${id}`)
   const startUI = C.clDateAgo(ago(start))
   const finalEnd = end === null ? new Date() : end
   const descriptionUI = C.clText(description)
