@@ -32,7 +32,7 @@ interface ListCommandArgs {
 
 const handler = (args: ListCommandArgs) => {
   const { sheets, db } = args
-  const { sheets: dbSheets } = db
+  const { activeSheetName, sheets: dbSheets } = db
   const sheetsToList = _isEmpty(sheets)
     ? dbSheets
     : sheets.map((name: string): TimeSheet => findSheet(db, name))
@@ -44,6 +44,7 @@ const handler = (args: ListCommandArgs) => {
 
   sheetsToList.forEach((sheet: TimeSheet, i: number): void => {
     const { activeEntryID, name, entries } = sheet
+    const isSheetActive = name === activeSheetName
 
     if (entries.length > 0) {
       const totalSheetDuration = _sum(
@@ -52,10 +53,14 @@ const handler = (args: ListCommandArgs) => {
         )
       )
 
+      const uiActiveStatus = isSheetActive ? C.clHighlight(' (active)') : ''
+
       console.log(
         `${C.clText('- Sheet')} ${C.clSheet(name)} [${C.clHighlight(
           'duration:'
-        )} ${C.clDuration(`${formatDuration(totalSheetDuration)}`)}]`
+        )} ${C.clDuration(
+          `${formatDuration(totalSheetDuration)}`
+        )}]${uiActiveStatus}`
       )
 
       entries.forEach((entry: TimeSheetEntry): void => {
