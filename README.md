@@ -1,4 +1,4 @@
-# time-tracker-cli - A CLI utility for tracking tasks in time sheets, inspired by timetrap.
+# track-time-cli - A CLI utility for tracking tasks in time sheets, inspired by timetrap.
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
@@ -7,10 +7,10 @@
 README TODO
 
 ## Installation
-![npm badge](https://nodei.co/npm/@f3rno64/time-tracker-cli.png?downloads=true&downloadRank=true&stars=true)
+![npm badge](https://nodei.co/npm/track-time-cli.png?downloads=true&downloadRank=true&stars=true)
 
 ```bash
-npm i -g @f3rno64/time-tracker-cli
+npm i -g track-time-cli
 ```
 
 ## Usage
@@ -36,8 +36,8 @@ Distributed under the **MIT** license. See [LICENSE.md](LICENSE.md) for more inf
 5. Create a new Pull Request
 
 <!-- Markdown link & img dfn's -->
-[npm-image]: https://img.shields.io/npm/v/@f3rno64/time-tracker-cli.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/@f3rno64/time-tracker-cli
-[npm-downloads]: https://img.shields.io/npm/dm/@f3rno64/time-tracker-cli.svg?style=flat-square
-[travis-image]: https://img.shields.io/travis/f3rno/@f3rno64/time-tracker-cli/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/f3rno64/@f3rno64/time-tracker-cli
+[npm-image]: https://img.shields.io/npm/v/track-time-cli.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/track-time-cli
+[npm-downloads]: https://img.shields.io/npm/dm/track-time-cli.svg?style=flat-square
+[travis-image]: https://img.shields.io/travis/f3rno/track-time-cli/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/f3rno64/track-time-cli

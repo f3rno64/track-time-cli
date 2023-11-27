@@ -91,35 +91,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@f3rno64/time-tracker-cli@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@f3rno64/time-tracker-cli@workspace:."
-  dependencies:
-    "@eslint/js": "npm:^8.54.0"
-    "@types/colors": "npm:^1.2.1"
-    "@types/eslint__js": "npm:^8"
-    "@types/humanize-duration": "npm:^3.27.3"
-    "@types/lodash": "npm:^4.14.202"
-    "@types/node": "npm:^20.10.0"
-    "@types/yargs": "npm:^17.0.32"
-    "@typescript-eslint/eslint-plugin": "npm:^6.12.0"
-    "@typescript-eslint/parser": "npm:^6.12.0"
-    colors: "npm:^1.4.0"
-    eslint: "npm:^7.32.0"
-    humanize-duration: "npm:^3.31.0"
-    lodash: "npm:^4.17.21"
-    s-ago: "npm:^2.2.0"
-    standard-version: "npm:^9.5.0"
-    time-speak: "npm:^1.1.0"
-    tslib: "npm:^2.6.2"
-    typescript: "npm:^5.3.2"
-    updates: "npm:^15.0.4"
-    yargs: "npm:^17.7.2"
-  bin:
-    tt: ./dist/cli.js
-  languageName: unknown
-  linkType: soft
-
 "@humanwhocodes/config-array@npm:^0.5.0":
   version: 0.5.0
   resolution: "@humanwhocodes/config-array@npm:0.5.0"
@@ -2793,6 +2764,35 @@ __metadata:
   checksum: 487988b0a19c654ff3e1961b87f471702e708fa8a8dd02a298ef16da7206692e8552a0250e8b3e8759270f62e9d8314616f6da274734d3b558b1fc7b7724e892
   languageName: node
   linkType: hard
+
+"track-time-cli@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "track-time-cli@workspace:."
+  dependencies:
+    "@eslint/js": "npm:^8.54.0"
+    "@types/colors": "npm:^1.2.1"
+    "@types/eslint__js": "npm:^8"
+    "@types/humanize-duration": "npm:^3.27.3"
+    "@types/lodash": "npm:^4.14.202"
+    "@types/node": "npm:^20.10.0"
+    "@types/yargs": "npm:^17.0.32"
+    "@typescript-eslint/eslint-plugin": "npm:^6.12.0"
+    "@typescript-eslint/parser": "npm:^6.12.0"
+    colors: "npm:^1.4.0"
+    eslint: "npm:^7.32.0"
+    humanize-duration: "npm:^3.31.0"
+    lodash: "npm:^4.17.21"
+    s-ago: "npm:^2.2.0"
+    standard-version: "npm:^9.5.0"
+    time-speak: "npm:^1.1.0"
+    tslib: "npm:^2.6.2"
+    typescript: "npm:^5.3.2"
+    updates: "npm:^15.0.4"
+    yargs: "npm:^17.7.2"
+  bin:
+    tt: ./dist/cli.js
+  languageName: unknown
+  linkType: soft
 
 "trim-newlines@npm:^3.0.0":
   version: 3.0.1
