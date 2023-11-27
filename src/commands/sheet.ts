@@ -5,13 +5,13 @@ import _isUndefined from 'lodash/isUndefined'
 
 import * as C from '../color'
 import * as P from '../print'
+import * as U from '../utils'
 import { genSheet } from '../sheets'
 import { findSheet, saveDB } from '../db'
-import cmdHandler from '../utils/cmd_handler'
 import { TimeSheetEntry, type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
-  command: ['sheet [name]', '$0 [options] [name]'],
+  command: 'sheet [name]',
   describe: 'Switch to a sheet by name, creating it if needed',
   builder: {
     name: {
