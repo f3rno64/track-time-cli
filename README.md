@@ -12,8 +12,32 @@ README TODO
 ```bash
 npm i -g track-time-cli
 ```
+## Commands
+
+```bash
+track-time-cli [name]
+
+Switch to a sheet by name, creating it if needed
+
+Commands:
+  track-time-cli list [sheets..]            List all time sheet entries
+  track-time-cli sheet [name]               Switch to a sheet by name, creating
+                                            it if needed               [default]
+  track-time-cli sheets                     List all sheets
+  track-time-cli out [options]              Check out of the currently active
+                                            time sheet entry
+  track-time-cli in [options]               Check in to a time sheet
+  <description..>
+
+Options:
+  --help     Show help                                                 [boolean]
+  --version  Show version number                                       [boolean]
+  --name     Sheet name                                 [required] [default: ""]
+  --delete   Delete sheet by name                               [default: false]
+```
 
 ## Usage
+
 ```bash
 tt in --at="2 hours and 24 minutes ago" crafting something
 tt in cooking up something good
