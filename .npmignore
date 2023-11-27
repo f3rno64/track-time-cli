@@ -1,4 +1,6 @@
 /.yarn
+/src
+/test
 tsconfig.json
 .eslintrc.json
 .gitignore
