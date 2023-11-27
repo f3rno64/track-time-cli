@@ -9,6 +9,17 @@
   "bin": {
     "tt": "./dist/cli.js"
   },
+  "homepage": "https://github.com/f3rno64/track-time-cli",
+  "bugs": {
+    "url": "https://github.com/f3rno64/track-time-cli/issues"
+  },
+  "keywords": [
+    "time",
+    "tracking",
+    "cli",
+    "timetrap",
+    "timesheet"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint src/**",
