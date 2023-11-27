@@ -1,5 +1,5 @@
 import * as C from '../color'
-import cmdHandler from '../utils/cmd_handler'
+import * as U from '../utils'
 import { TimeSheet, type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
@@ -38,5 +38,5 @@ const handler = async (args: SheetsCommandArgs) => {
 
 export default {
   ...COMMAND_CONFIG,
-  handler: cmdHandler(handler)
+  handler: U.cmdHandler(handler)
 }

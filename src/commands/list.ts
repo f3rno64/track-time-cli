@@ -6,7 +6,7 @@ import _flattenDeep from 'lodash/flattenDeep'
 
 import * as C from '../color'
 import * as P from '../print'
-import cmdHandler from '../utils/cmd_handler'
+import * as U from '../utils'
 import { findSheet } from '../db'
 import {
   type TimeSheet,
@@ -104,5 +104,5 @@ const handler = (args: ListCommandArgs) => {
 
 export default {
   ...COMMAND_CONFIG,
-  handler: cmdHandler(handler)
+  handler: U.cmdHandler(handler)
 }

@@ -133,5 +133,5 @@ const handler = async (args: SheetCommandArgs) => {
 
 export default {
   ...COMMAND_CONFIG,
-  handler: cmdHandler(handler)
+  handler: U.cmdHandler(handler)
 }

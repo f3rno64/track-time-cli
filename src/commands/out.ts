@@ -4,8 +4,8 @@ import _isFinite from 'lodash/isFinite'
 import formatDuration from 'format-duration'
 
 import * as C from '../color'
+import * as U from '../utils'
 import { findSheet, saveDB } from '../db'
-import cmdHandler from '../utils/cmd_handler'
 import { type TimeTrackerDB } from '../types'
 
 interface OutCommandArgs {
@@ -98,5 +98,5 @@ const handler = async (args: OutCommandArgs) => {
 
 export default {
   ...COMMAND_CONFIG,
-  handler: cmdHandler(handler)
+  handler: U.cmdHandler(handler)
 }

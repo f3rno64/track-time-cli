@@ -4,7 +4,7 @@ import _isUndefined from 'lodash/isUndefined'
 
 import * as C from '../color'
 import * as P from '../print'
-import cmdHandler from '../utils/cmd_handler'
+import * as U from '../utils'
 import { type TimeTrackerDB } from '../types'
 import { findSheet, findSheetEntry, saveDB } from '../db'
 
@@ -88,5 +88,5 @@ const handler = async (args: InCommandArgs) => {
 
 export default {
   ...COMMAND_CONFIG,
-  handler: cmdHandler(handler)
+  handler: U.cmdHandler(handler)
 }
