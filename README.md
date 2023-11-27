@@ -1,10 +1,10 @@
-# track-time-cli - A CLI utility for tracking tasks in time sheets, inspired by timetrap.
+# track-time-cli
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
 [![Downloads Stats][npm-downloads]][npm-url]
 
-README TODO
+A Node.JS CLI utility for tracking tasks in time sheets, inspired by ruby's [timetrap](https://github.com/samg/timetrap).
 
 ## Installation
 ![npm badge](https://nodei.co/npm/track-time-cli.png?downloads=true&downloadRank=true&stars=true)
