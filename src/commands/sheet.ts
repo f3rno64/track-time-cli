@@ -11,35 +11,67 @@ import cmdHandler from '../utils/cmd_handler'
 import { TimeSheetEntry, type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
-  command: ['sheet [name]', '$0 [name]'],
+  command: ['sheet [name]', '$0 [options] [name]'],
   describe: 'Switch to a sheet by name, creating it if needed',
   builder: {
     name: {
       describe: 'Sheet name',
       demandOption: true,
       default: ''
+    },
+
+    delete: {
+      describe: 'Delete sheet by name',
+      default: false
     }
   }
 }
 
 interface SheetCommandArgs {
   db: TimeTrackerDB
+  delete: string
   name: string
 }
 
 const handler = async (args: SheetCommandArgs) => {
-  const { name, db } = args
+  const { name, delete: nameOfSheetToDelete, db } = args
   const { activeSheetName } = db
+
+  if (!_isEmpty(nameOfSheetToDelete)) {
+    const { sheets } = db
+    const existingSheet = findSheet(db, nameOfSheetToDelete)
+
+    if (_isUndefined(existingSheet)) {
+      console.log(
+        `${C.clError('Sheet')} ${C.clSheet(nameOfSheetToDelete)} ${C.clError(
+          'does not exist'
+        )}`
+      )
+      return
+    }
+
+    db.sheets = sheets.filter(
+      ({ name: sName }) => sName !== nameOfSheetToDelete
+    )
+
+    if (db.activeSheetName === nameOfSheetToDelete) {
+      db.activeSheetName = null
+    }
+
+    await saveDB(db)
+
+    console.log(
+      `${C.clText('Deleted sheet')} ${C.clSheet(nameOfSheetToDelete)}`
+    )
+
+    return
+  }
 
   if (_isEmpty(name)) {
     const sheet = findSheet(db, activeSheetName)
 
     if (_isUndefined(sheet)) {
-      console.log(C.clError('Error: no sheet exists'))
-      console.log('')
-      console.log(
-        `${C.clText('Create a sheet with')} ${C.clHighlight('tt sheet [name]')}`
-      )
+      console.log(C.clError('No active time sheet'))
       return
     }
 
