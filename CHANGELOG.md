@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.1](https://github.com/f3rno64/track-time-cli/compare/v1.7.0...v1.7.1) (2023-11-27)
+
+
+### Bug Fixes
+
+* add todo to npmignore ([8ce6f91](https://github.com/f3rno64/track-time-cli/commit/8ce6f9131f43dfb4d2de3543c7ff343c5ffffa7d))
+
 ## [1.7.0](https://github.com/f3rno64/track-time-cli/compare/v1.6.0...v1.7.0) (2023-11-27)
 
 ## [1.6.0](https://github.com/f3rno64/track-time-cli/compare/v1.5.0...v1.6.0) (2023-11-27)
