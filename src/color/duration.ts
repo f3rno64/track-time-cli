@@ -1,5 +1,5 @@
 import colors from 'colors'
 
-const clDuration = (duration: string): string => colors.magenta(duration)
+const clDuration = (duration: string): string => colors.green(duration)
 
 export default clDuration

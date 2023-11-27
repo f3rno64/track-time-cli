@@ -15,7 +15,7 @@ const printSheet = (sheet: TimeSheet, activeSheetName?: string): void => {
   const { name, entries } = sheet
   const uiName = C.clSheet(name)
   const uiEntryCount = C.clText(`${entries.length} entries`)
-  const uiActive = name === activeSheetName ? C.clText('(active)') : ''
+  const uiActive = name === activeSheetName ? C.clHighlight('(active)') : ''
 
   console.log(
     `${C.clText('Sheet')} ${uiName}: ${uiEntryCount} ${uiActive}`.trim()

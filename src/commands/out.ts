@@ -1,6 +1,6 @@
-import ago from 's-ago'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
+import _isFinite from 'lodash/isFinite'
 import humanizeDuration from 'humanize-duration'
 
 import * as C from '../color'
@@ -16,7 +16,7 @@ interface OutCommandArgs {
 }
 
 const COMMAND_CONFIG = {
-  command: 'out [at..]',
+  command: 'out [options]',
   describe: 'Check out of the currently active time sheet entry',
   builder: {
     at: {
@@ -37,7 +37,7 @@ const COMMAND_CONFIG = {
 
 const handler = async (args: OutCommandArgs) => {
   const { at, sheet: inputSheetName, entry: inputEntry, db } = args
-  const finalAt = _isEmpty(at) ? new Date() : parseDate(at.join(' '))
+  const atDate = parseDate(at)
 
   const { activeSheetName } = db
   const finalSheetName = _isEmpty(inputSheetName)
@@ -63,8 +63,10 @@ const handler = async (args: OutCommandArgs) => {
   const { name: sheetName, activeEntryID } = sheet
   const finalActiveEntryID = _isEmpty(inputEntry) ? activeEntryID : inputEntry
 
-  if (_isEmpty(finalActiveEntryID)) {
-    console.log(C.clError('No active entry'))
+  if (!_isFinite(finalActiveEntryID)) {
+    console.log(
+      `${C.clError('No active entry for sheet')} ${C.clSheet(sheetName)}`
+    )
     return
   }
 
@@ -77,20 +79,19 @@ const handler = async (args: OutCommandArgs) => {
       )} ${C.clError('not found')}`
     )
   } else {
-    entry.end = finalAt
+    entry.end = atDate
+    sheet.activeEntryID = null
 
     await saveDB(db)
 
     const { start, end, description } = entry
-    const startUI = C.clDateAgo(ago(start))
-    const endUI = C.clDateAgo(ago(end))
     const descriptionUI = C.clText(description)
     const durationUI = C.clDuration(humanizeDuration(+end - +start))
 
     console.log(
-      `${C.clText('Checked out of sheet')} ${C.clSheet(
+      `${C.clHighlight('Checked out of')} ${C.clSheet(
         sheetName
-      )}: ${descriptionUI} (${startUI} -> ${endUI}) [${durationUI}]`
+      )}: ${descriptionUI} [${durationUI}]`
     )
   }
 }

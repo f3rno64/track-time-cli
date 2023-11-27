@@ -1,9 +1,10 @@
+import { genSheet } from '../sheets'
 import { type TimeTrackerDB } from '../types'
 
 const genDB = () =>
   ({
-    sheets: [],
-    activeSheetName: null
+    sheets: [genSheet('main')],
+    activeSheetName: 'main'
   }) as TimeTrackerDB
 
 export default genDB

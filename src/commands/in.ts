@@ -1,11 +1,13 @@
+import ago from 's-ago'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
+import _isUndefined from 'lodash/isUndefined'
 
 import * as C from '../color'
 import * as P from '../print'
-import { findSheet, saveDB } from '../db'
 import cmdHandler from '../utils/cmd_handler'
 import { type TimeTrackerDB } from '../types'
+import { findSheet, findSheetEntry, saveDB } from '../db'
 
 interface InCommandArgs {
   description: string[]
@@ -42,6 +44,31 @@ const handler = async (args: InCommandArgs) => {
 
   if (typeof sheet === 'undefined') {
     console.log(C.clError('No active sheet'))
+    return
+  }
+
+  const { name, activeEntryID } = sheet
+
+  if (activeEntryID !== null) {
+    const entry = findSheetEntry(db, name, activeEntryID)
+
+    if (_isUndefined(entry)) {
+      throw new Error(
+        `${C.clText('Sheet')} ${C.clSheet(name)} ${C.clText(
+          'has no active entry with id'
+        )} ${C.clID(activeEntryID)}`
+      )
+    }
+
+    const { id, start, description: entryDescription } = entry
+    const startUI = C.clDateAgo(ago(start))
+
+    console.log(
+      `${C.clHighlight('An entry is already active:')} [${C.clID(
+        `${id}`
+      )}] ${C.clText(entryDescription)} (${C.clText('started')} ${startUI})`
+    )
+
     return
   }
 
