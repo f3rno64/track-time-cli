@@ -178,10 +178,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/humanize-duration@npm:^3.27.3":
-  version: 3.27.3
-  resolution: "@types/humanize-duration@npm:3.27.3"
-  checksum: 90fc7ddf6ea526f42eec12f2b6261024ab2c46ce331f46c65848d2618ed133aacf123ae04bb1bc33ab15f584423e4f484b8110c2e480d10c62ee66efca0ee5e2
+"@types/format-duration@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@types/format-duration@npm:1.0.3"
+  checksum: 9f1830d8f102faea4bc087ee10349897cd8b4c10e3f21c915f1dd7262368ce0bd24ecfd97501980ce517cad8abfd05aa1b911f416b49ce3ba6e19c3831862b65
   languageName: node
   linkType: hard
 
@@ -1311,6 +1311,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"format-duration@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "format-duration@npm:3.0.2"
+  checksum: 2873fa124fc75b9d240651707c6f664feb0c4f53015c8d261c6d8b9c37d937303338f994ab66463e4875da60ed93f14bdd60bbccaeaf8ffabe91bc09e0e96cef
+  languageName: node
+  linkType: hard
+
 "fs.realpath@npm:^1.0.0":
   version: 1.0.0
   resolution: "fs.realpath@npm:1.0.0"
@@ -1520,13 +1527,6 @@ __metadata:
   dependencies:
     lru-cache: "npm:^6.0.0"
   checksum: 150fbcb001600336d17fdbae803264abed013548eea7946c2264c49ebe2ebd8c4441ba71dd23dd8e18c65de79d637f98b22d4760ba5fb2e0b15d62543d0fff07
-  languageName: node
-  linkType: hard
-
-"humanize-duration@npm:^3.31.0":
-  version: 3.31.0
-  resolution: "humanize-duration@npm:3.31.0"
-  checksum: a78612f6920bd1348401632f4d707da877878473d0b92b6df4c8eff65700365715daae3238324a2c49e25dbddd5d033d5acbb85edc1551eb5f6120a61eb3fd2b
   languageName: node
   linkType: hard
 
@@ -2772,7 +2772,7 @@ __metadata:
     "@eslint/js": "npm:^8.54.0"
     "@types/colors": "npm:^1.2.1"
     "@types/eslint__js": "npm:^8"
-    "@types/humanize-duration": "npm:^3.27.3"
+    "@types/format-duration": "npm:^1.0.3"
     "@types/lodash": "npm:^4.14.202"
     "@types/node": "npm:^20.10.0"
     "@types/yargs": "npm:^17.0.32"
@@ -2780,7 +2780,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^6.12.0"
     colors: "npm:^1.4.0"
     eslint: "npm:^7.32.0"
-    humanize-duration: "npm:^3.31.0"
+    format-duration: "npm:^3.0.2"
     lodash: "npm:^4.17.21"
     s-ago: "npm:^2.2.0"
     standard-version: "npm:^9.5.0"

@@ -1,7 +1,7 @@
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
-import humanizeDuration from 'humanize-duration'
+import formatDuration from 'format-duration'
 
 import * as C from '../color'
 import { findSheet, saveDB } from '../db'
@@ -86,7 +86,7 @@ const handler = async (args: OutCommandArgs) => {
 
     const { start, end, description } = entry
     const descriptionUI = C.clText(description)
-    const durationUI = C.clDuration(humanizeDuration(+end - +start))
+    const durationUI = C.clDuration(formatDuration(+end - +start))
 
     console.log(
       `${C.clHighlight('Checked out of')} ${C.clSheet(

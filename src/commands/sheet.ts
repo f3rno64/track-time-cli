@@ -1,7 +1,7 @@
 import _sum from 'lodash/sum'
 import _isEmpty from 'lodash/isEmpty'
+import formatDuration from 'format-duration'
 import _isUndefined from 'lodash/isUndefined'
-import humanizeDuration from 'humanize-duration'
 
 import * as C from '../color'
 import * as P from '../print'
@@ -53,9 +53,9 @@ const handler = async (args: SheetCommandArgs) => {
       )
 
       console.log(
-        `${C.clText('- Sheet')} ${C.clSheet(activeSheetName)} [${C.clHighlight(
-          'duration:'
-        )} ${C.clDuration(`${humanizeDuration(totalSheetDuration)}`)}]`
+        `${C.clText('- Sheet')} ${C.clSheet(activeSheetName)} [${C.clDuration(
+          `${formatDuration(totalSheetDuration)}`
+        )}]`
       )
 
       entries.forEach((entry: TimeSheetEntry): void => {

@@ -1,4 +1,3 @@
-import ago from 's-ago'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 import _isUndefined from 'lodash/isUndefined'
@@ -60,13 +59,12 @@ const handler = async (args: InCommandArgs) => {
       )
     }
 
-    const { id, start, description: entryDescription } = entry
-    const startUI = C.clDateAgo(ago(start))
+    const { id, description: entryDescription } = entry
 
     console.log(
       `${C.clHighlight('An entry is already active:')} [${C.clID(
         `${id}`
-      )}] ${C.clText(entryDescription)} (${C.clText('started')} ${startUI})`
+      )}] ${C.clText(entryDescription)}`
     )
 
     return

@@ -19,7 +19,7 @@
     "@eslint/js": "^8.54.0",
     "@types/colors": "^1.2.1",
     "@types/eslint__js": "^8",
-    "@types/humanize-duration": "^3.27.3",
+    "@types/format-duration": "^1.0.3",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20.10.0",
     "@types/yargs": "^17.0.32",
@@ -33,7 +33,7 @@
   "packageManager": "yarn@4.0.2",
   "dependencies": {
     "colors": "^1.4.0",
-    "humanize-duration": "^3.31.0",
+    "format-duration": "^3.0.2",
     "lodash": "^4.17.21",
     "s-ago": "^2.2.0",
     "time-speak": "^1.1.0",

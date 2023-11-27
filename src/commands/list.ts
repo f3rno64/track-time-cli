@@ -1,8 +1,8 @@
 import _sum from 'lodash/sum'
 import _isEmpty from 'lodash/isEmpty'
 import _flatten from 'lodash/flatten'
+import formatDuration from 'format-duration'
 import _flattenDeep from 'lodash/flattenDeep'
-import humanizeDuration from 'humanize-duration'
 
 import * as C from '../color'
 import * as P from '../print'
@@ -55,7 +55,7 @@ const handler = (args: ListCommandArgs) => {
       console.log(
         `${C.clText('- Sheet')} ${C.clSheet(name)} [${C.clHighlight(
           'duration:'
-        )} ${C.clDuration(`${humanizeDuration(totalSheetDuration)}`)}]`
+        )} ${C.clDuration(`${formatDuration(totalSheetDuration)}`)}]`
       )
 
       entries.forEach((entry: TimeSheetEntry): void => {
@@ -80,7 +80,7 @@ const handler = (args: ListCommandArgs) => {
     sheetsToList.map(({ entries }) => entries)
   ).length
 
-  const totalSheetDuration = humanizeDuration(
+  const totalSheetDuration = formatDuration(
     _sum(
       _flattenDeep(
         sheetsToList.map(({ entries }) =>

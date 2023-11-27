@@ -1,6 +1,6 @@
 import ago from 's-ago'
 import colors from 'colors'
-import humanizeDuration from 'humanize-duration'
+import formatDuration from 'format-duration'
 
 import * as C from '../color'
 import { type TimeSheetEntry } from '../types'
@@ -11,10 +11,13 @@ const printSheetEntry = (entry: TimeSheetEntry, isActive?: boolean): void => {
   const startUI = C.clDateAgo(ago(start))
   const finalEnd = end === null ? new Date() : end
   const descriptionUI = C.clText(description)
-  const durationUI = C.clDuration(humanizeDuration(+finalEnd - +start))
-  const result = `[${idUI}] ${descriptionUI}: ${C.clHighlight(
+  const durationUI = C.clDuration(formatDuration(+finalEnd - +start))
+  const endedUI =
+    end === null ? '' : `, ${C.clHighlight('ended')} ${C.clDateAgo(ago(end))}`
+
+  const result = `(${idUI}) [${durationUI}] ${descriptionUI}: ${C.clHighlight(
     'started'
-  )} ${startUI} [${durationUI}]`
+  )} ${startUI}${endedUI}`
 
   if (isActive === true) {
     console.log(colors.bold(`  ${C.clHighlight('*')} ${result}`))
