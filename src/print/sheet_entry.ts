@@ -15,7 +15,11 @@ const printSheetEntry = (entry: TimeSheetEntry, isActive?: boolean): void => {
   const endedUI = end === null ? '' : C.clDateAgo(ago(end))
   const startEndUI = end === null ? `started ${startUI}` : `ended ${endedUI}`
 
-  const result = `(${idUI}) [${durationUI}] ${descriptionUI}: ${startEndUI}`
+  let result = `(${idUI}) [${durationUI}] ${descriptionUI}`
+
+  if (end === null) {
+    result += `: ${startEndUI}`
+  }
 
   if (isActive === true) {
     console.log(colors.bold(`  ${C.clHighlight('*')} ${result}`))

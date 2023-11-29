@@ -1,5 +1,3 @@
-import _isUndefined from 'lodash/isUndefined'
-
 import findSheet from './find_sheet'
 import { type TimeTrackerDB, type TimeSheetEntry } from '../types'
 
@@ -10,7 +8,7 @@ const findSheetEntry = (
 ): TimeSheetEntry | undefined => {
   const sheet = findSheet(db, sheetName)
 
-  if (_isUndefined(sheet)) {
+  if (typeof sheet === 'undefined') {
     throw new Error(`Sheet ${sheetName} does not exist`)
   }
 

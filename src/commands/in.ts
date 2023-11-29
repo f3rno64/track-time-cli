@@ -1,8 +1,6 @@
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
-import _isUndefined from 'lodash/isUndefined'
 
-import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
 import { genEntry } from '../sheets'
@@ -43,8 +41,7 @@ const handler = async (args: InCommandArgs) => {
   const sheet = findSheet(db, activeSheetName)
 
   if (typeof sheet === 'undefined') {
-    console.log(C.clError('No active sheet'))
-    return
+    throw new Error('No active sheet')
   }
 
   const { name, entries, activeEntryID } = sheet
@@ -52,23 +49,13 @@ const handler = async (args: InCommandArgs) => {
   if (activeEntryID !== null) {
     const entry = findSheetEntry(db, name, activeEntryID)
 
-    if (_isUndefined(entry)) {
-      throw new Error(
-        `${C.clText('Sheet')} ${C.clSheet(name)} ${C.clText(
-          'has no active entry with id'
-        )} ${C.clID(activeEntryID)}`
-      )
+    if (typeof entry === 'undefined') {
+      throw new Error(`Sheet ${name} has no entry with ID ${activeEntryID}`)
     }
 
     const { id, description: entryDescription } = entry
 
-    console.log(
-      `${C.clHighlight('An entry is already active:')} [${C.clID(
-        `${id}`
-      )}] ${C.clText(entryDescription)}`
-    )
-
-    return
+    throw new Error(`An entry is already active (${id}): ${entryDescription}`)
   }
 
   const startDate = _isEmpty(at) ? new Date() : parseDate(at)

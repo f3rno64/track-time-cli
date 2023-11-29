@@ -1,7 +1,8 @@
-import * as C from '../color'
+import _max from 'lodash/max'
+
 import * as P from '../print'
 import * as U from '../utils'
-import { type TimeSheetEntry, type TimeTrackerDB } from '../types'
+import { type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
   command: ['now', '$0'],
@@ -15,34 +16,25 @@ interface NowCommandArguments {
 
 const handler = (args: NowCommandArguments) => {
   const { db } = args
-  const { activeSheetName, sheets } = db
-  const sheetsWithActiveEntries = sheets
-    .map(({ name, entries }) => ({
-      sheetName: name,
-      entries: entries.filter(({ end }) => end === null)
-    }))
-    .filter(({ entries }) => entries.length > 0)
+  const { sheets } = db
+  const sheetsWithActiveEntries = sheets.filter(
+    ({ entries }) => entries.filter(({ end }) => end === null).length > 0
+  )
 
   if (sheetsWithActiveEntries.length === 0) {
-    console.log(
-      `[${C.clText('Active sheet')} ${C.clSheet(
-        activeSheetName ?? 'No active sheet'
-      )}] ${C.clText('No active entries')}`
-    )
-    return
+    throw new Error('No sheets with active entries')
   }
 
-  sheetsWithActiveEntries.forEach(({ sheetName, entries }, i: number) => {
-    console.log(`${C.clText('- Sheet')} ${C.clSheet(sheetName)}`)
+  sheetsWithActiveEntries.sort(
+    ({ entries: a }, { entries: b }) =>
+      +_max(a.map(({ start }) => start)) - +_max(b.map(({ start }) => start))
+  )
 
-    entries.map((entry: TimeSheetEntry): void => {
-      P.printSheetEntry(entry, true)
-    })
+  const [sheet] = sheetsWithActiveEntries
+  const { activeEntryID, entries } = sheet
+  const entry = entries.find(({ id }) => id === activeEntryID)
 
-    if (i < sheetsWithActiveEntries.length - 1) {
-      console.log('')
-    }
-  })
+  P.printSheetEntry(entry, true)
 }
 
 export default {

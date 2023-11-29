@@ -1,12 +1,11 @@
 import _isEmpty from 'lodash/isEmpty'
-import _isUndefined from 'lodash/isUndefined'
 
 import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
 import { genSheet } from '../sheets'
 import { findSheet, saveDB } from '../db'
-import { TimeSheetEntry, type TimeTrackerDB } from '../types'
+import { type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'sheet [name]',
@@ -39,13 +38,8 @@ const handler = async (args: SheetCommandArgs) => {
     const { sheets } = db
     const existingSheet = findSheet(db, nameOfSheetToDelete)
 
-    if (_isUndefined(existingSheet)) {
-      console.log(
-        `${C.clError('Sheet')} ${C.clSheet(nameOfSheetToDelete)} ${C.clError(
-          'does not exist'
-        )}`
-      )
-      return
+    if (typeof existingSheet === 'undefined') {
+      throw new Error(`Sheet ${nameOfSheetToDelete} does not exist`)
     }
 
     db.sheets = sheets.filter(
@@ -68,53 +62,39 @@ const handler = async (args: SheetCommandArgs) => {
   if (_isEmpty(name)) {
     const sheet = findSheet(db, activeSheetName)
 
-    if (_isUndefined(sheet)) {
-      console.log(C.clError('No active time sheet'))
-      return
+    if (typeof sheet === 'undefined') {
+      throw new Error('No active time sheet')
     }
 
-    const { activeEntryID, name, entries } = sheet
+    const { name, entries } = sheet
 
-    if (entries.length > 0) {
-      P.printSheetHeader(sheet, name === activeSheetName)
-
-      entries.forEach((entry: TimeSheetEntry): void => {
-        P.printSheetEntry(entry, entry.id === activeEntryID)
-      })
-    } else {
-      console.log(
-        `${C.clHighlight('Sheet')} ${C.clSheet(name)} ${C.clHighlight(
-          'has no entries'
-        )}`
-      )
+    if (entries.length === 0) {
+      throw new Error(`Sheet ${name} has no entries`)
     }
 
-    return
+    P.printSheet(sheet, name === activeSheetName)
   }
 
   if (activeSheetName === name) {
-    console.log(
-      `${C.clText('Sheet')} ${C.clSheet(name)} ${C.clText('already active')}`
-    )
-    return
-  }
+    throw new Error(`Sheet ${name} already active`)
+  } else if (!_isEmpty(name)) {
+    const existingSheet = findSheet(db, name)
+    let sheet = null
 
-  const existingSheet = findSheet(db, name)
-  let sheet = null
+    if (typeof existingSheet === 'undefined') {
+      sheet = genSheet(name)
+      db.sheets.push(sheet)
+      await saveDB(db)
+    } else {
+      sheet = existingSheet
+    }
 
-  if (typeof existingSheet === 'undefined') {
-    sheet = genSheet(name)
-    db.sheets.push(sheet)
+    db.activeSheetName = sheet.name
+
     await saveDB(db)
-  } else {
-    sheet = existingSheet
+
+    console.log(`${C.clText('Switched to time sheet:')} ${C.clSheet(name)}`)
   }
-
-  db.activeSheetName = sheet.name
-
-  await saveDB(db)
-
-  console.log(`${C.clText('Switched to time sheet:')} ${C.clSheet(name)}`)
 }
 
 export default {

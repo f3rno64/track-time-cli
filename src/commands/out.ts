@@ -45,39 +45,26 @@ const handler = async (args: OutCommandArgs) => {
     : inputSheetName
 
   if (_isEmpty(finalSheetName)) {
-    console.log(C.clError('No active sheet'))
-    return
+    throw new Error('No active sheet')
   }
 
   const sheet = findSheet(db, finalSheetName)
 
   if (typeof sheet === 'undefined') {
-    console.log(
-      `${C.clText('Sheet')} ${C.clSheet(inputSheetName)} ${C.clError(
-        'not found'
-      )}`
-    )
-    return
+    throw new Error(`Sheet ${inputSheetName} does not exist`)
   }
 
   const { name: sheetName, activeEntryID } = sheet
   const finalActiveEntryID = _isEmpty(inputEntry) ? activeEntryID : inputEntry
 
   if (!_isFinite(finalActiveEntryID)) {
-    console.log(
-      `${C.clError('No active entry for sheet')} ${C.clSheet(sheetName)}`
-    )
-    return
+    throw new Error(`No active entry for sheet ${sheetName}`)
   }
 
   const entry = sheet.entries.find(({ id }) => id === finalActiveEntryID)
 
   if (typeof entry === 'undefined') {
-    console.log(
-      `${C.clText('Sheet entry')} ${C.clID(
-        `${finalActiveEntryID}`
-      )} ${C.clError('not found')}`
-    )
+    throw new Error(`No entry found with ID ${finalActiveEntryID}`)
   } else {
     entry.end = endDate
     sheet.activeEntryID = null

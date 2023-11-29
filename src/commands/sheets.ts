@@ -1,4 +1,3 @@
-import * as C from '../color'
 import * as U from '../utils'
 import * as P from '../print'
 import { TimeSheet, type TimeTrackerDB } from '../types'
@@ -17,8 +16,7 @@ const handler = async (args: SheetsCommandArgs) => {
   const { activeSheetName, sheets } = db
 
   if (sheets.length === 0) {
-    console.log(C.clText('No time sheets exist'))
-    return
+    throw new Error('No time sheets exist')
   }
 
   sheets.forEach((sheet: TimeSheet): void => {

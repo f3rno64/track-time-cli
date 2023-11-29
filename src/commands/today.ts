@@ -1,11 +1,6 @@
-import * as C from '../color'
 import * as U from '../utils'
 import * as P from '../print'
-import {
-  type TimeSheetEntry,
-  type TimeSheet,
-  type TimeTrackerDB
-} from '../types'
+import { type TimeSheetEntry, type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'today',
@@ -49,28 +44,16 @@ const isEntryForToday = (entry: TimeSheetEntry): boolean => {
 const handler = (args: TodayCommandArguments) => {
   const { db } = args
   const { activeSheetName, sheets } = db
-  const sheetsWithEntriesForToday = sheets
-    .map(({ entries, ...otherSheetData }) => ({
-      entries: entries.filter(isEntryForToday),
-      ...otherSheetData
-    }))
-    .filter(({ entries }) => entries.length > 0)
+  const sheetsWithEntriesForToday = sheets.filter(
+    ({ entries }) => entries.filter(isEntryForToday).length > 0
+  )
 
   if (sheetsWithEntriesForToday.length === 0) {
-    console.log(C.clText('No entries for today'))
-    return
+    throw new Error('No entries for today')
   }
 
-  sheetsWithEntriesForToday.forEach((sheet: TimeSheet, i: number) => {
-    P.printSheet(sheet, sheet.name === activeSheetName)
-
-    if (i < sheetsWithEntriesForToday.length - 1) {
-      console.log('')
-    }
-  })
-
-  console.log('')
-  P.printSummary(sheetsWithEntriesForToday)
+  P.printSummary(sheetsWithEntriesForToday, true)
+  P.printSheets(sheetsWithEntriesForToday, activeSheetName)
 }
 
 export default {

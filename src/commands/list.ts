@@ -1,6 +1,5 @@
 import _isEmpty from 'lodash/isEmpty'
 
-import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
 import { findSheet } from '../db'
@@ -30,20 +29,11 @@ const handler = (args: ListCommandArgs) => {
     : sheets.map((name: string): TimeSheet => findSheet(db, name))
 
   if (_isEmpty(sheetsToList)) {
-    console.error(C.clError('No available sheets'))
-    return
+    throw new Error('No sheets')
   }
 
-  sheetsToList.forEach((sheet: TimeSheet, i: number): void => {
-    P.printSheet(sheet, sheet.name === activeSheetName)
-
-    if (i < sheetsToList.length - 1) {
-      console.log('')
-    }
-  })
-
-  console.log('')
-  P.printSummary(sheetsToList)
+  P.printSummary(sheetsToList, true)
+  P.printSheets(sheetsToList, activeSheetName)
 }
 
 export default {
