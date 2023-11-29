@@ -15,7 +15,7 @@ interface NowCommandArguments {
 
 const handler = (args: NowCommandArguments) => {
   const { db } = args
-  const { sheets } = db
+  const { activeSheetName, sheets } = db
   const sheetsWithActiveEntries = sheets
     .map(({ name, entries }) => ({
       sheetName: name,
@@ -24,7 +24,11 @@ const handler = (args: NowCommandArguments) => {
     .filter(({ entries }) => entries.length > 0)
 
   if (sheetsWithActiveEntries.length === 0) {
-    console.log(C.clText('No sheets have active entries'))
+    console.log(
+      `[${C.clText('Active sheet')} ${C.clSheet(
+        activeSheetName ?? 'No active sheet'
+      )}] ${C.clText('No active entries')}`
+    )
     return
   }
 

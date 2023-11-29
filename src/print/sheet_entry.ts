@@ -12,12 +12,10 @@ const printSheetEntry = (entry: TimeSheetEntry, isActive?: boolean): void => {
   const finalEnd = end === null ? new Date() : end
   const descriptionUI = C.clText(description)
   const durationUI = C.clDuration(formatDuration(+finalEnd - +start))
-  const endedUI =
-    end === null ? '' : `, ${C.clHighlight('ended')} ${C.clDateAgo(ago(end))}`
+  const endedUI = end === null ? '' : C.clDateAgo(ago(end))
+  const startEndUI = end === null ? `started ${startUI}` : `ended ${endedUI}`
 
-  const result = `(${idUI}) [${durationUI}] ${descriptionUI}: ${C.clHighlight(
-    'started'
-  )} ${startUI}${endedUI}`
+  const result = `(${idUI}) [${durationUI}] ${descriptionUI}: ${startEndUI}`
 
   if (isActive === true) {
     console.log(colors.bold(`  ${C.clHighlight('*')} ${result}`))

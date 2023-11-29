@@ -1,6 +1,7 @@
 import sheetsCommand from './sheets'
 import entryCommand from './entry'
 import sheetCommand from './sheet'
+import todayCommand from './today'
 import listCommand from './list'
 import nowCommand from './now'
 import outCommand from './out'
@@ -11,6 +12,7 @@ export default [
   nowCommand,
   outCommand,
   listCommand,
+  todayCommand,
   sheetCommand,
   entryCommand,
   sheetsCommand
