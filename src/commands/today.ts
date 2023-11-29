@@ -1,12 +1,11 @@
-import _sum from 'lodash/sum'
-import _flatten from 'lodash/flatten'
-import formatDuration from 'format-duration'
-
 import * as C from '../color'
 import * as U from '../utils'
 import * as P from '../print'
-import { getTotalSheetDuration } from '../sheets'
-import { type TimeSheetEntry, type TimeTrackerDB } from '../types'
+import {
+  type TimeSheetEntry,
+  type TimeSheet,
+  type TimeTrackerDB
+} from '../types'
 
 const COMMAND_CONFIG = {
   command: 'today',
@@ -49,7 +48,7 @@ const isEntryForToday = (entry: TimeSheetEntry): boolean => {
 
 const handler = (args: TodayCommandArguments) => {
   const { db } = args
-  const { sheets } = db
+  const { activeSheetName, sheets } = db
   const sheetsWithEntriesForToday = sheets
     .map(({ entries, ...otherSheetData }) => ({
       entries: entries.filter(isEntryForToday),
@@ -62,32 +61,16 @@ const handler = (args: TodayCommandArguments) => {
     return
   }
 
-  sheetsWithEntriesForToday.forEach(
-    ({ activeEntryID, name, entries }, i: number) => {
-      console.log(`${C.clText('- Sheet')} ${C.clSheet(name)}`)
+  sheetsWithEntriesForToday.forEach((sheet: TimeSheet, i: number) => {
+    P.printSheet(sheet, sheet.name === activeSheetName)
 
-      entries.map((entry: TimeSheetEntry): void => {
-        P.printSheetEntry(entry, entry.id === activeEntryID)
-      })
-
-      if (i < sheetsWithEntriesForToday.length - 1) {
-        console.log('')
-      }
+    if (i < sheetsWithEntriesForToday.length - 1) {
+      console.log('')
     }
-  )
-
-  const totalEntries = _sum(
-    sheetsWithEntriesForToday.map(({ entries }) => entries.length)
-  )
-  const totalDuration = getTotalSheetDuration(sheetsWithEntriesForToday)
-  const totalDurationUI = formatDuration(totalDuration)
+  })
 
   console.log('')
-  console.log(
-    `${C.clHighlight(`${totalEntries}`)} ${C.clText(
-      'entries, total duration'
-    )} ${C.clDuration(totalDurationUI)}`
-  )
+  P.printSummary(sheetsWithEntriesForToday)
 }
 
 export default {

@@ -1,8 +1,6 @@
-import formatDuration from 'format-duration'
-
 import * as C from '../color'
 import * as U from '../utils'
-import { getTotalSheetDuration } from '../sheets'
+import * as P from '../print'
 import { TimeSheet, type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
@@ -12,23 +10,6 @@ const COMMAND_CONFIG = {
 
 interface SheetsCommandArgs {
   db: TimeTrackerDB
-}
-
-const printSheet = (sheet: TimeSheet, activeSheetName?: string): void => {
-  const { name, entries } = sheet
-  const uiName = C.clSheet(name)
-  const uiEntryCount = C.clText(`${entries.length} entries`)
-  const uiActive = name === activeSheetName ? C.clHighlight('(active)') : ''
-  const totalDuration = getTotalSheetDuration(sheet)
-  const uiTotalDuration = `${C.clDuration(
-    `[${formatDuration(totalDuration)}]`
-  )}`
-
-  console.log(
-    `${C.clText(
-      'Sheet'
-    )} ${uiName}: ${uiEntryCount} ${uiActive} ${uiTotalDuration}`.trim()
-  )
 }
 
 const handler = async (args: SheetsCommandArgs) => {
@@ -41,7 +22,7 @@ const handler = async (args: SheetsCommandArgs) => {
   }
 
   sheets.forEach((sheet: TimeSheet): void => {
-    printSheet(sheet, activeSheetName)
+    P.printSheetHeader(sheet, sheet.name === activeSheetName)
   })
 }
 

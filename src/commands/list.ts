@@ -1,18 +1,10 @@
-import _sum from 'lodash/sum'
 import _isEmpty from 'lodash/isEmpty'
-import _flatten from 'lodash/flatten'
-import formatDuration from 'format-duration'
-import _flattenDeep from 'lodash/flattenDeep'
 
 import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
 import { findSheet } from '../db'
-import {
-  type TimeSheet,
-  type TimeSheetEntry,
-  type TimeTrackerDB
-} from '../types'
+import { type TimeSheet, type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'list [sheets..]',
@@ -43,68 +35,15 @@ const handler = (args: ListCommandArgs) => {
   }
 
   sheetsToList.forEach((sheet: TimeSheet, i: number): void => {
-    const { activeEntryID, name, entries } = sheet
-    const isSheetActive = name === activeSheetName
-
-    if (entries.length > 0) {
-      const totalSheetDuration = _sum(
-        entries.map(
-          ({ start, end }) => (end === null ? Date.now() : +end) - +start
-        )
-      )
-
-      const uiActiveStatus = isSheetActive ? C.clHighlight(' (active)') : ''
-
-      console.log(
-        `${C.clText('- Sheet')} ${C.clSheet(name)} [${C.clHighlight(
-          'duration:'
-        )} ${C.clDuration(
-          `${formatDuration(totalSheetDuration)}`
-        )}]${uiActiveStatus}`
-      )
-
-      entries.forEach((entry: TimeSheetEntry): void => {
-        const { id } = entry
-
-        P.printSheetEntry(entry, id === activeEntryID)
-      })
-    } else {
-      console.log(
-        `${C.clHighlight('Sheet')} ${C.clSheet(name)} ${C.clHighlight(
-          'has no entries'
-        )}`
-      )
-    }
+    P.printSheet(sheet, sheet.name === activeSheetName)
 
     if (i < sheetsToList.length - 1) {
       console.log('')
     }
   })
 
-  const totalEntries = _flatten(
-    sheetsToList.map(({ entries }) => entries)
-  ).length
-
-  const totalSheetDuration = formatDuration(
-    _sum(
-      _flattenDeep(
-        sheetsToList.map(({ entries }) =>
-          entries.map(
-            ({ start, end }): number =>
-              (end === null ? Date.now() : +end) - +start
-          )
-        )
-      )
-    )
-  )
-
   console.log('')
-  console.log(
-    `${C.clText('- Total duration:')} ${C.clDuration(totalSheetDuration)}`
-  )
-  console.log(
-    `${C.clText('- Total entries:')} ${C.clHighlight(`${totalEntries}`)}`
-  )
+  P.printSummary(sheetsToList)
 }
 
 export default {

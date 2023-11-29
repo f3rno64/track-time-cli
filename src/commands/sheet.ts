@@ -1,6 +1,4 @@
-import _sum from 'lodash/sum'
 import _isEmpty from 'lodash/isEmpty'
-import formatDuration from 'format-duration'
 import _isUndefined from 'lodash/isUndefined'
 
 import * as C from '../color'
@@ -78,22 +76,10 @@ const handler = async (args: SheetCommandArgs) => {
     const { activeEntryID, name, entries } = sheet
 
     if (entries.length > 0) {
-      const totalSheetDuration = _sum(
-        entries.map(
-          ({ start, end }) => (end === null ? Date.now() : +end) - +start
-        )
-      )
-
-      console.log(
-        `${C.clText('- Sheet')} ${C.clSheet(activeSheetName)} [${C.clDuration(
-          `${formatDuration(totalSheetDuration)}`
-        )}]`
-      )
+      P.printSheetHeader(sheet, name === activeSheetName)
 
       entries.forEach((entry: TimeSheetEntry): void => {
-        const { id } = entry
-
-        P.printSheetEntry(entry, id === activeEntryID)
+        P.printSheetEntry(entry, entry.id === activeEntryID)
       })
     } else {
       console.log(
