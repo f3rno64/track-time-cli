@@ -5,6 +5,7 @@ import _isUndefined from 'lodash/isUndefined'
 import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
+import { genEntry } from '../sheets'
 import { type TimeTrackerDB } from '../types'
 import { findSheet, findSheetEntry, saveDB } from '../db'
 
@@ -46,7 +47,7 @@ const handler = async (args: InCommandArgs) => {
     return
   }
 
-  const { name, activeEntryID } = sheet
+  const { name, entries, activeEntryID } = sheet
 
   if (activeEntryID !== null) {
     const entry = findSheetEntry(db, name, activeEntryID)
@@ -70,13 +71,8 @@ const handler = async (args: InCommandArgs) => {
     return
   }
 
-  const atDate = _isEmpty(at) ? new Date() : parseDate(at)
-  const entry = {
-    id: sheet.entries.length,
-    start: atDate,
-    end: null,
-    description: finalDescription
-  }
+  const startDate = _isEmpty(at) ? new Date() : parseDate(at)
+  const entry = genEntry(entries.length, finalDescription, startDate)
 
   sheet.entries = [...sheet.entries, entry]
   sheet.activeEntryID = entry.id
