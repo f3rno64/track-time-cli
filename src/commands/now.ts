@@ -31,10 +31,10 @@ const handler = (args: NowCommandArguments) => {
   )
 
   const [sheet] = sheetsWithActiveEntries
-  const { activeEntryID, entries } = sheet
+  const { name, activeEntryID, entries } = sheet
   const entry = entries.find(({ id }) => id === activeEntryID)
 
-  P.printSheetEntry(entry, true)
+  P.printSheetEntry(entry, true, name)
 }
 
 export default {

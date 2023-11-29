@@ -1,11 +1,16 @@
 import ago from 's-ago'
 import colors from 'colors'
+import _isEmpty from 'lodash/isEmpty'
 import formatDuration from 'format-duration'
 
 import * as C from '../color'
 import { type TimeSheetEntry } from '../types'
 
-const printSheetEntry = (entry: TimeSheetEntry, isActive?: boolean): void => {
+const printSheetEntry = (
+  entry: TimeSheetEntry,
+  isActive?: boolean,
+  sheetName?: string
+): void => {
   const { id, start, end, description } = entry
   const idUI = C.clID(`${id}`)
   const startUI = C.clDateAgo(ago(start))
@@ -15,7 +20,12 @@ const printSheetEntry = (entry: TimeSheetEntry, isActive?: boolean): void => {
   const endedUI = end === null ? '' : C.clDateAgo(ago(end))
   const startEndUI = end === null ? `started ${startUI}` : `ended ${endedUI}`
 
-  let result = `(${idUI}) [${durationUI}] ${descriptionUI}`
+  const sheetNamePrefix = _isEmpty(sheetName)
+    ? ''
+    : `${C.clText('sheet')} ${C.clSheet(sheetName)}`
+
+  let result =
+    `${sheetNamePrefix} (${idUI}) [${durationUI}] ${descriptionUI}`.trim()
 
   if (end === null) {
     result += `: ${startEndUI}`
