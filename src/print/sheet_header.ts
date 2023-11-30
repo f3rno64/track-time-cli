@@ -1,5 +1,6 @@
 import formatDuration from 'format-duration'
 
+import log from '../log'
 import * as C from '../color'
 import { type TimeSheet } from '../types'
 import { getTotalSheetDuration } from '../sheets'
@@ -19,9 +20,7 @@ const printSheetHeader = (sheet: TimeSheet, isActive?: boolean): void => {
     entries.length === 0 ? '' : C.clDuration(`[${totalDuration}]`)
   const uiActiveStatus = isActive !== true ? '' : C.clHighlight('active')
 
-  console.log(
-    `${uiPrefix} ${uiName} ${uiEntries} ${uiTotalDuration} ${uiActiveStatus}`
-  )
+  log(`${uiPrefix} ${uiName} ${uiEntries} ${uiTotalDuration} ${uiActiveStatus}`)
 }
 
 export default printSheetHeader

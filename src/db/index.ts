@@ -3,6 +3,7 @@ import loadDB from './load'
 import saveDB from './save'
 import initDB from './init'
 import dbExists from './exists'
+import deleteDB from './delete'
 import findSheet from './find_sheet'
 import findSheetEntry from './find_sheet_entry'
 import findLastActiveSheet from './find_last_active_sheet'
@@ -14,6 +15,7 @@ export {
   genDB,
   initDB,
   dbExists,
+  deleteDB,
   findSheet,
   findSheetEntry,
   findLastActiveSheet,

@@ -3,14 +3,14 @@ import _isEmpty from 'lodash/isEmpty'
 
 import * as P from '../print'
 import * as U from '../utils'
-import { genEntry } from '../sheets'
+import { genSheetEntry } from '../sheets'
 import { type TimeTrackerDB } from '../types'
 import { findSheet, findSheetEntry, saveDB } from '../db'
 
 interface InCommandArgs {
   description: string[]
-  sheet: string
-  at: string
+  sheet?: string
+  at?: string
   db: TimeTrackerDB
 }
 
@@ -59,7 +59,7 @@ const handler = async (args: InCommandArgs) => {
   }
 
   const startDate = _isEmpty(at) ? new Date() : parseDate(at)
-  const entry = genEntry(entries.length, finalDescription, startDate)
+  const entry = genSheetEntry(entries.length, finalDescription, startDate)
 
   sheet.entries = [...sheet.entries, entry]
   sheet.activeEntryID = entry.id
@@ -69,6 +69,7 @@ const handler = async (args: InCommandArgs) => {
   P.printCheckedInEntry(entry)
 }
 
+export { InCommandArgs, handler }
 export default {
   ...COMMAND_CONFIG,
   handler: U.cmdHandler(handler)

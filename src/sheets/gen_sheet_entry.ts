@@ -1,6 +1,6 @@
 import { type TimeSheetEntry } from 'types'
 
-const genEntry = (
+const genSheetEntry = (
   id: number,
   description: string,
   start?: Date,
@@ -12,4 +12,4 @@ const genEntry = (
   end: end ?? null
 })
 
-export default genEntry
+export default genSheetEntry

@@ -2,6 +2,7 @@ import _sum from 'lodash/sum'
 import _isArray from 'lodash/isArray'
 import formatDuration from 'format-duration'
 
+import log from '../log'
 import * as C from '../color'
 import { type TimeSheet } from '../types'
 import { getTotalSheetDuration } from '../sheets'
@@ -24,14 +25,14 @@ const printSummary = (
   const uiTotalSheets = C.clHighlight(`${sheetCount} sheets`)
   const uiTotalEntries = C.clHighlight(`${totalEntries} entries`)
 
-  console.log(
+  log(
     `${C.clText('* Summary:')} ${uiTotalSheets}${C.clHighlight(
       ','
     )} ${uiTotalEntries} ${uiTotalDuration}`
   )
 
   if (appendEmptyLine === true) {
-    console.log('')
+    log('')
   }
 }
 

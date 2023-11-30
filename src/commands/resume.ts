@@ -1,9 +1,10 @@
 import _isFinite from 'lodash/isFinite'
 
+import log from '../log'
 import * as D from '../db'
 import * as U from '../utils'
 import * as C from '../color'
-import { genEntry } from '../sheets'
+import { genSheetEntry } from '../sheets'
 import { type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
@@ -40,14 +41,14 @@ const handler = async (args: ResumeCommandArgs) => {
   }
 
   const newEntryID = id + 1
-  const newEntry = genEntry(newEntryID, description)
+  const newEntry = genSheetEntry(newEntryID, description)
 
   lastActiveSheet.entries.push(newEntry)
   lastActiveSheet.activeEntryID = newEntryID
 
   await D.saveDB(db)
 
-  console.log(
+  log(
     `${C.clSheet(`[sheet ${name}]`)} ${C.clText('Resumed entry')} ${C.clID(
       `(${newEntryID})`
     )} ${C.clHighlight(description)}`

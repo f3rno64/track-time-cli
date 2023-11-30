@@ -3,6 +3,7 @@ import colors from 'colors'
 import _isEmpty from 'lodash/isEmpty'
 import formatDuration from 'format-duration'
 
+import log from '../log'
 import * as C from '../color'
 import { type TimeSheetEntry } from '../types'
 
@@ -32,9 +33,9 @@ const printSheetEntry = (
   }
 
   if (isActive === true) {
-    console.log(colors.bold(`  ${C.clHighlight('*')} ${result}`))
+    log(colors.bold(`  ${C.clHighlight('*')} ${result}`))
   } else {
-    console.log(`    ${result}`)
+    log(`    ${result}`)
   }
 }
 

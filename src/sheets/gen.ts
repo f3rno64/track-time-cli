@@ -1,9 +1,13 @@
-import { type TimeSheet } from 'types'
+import { type TimeSheetEntry, type TimeSheet } from 'types'
 
-const genSheet = (name: string): TimeSheet => ({
+const genSheet = (
+  name: string,
+  entries: TimeSheetEntry[] = [],
+  activeEntryID: number | null = null
+): TimeSheet => ({
   name,
-  entries: [],
-  activeEntryID: null
+  entries,
+  activeEntryID
 })
 
 export default genSheet

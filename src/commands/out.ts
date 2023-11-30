@@ -3,6 +3,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
 import formatDuration from 'format-duration'
 
+import log from '../log'
 import * as C from '../color'
 import * as U from '../utils'
 import { findSheet, saveDB } from '../db'
@@ -75,7 +76,7 @@ const handler = async (args: OutCommandArgs) => {
     const descriptionUI = C.clText(description)
     const durationUI = C.clDuration(formatDuration(+end - +start))
 
-    console.log(
+    log(
       `${C.clHighlight('Checked out of')} ${C.clSheet(
         sheetName
       )}: ${descriptionUI} [${durationUI}]`

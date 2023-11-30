@@ -1,5 +1,6 @@
 import _isEmpty from 'lodash/isEmpty'
 
+import log from '../log'
 import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
@@ -52,9 +53,7 @@ const handler = async (args: SheetCommandArgs) => {
 
     await saveDB(db)
 
-    console.log(
-      `${C.clText('Deleted sheet')} ${C.clSheet(nameOfSheetToDelete)}`
-    )
+    log(`${C.clText('Deleted sheet')} ${C.clSheet(nameOfSheetToDelete)}`)
 
     return
   }
@@ -93,7 +92,7 @@ const handler = async (args: SheetCommandArgs) => {
 
     await saveDB(db)
 
-    console.log(`${C.clText('Switched to time sheet:')} ${C.clSheet(name)}`)
+    log(`${C.clText('Switched to time sheet:')} ${C.clSheet(name)}`)
   }
 }
 
