@@ -37,6 +37,7 @@ const handler = (args: NowCommandArguments) => {
   P.printSheetEntry(entry, true, name)
 }
 
+export { handler }
 export default {
   ...COMMAND_CONFIG,
   handler: U.cmdHandler(handler)

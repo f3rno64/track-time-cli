@@ -22,7 +22,7 @@ const handler = async (args: ResumeCommandArgs) => {
   const lastActiveSheet = D.findLastActiveSheet(db)
 
   if (lastActiveSheet === null) {
-    throw new Error('No recent active sheet')
+    throw new Error('No active sheet')
   }
 
   const { name } = lastActiveSheet
@@ -55,6 +55,7 @@ const handler = async (args: ResumeCommandArgs) => {
   )
 }
 
+export { handler }
 export default {
   ...COMMAND_CONFIG,
   handler: U.cmdHandler(handler)

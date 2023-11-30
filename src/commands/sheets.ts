@@ -24,6 +24,7 @@ const handler = async (args: SheetsCommandArgs) => {
   })
 }
 
+export { handler }
 export default {
   ...COMMAND_CONFIG,
   handler: U.cmdHandler(handler)

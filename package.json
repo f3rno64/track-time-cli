@@ -21,7 +21,7 @@
     "timesheet"
   ],
   "scripts": {
-    "test": "NODE_ENV=test mocha",
+    "test": "NODE_ENV=test nyc mocha --recursive",
     "build": "tsc -p tsconfig.json",
     "lint": "eslint src/**",
     "update-deps": "updates -u -g -c",
@@ -44,6 +44,7 @@
     "chai-as-promised": "^7.1.1",
     "eslint": "^8.54.0",
     "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
     "standard-version": "^9.5.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.2",

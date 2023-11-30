@@ -68,7 +68,10 @@ const handler = async (args: SheetCommandArgs) => {
     const { name, entries } = sheet
 
     if (entries.length === 0) {
-      throw new Error(`Sheet ${name} has no entries`)
+      console.log(
+        `${C.clText('Sheet')} ${C.clSheet(name)} ${C.clText('has no entries')}`
+      )
+      return
     }
 
     P.printSheet(sheet, name === activeSheetName)
@@ -96,6 +99,7 @@ const handler = async (args: SheetCommandArgs) => {
   }
 }
 
+export { handler }
 export default {
   ...COMMAND_CONFIG,
   handler: U.cmdHandler(handler)
