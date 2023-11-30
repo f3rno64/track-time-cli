@@ -15,32 +15,39 @@ npm i -g track-time-cli
 ## Commands
 
 ```bash
-track-time-cli [name]
+track-time-cli
 
-Switch to a sheet by name, creating it if needed
+Display all active time sheet entries
 
 Commands:
-  track-time-cli list [sheets..]            List all time sheet entries
-  track-time-cli sheet [name]               Switch to a sheet by name, creating
-                                            it if needed               [default]
-  track-time-cli sheets                     List all sheets
-  track-time-cli out [options]              Check out of the currently active
-                                            time sheet entry
   track-time-cli in [options]               Check in to a time sheet
   <description..>
+  track-time-cli now                        Display all active time sheet
+                                            entries                    [default]
+  track-time-cli out [options]              Check out of the currently active
+                                            time sheet entry
+  track-time-cli list [sheets..]            List all time sheet entries
+  track-time-cli edit                       View, modify, or delete a time sheet
+                                            entry
+  track-time-cli today                      Display a summary of activity for
+                                            today
+  track-time-cli sheet [name]               Switch to a sheet by name, creating
+                                            it if needed
+  track-time-cli sheets                     List all sheets
+  track-time-cli resume                     Resume the last active entry
 
 Options:
   --help     Show help                                                 [boolean]
   --version  Show version number                                       [boolean]
-  --name     Sheet name                                 [required] [default: ""]
-  --delete   Delete sheet by name                               [default: false]
 ```
 
 ## Usage
 
 ```bash
-tt in --at="2 hours and 24 minutes ago" crafting something
+tt in --at '2 hours and 24 minutes ago' crafting something
 tt in cooking up something good
+tt out
+tt today
 ```
 
 ### Release History
