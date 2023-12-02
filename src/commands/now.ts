@@ -1,5 +1,6 @@
 import _max from 'lodash/max'
 
+import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
 import { type TimeTrackerDB } from '../types'
@@ -22,7 +23,8 @@ const handler = (args: NowCommandArguments) => {
   )
 
   if (sheetsWithActiveEntries.length === 0) {
-    throw new Error('No sheets with active entries')
+    console.log(C.clHighlight('No active entry'))
+    return
   }
 
   sheetsWithActiveEntries.sort(
@@ -34,7 +36,7 @@ const handler = (args: NowCommandArguments) => {
   const { name, activeEntryID, entries } = sheet
   const entry = entries.find(({ id }) => id === activeEntryID)
 
-  P.printSheetEntry(entry, true, name)
+  P.printActiveSheetEntry(entry, name)
 }
 
 export { handler }

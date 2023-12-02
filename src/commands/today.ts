@@ -44,12 +44,12 @@ const isEntryForToday = (entry: TimeSheetEntry): boolean => {
 const handler = (args: TodayCommandArguments) => {
   const { db } = args
   const { activeSheetName, sheets } = db
-  const sheetsWithEntriesForToday = sheets.map(
-    ({ entries, ...otherSheetData }) => ({
+  const sheetsWithEntriesForToday = sheets
+    .map(({ entries, ...otherSheetData }) => ({
       entries: entries.filter(isEntryForToday),
       ...otherSheetData
-    })
-  )
+    }))
+    .filter(({ entries }) => entries.length > 0)
 
   if (sheetsWithEntriesForToday.length === 0) {
     throw new Error('No entries for today')

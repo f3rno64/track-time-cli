@@ -49,9 +49,9 @@ const handler = async (args: ResumeCommandArgs) => {
   await D.saveDB(db)
 
   log(
-    `${C.clSheet(`[sheet ${name}]`)} ${C.clText('Resumed entry')} ${C.clID(
-      `(${newEntryID})`
-    )} ${C.clHighlight(description)}`
+    `${C.clSheet(`${name}:`)} ${C.clText('resumed')} ${C.clHighlight(
+      description
+    )}`
   )
 }
 
