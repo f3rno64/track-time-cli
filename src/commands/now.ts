@@ -1,5 +1,6 @@
 import _max from 'lodash/max'
 
+import log from '../log'
 import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
@@ -17,13 +18,15 @@ interface NowCommandArguments {
 
 const handler = (args: NowCommandArguments) => {
   const { db } = args
-  const { sheets } = db
+  const { activeSheetName, sheets } = db
   const sheetsWithActiveEntries = sheets.filter(
     ({ entries }) => entries.filter(({ end }) => end === null).length > 0
   )
 
   if (sheetsWithActiveEntries.length === 0) {
-    console.log(C.clHighlight('No active entry'))
+    log(
+      `${C.clSheet(`[${activeSheetName}]`)} ${C.clHighlight('No active entry')}`
+    )
     return
   }
 
