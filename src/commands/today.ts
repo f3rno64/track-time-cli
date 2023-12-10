@@ -9,6 +9,7 @@ const COMMAND_CONFIG = {
 
 interface TodayCommandArguments {
   db: TimeTrackerDB
+  ago: boolean
 }
 
 const isEntryForToday = (entry: TimeSheetEntry): boolean => {
@@ -34,7 +35,7 @@ const handler = (args: TodayCommandArguments) => {
   }
 
   P.printSummary(sheetsWithEntriesForToday, true)
-  P.printSheets(sheetsWithEntriesForToday, activeSheetName)
+  P.printSheets(sheetsWithEntriesForToday, activeSheetName, true)
 }
 
 export default {

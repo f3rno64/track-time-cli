@@ -37,7 +37,7 @@ const handler = (args: YesterdayCommandArguments) => {
   }
 
   P.printSummary(sheetsWithEntriesForYesterday, true)
-  P.printSheets(sheetsWithEntriesForYesterday, activeSheetName)
+  P.printSheets(sheetsWithEntriesForYesterday, activeSheetName, true)
 }
 
 export default {

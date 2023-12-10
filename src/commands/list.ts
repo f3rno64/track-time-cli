@@ -12,6 +12,11 @@ const COMMAND_CONFIG = {
   builder: {
     sheets: {
       description: 'List of sheet names to list entries from'
+    },
+
+    ago: {
+      description: 'Print dates as relative time (e.g. 5 minutes ago)',
+      type: 'boolean'
     }
   }
 }
@@ -19,10 +24,11 @@ const COMMAND_CONFIG = {
 interface ListCommandArgs {
   sheets: string[]
   db: TimeTrackerDB
+  ago: boolean
 }
 
 const handler = (args: ListCommandArgs) => {
-  const { sheets, db } = args
+  const { ago, sheets, db } = args
   const { activeSheetName, sheets: dbSheets } = db
   const sheetsToList = _isEmpty(sheets)
     ? dbSheets
@@ -33,7 +39,7 @@ const handler = (args: ListCommandArgs) => {
   }
 
   P.printSummary(sheetsToList, true)
-  P.printSheets(sheetsToList, activeSheetName)
+  P.printSheets(sheetsToList, activeSheetName, ago === true)
 }
 
 export default {

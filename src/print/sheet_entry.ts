@@ -10,27 +10,34 @@ import { type TimeSheetEntry } from '../types'
 const printSheetEntry = (
   entry: TimeSheetEntry,
   isActive?: boolean,
-  sheetName?: string
+  sheetName?: string,
+  printDateAgo?: boolean
 ): void => {
   const { id, start, end, description } = entry
   const idUI = C.clID(`${id}`)
-  const startUI = C.clDateAgo(ago(start))
+  const startUI = C.clDateAgo(
+    printDateAgo ? ago(start) : new Date(start).toLocaleDateString()
+  )
   const finalEnd = end === null ? new Date() : end
   const descriptionUI = C.clText(description)
   const durationUI = C.clDuration(formatDuration(+finalEnd - +start))
-  const endedUI = end === null ? '' : C.clDateAgo(ago(end))
-  const startEndUI = end === null ? `started ${startUI}` : `ended ${endedUI}`
+
+  // prettier-ignore
+  const endUI =
+    end === null
+      ? ''
+      : C.clDateAgo(
+        printDateAgo ? ago(start) : new Date(end).toLocaleDateString()
+      )
+
+  const dateUI = end === null ? startUI : endUI
 
   const sheetNamePrefix = _isEmpty(sheetName)
     ? ''
     : `${C.clText('sheet')} ${C.clSheet(sheetName)}`
 
-  let result =
-    `${sheetNamePrefix} (${idUI}) [${durationUI}] ${descriptionUI}`.trim()
-
-  if (end === null) {
-    result += `: ${startEndUI}`
-  }
+  const result =
+    `${sheetNamePrefix} (${idUI}) [${durationUI}] ${dateUI}: ${descriptionUI}`.trim()
 
   if (isActive === true) {
     log(colors.bold(`  ${C.clHighlight('*')} ${result}`))
