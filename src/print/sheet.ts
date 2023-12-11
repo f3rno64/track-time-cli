@@ -6,17 +6,12 @@ const printSheet = (
   isActive?: boolean,
   printDateAgo?: boolean
 ): void => {
-  const { activeEntryID, entries, name: sheetName } = sheet
+  const { activeEntryID, entries } = sheet
 
   P.printSheetHeader(sheet, isActive)
 
   entries.map((entry: TimeSheetEntry): void => {
-    P.printSheetEntry(
-      entry,
-      entry.id === activeEntryID,
-      sheetName,
-      printDateAgo
-    )
+    P.printSheetEntry(entry, entry.id === activeEntryID, '', printDateAgo)
   })
 }
 
