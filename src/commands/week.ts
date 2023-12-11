@@ -28,7 +28,7 @@ interface WeekCommandArguments {
 
 const DAY_MS = 24 * 60 * 60 * 1000
 const LAST_WEEK_DATE = new Date(
-  +U.getEndDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) + 1
+  +U.getStartDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
 )
 
 const getSheetsWithEntriesInLastWeek = (sheets: TimeSheet[]) => {
