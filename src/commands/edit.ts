@@ -1,14 +1,16 @@
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
+import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
 
 import log from '../log'
+import * as C from '../color'
 import * as U from '../utils'
 import { type TimeTrackerDB } from '../types'
 import { findSheet, findSheetEntry, saveDB } from '../db'
 
 const COMMAND_CONFIG = {
-  command: 'edit',
+  command: 'edit [description..]',
   describe: 'View, modify, or delete a time sheet entry',
   builder: {
     sheet: {
@@ -46,67 +48,98 @@ interface EditCommandArguments {
 
 const handler = async (args: EditCommandArguments): Promise<void> => {
   const {
-    db,
+    description: inputDescription,
     sheet: inputSheet,
-    name: inputName,
     entry: inputEntry,
-    description,
+    name: inputName,
     delete: del,
     start,
+    db,
     end
   } = args
 
-  if (_isEmpty(inputSheet) && _isEmpty(inputEntry)) {
-    throw new Error('No sheet or entry specified')
+  const { activeSheetName } = db
+  const finalSheetName = _isEmpty(inputSheet) ? activeSheetName : inputSheet
+  const description = _isArray(inputDescription)
+    ? inputDescription.join(' ')
+    : inputDescription
+
+  if (_isEmpty(finalSheetName)) {
+    throw new Error('No sheet specified and none active')
   }
 
-  if (!_isEmpty(inputSheet)) {
-    const sheet = findSheet(db, inputSheet)
+  const sheet = findSheet(db, finalSheetName)
 
-    if (typeof sheet === 'undefined') {
-      throw new Error(`Sheet ${inputSheet} not found`)
+  if (typeof sheet === 'undefined') {
+    throw new Error(`Sheet ${finalSheetName} not found`)
+  }
+
+  const { activeEntryID } = sheet
+  const finalEntryID = _isEmpty(inputEntry) ? activeEntryID : +inputEntry
+
+  if (_isFinite(+finalEntryID)) {
+    const entry = findSheetEntry(db, finalSheetName, +finalEntryID)
+
+    if (typeof entry === 'undefined') {
+      throw new Error(
+        `Entry ${+finalEntryID} not found in sheet ${finalSheetName}`
+      )
     }
 
-    if (_isFinite(+inputEntry)) {
-      const entry = findSheetEntry(db, inputSheet, +inputEntry)
+    if (del) {
+      sheet.entries = sheet.entries.filter((e) => e.id !== entry.id)
+      log(
+        `${C.clText('Deleted entry')} ${C.clHighlight(
+          `${finalEntryID}`
+        )} ${C.clText('from sheet')} ${C.clSheet(finalSheetName)}`
+      )
+    } else if (!_isEmpty(description)) {
+      entry.description = description
+      log(
+        `${C.clText('Updated entry')} ${C.clHighlight(
+          `${finalEntryID}`
+        )} ${C.clText('in sheet')} ${C.clSheet(finalSheetName)}: ${C.clText(
+          description
+        )}`
+      )
+    } else if (!_isEmpty(start)) {
+      const startDate = parseDate(start)
+      entry.start = startDate
+      log(
+        `${C.clText('Updated entry')} ${C.clHighlight(
+          `${finalEntryID}`
+        )} ${C.clText('start date to')} ${C.clDateAgo(
+          startDate.toLocaleString()
+        )}`
+      )
+    } else if (!_isEmpty(end)) {
+      const endDate = parseDate(end)
 
-      if (typeof entry === 'undefined') {
-        throw new Error(`Entry ${inputEntry} not found in sheet ${inputSheet}`)
-      }
+      entry.end = endDate
 
-      if (del) {
-        sheet.entries = sheet.entries.filter((e) => e.id !== entry.id)
-        log(`Deleted entry ${inputEntry} from sheet ${inputSheet}`)
-      } else if (!_isEmpty(description)) {
-        entry.description = description
-        log(`Updated entry ${inputEntry} in sheet ${inputSheet}`)
-      } else if (!_isEmpty(start)) {
-        const startDate = parseDate(start)
-        entry.start = startDate
-        log(
-          `Updated entry ${inputEntry} start date to ${startDate.toLocaleString()}`
-        )
-      } else if (!_isEmpty(end)) {
-        const endDate = parseDate(end)
-        entry.end = endDate
-        log(
-          `Updated entry ${inputEntry} end date to ${endDate.toLocaleString()}`
-        )
-      }
+      log(
+        `${C.clText('Updated entry')} ${C.clHighlight(
+          `${finalEntryID}`
+        )} ${C.clText('end date to')} ${C.clDateAgo(endDate.toLocaleString())}`
+      )
+    }
+  } else {
+    if (del) {
+      db.sheets = db.sheets.filter((s) => s.name !== finalSheetName)
+      log(`${C.clText('Deleted sheet')} ${C.clSheet(finalSheetName)}`)
+    } else if (!_isEmpty(inputName)) {
+      sheet.name = inputName
+      log(
+        `${C.clText('Renamed sheet')} ${C.clSheet(finalSheetName)} ${C.clText(
+          'to'
+        )} ${C.clHighlight(inputName)}`
+      )
     } else {
-      if (del) {
-        db.sheets = db.sheets.filter((s) => s.name !== inputSheet)
-        log(`Deleted sheet ${inputSheet}`)
-      } else if (!_isEmpty(inputName)) {
-        sheet.name = inputName
-        log(`Renamed sheet ${inputSheet} to ${inputName}`)
-      } else {
-        throw new Error('No new name specified')
-      }
+      throw new Error(`No new name specified for sheet ${finalSheetName}`)
     }
-
-    await saveDB(db)
   }
+
+  await saveDB(db)
 }
 
 export { handler, COMMAND_CONFIG, type EditCommandArguments }
