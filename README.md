@@ -26,8 +26,10 @@ Commands:
                                             entries                    [default]
   track-time-cli out [options]              Check out of the currently active
                                             time sheet entry
+  track-time-cli week                       Display a summary of activity for
+                                            the past week
   track-time-cli list [sheets..]            List all time sheet entries
-  track-time-cli edit                       View, modify, or delete a time sheet
+  track-time-cli edit [description..]       View, modify, or delete a time sheet
                                             entry
   track-time-cli today                      Display a summary of activity for
                                             today
@@ -35,6 +37,8 @@ Commands:
                                             it if needed
   track-time-cli sheets                     List all sheets
   track-time-cli resume                     Resume the last active entry
+  track-time-cli yesterday                  Display a summary of activity for
+                                            yesterday
 
 Options:
   --help     Show help                                                 [boolean]
