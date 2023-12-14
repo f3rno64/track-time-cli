@@ -82,9 +82,9 @@ const handler = (args: ListCommandArgs) => {
 
     log('')
     log(
-      `${C.clText('Sheets not shown')}: ${C.clHighlightRed(
-        `${sheetsNotShownCount}`
-      )}; ${C.clText('use --all to show')}`
+      `  ${C.clHighlightRed(`${sheetsNotShownCount}`)} ${C.clText(
+        'Sheets not shown'
+      )}. ${C.clText('use --all to show')}`
     )
   }
 }
