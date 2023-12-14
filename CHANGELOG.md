@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.17.0](https://github.com/f3rno64/track-time-cli/compare/v1.16.0...v1.17.0) (2023-12-14)
+
+
+### Bug Fixes
+
+* manifest bin value ([5c6b5d2](https://github.com/f3rno64/track-time-cli/commit/5c6b5d2885498187317ebd47baaa7d5ec0005377))
+
 ## [1.16.0](https://github.com/f3rno64/track-time-cli/compare/v1.14.4...v1.16.0) (2023-12-14)
 
 
