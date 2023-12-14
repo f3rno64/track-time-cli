@@ -117,9 +117,7 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
       log(
         `${C.clText('Updated entry')} ${C.clHighlight(
           `${finalEntryID}`
-        )} ${C.clText('start date to')} ${C.clDateAgo(
-          startDate.toLocaleString()
-        )}`
+        )} ${C.clText('start date to')} ${C.clDate(startDate.toLocaleString())}`
       )
     } else if (!_isEmpty(end)) {
       const endDate = parseDate(end)
@@ -129,7 +127,7 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
       log(
         `${C.clText('Updated entry')} ${C.clHighlight(
           `${finalEntryID}`
-        )} ${C.clText('end date to')} ${C.clDateAgo(endDate.toLocaleString())}`
+        )} ${C.clText('end date to')} ${C.clDate(endDate.toLocaleString())}`
       )
     }
   } else {

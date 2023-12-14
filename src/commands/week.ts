@@ -1,9 +1,12 @@
 import _sum from 'lodash/sum'
+import weekday from 'weekday'
+import _isEmpty from 'lodash/isEmpty'
 import formatDuration from 'format-duration'
 
 import log from '../log'
 import * as U from '../utils'
 import * as C from '../color'
+import { findSheet } from '../db'
 import {
   type TimeSheetEntry,
   type TimeSheet,
@@ -11,7 +14,7 @@ import {
 } from '../types'
 
 const COMMAND_CONFIG = {
-  command: 'week',
+  command: 'week [sheets..]',
   describe: 'Display a summary of activity for the past week',
   aliases: ['w'],
   builder: {
@@ -25,6 +28,7 @@ const COMMAND_CONFIG = {
 interface WeekCommandArguments {
   db: TimeTrackerDB
   total: boolean
+  sheets?: string[]
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000
@@ -52,24 +56,41 @@ const getSheetsWithEntriesInLastWeek = (sheets: TimeSheet[]) => {
     .filter(({ entries }) => entries.length > 0)
 }
 
-interface SheetResult {
+interface WeekdayResult {
   duration: number
   entries: number
 }
 
-type SheetResults = Record<string, SheetResult>
-type WeekBreakdownResult = Record<string, SheetResults>
-type TotalResults = Record<string, number>
+type SheetResults = Record<string, WeekdayResult>
+type WeekdayResults = Record<string, SheetResults>
+type TotalResults = Record<string, WeekdayResult>
 
 const handler = (args: WeekCommandArguments) => {
-  const { total, db } = args
-  const { sheets } = db
-  const relevantSheets = getSheetsWithEntriesInLastWeek(sheets)
-  const results: WeekBreakdownResult = {}
+  const { sheets: inputSheets, total, db } = args
+  const { sheets: allSheets } = db
+
+  // prettier-ignore
+  const selectedSheets =
+    typeof inputSheets === 'undefined' || _isEmpty(inputSheets)
+      ? allSheets
+      : inputSheets.map((sheetName: string) => {
+        const sheet = findSheet(db, sheetName)
+
+        if (typeof sheet === 'undefined') {
+          throw new Error(`Sheet ${sheetName} does not exist`)
+        }
+
+        return sheet
+      })
+
+  const relevantSheets = getSheetsWithEntriesInLastWeek(selectedSheets)
+  const results: WeekdayResults = {}
+
   let totalDuration = 0
+  let totalEntries = 0
 
   relevantSheets.forEach(({ name, entries }) => {
-    const sheetResults: Record<string, SheetResult> = {}
+    const sheetResults: Record<string, WeekdayResult> = {}
 
     entries.forEach((entry: TimeSheetEntry) => {
       for (let i = 0; i < 7; i += 1) {
@@ -77,20 +98,22 @@ const handler = (args: WeekCommandArguments) => {
         const dateKey = date.toLocaleDateString()
         const duration = U.getEntryDurationInDay(entry, date)
 
+        if (duration === 0) {
+          continue
+        }
+
         totalDuration += duration
+        totalEntries += 1
 
         if (typeof sheetResults[dateKey] === 'undefined') {
           sheetResults[dateKey] = {
             duration,
-            entries: duration === 0 ? 0 : 1
+            entries: 1
           }
         } else {
           sheetResults[dateKey] = {
             duration: sheetResults[dateKey].duration + duration,
-            entries:
-              duration === 0
-                ? sheetResults[dateKey].entries
-                : sheetResults[dateKey].entries + 1
+            entries: sheetResults[dateKey].entries + 1
           }
         }
       }
@@ -102,7 +125,7 @@ const handler = (args: WeekCommandArguments) => {
   log(
     `${C.clText('* Total duration:')} ${C.clDuration(
       formatDuration(totalDuration)
-    )}`
+    )} ${C.clHighlight(`[${totalEntries} entries]`)}`
   )
 
   log('')
@@ -115,19 +138,34 @@ const handler = (args: WeekCommandArguments) => {
         const result = results[sheetName][dateKey]
         const { duration } = result
 
+        if (duration === 0) {
+          return
+        }
+
         if (typeof totalResults[dateKey] === 'undefined') {
-          totalResults[dateKey] = duration
+          totalResults[dateKey] = {
+            duration,
+            entries: 1
+          }
         } else {
-          totalResults[dateKey] += duration
+          totalResults[dateKey] = {
+            duration: totalResults[dateKey].duration + duration,
+            entries: totalResults[dateKey].entries + 1
+          }
         }
       })
     })
 
-    Object.keys(totalResults).forEach((dateKey: string) => {
+    Object.keys(totalResults).forEach((dateString: string) => {
+      const date = new Date(dateString)
+      const dateWeekday = weekday(date.getDay() + 1)
+      const result = totalResults[dateString]
+      const { duration, entries } = result
+
       log(
-        `${C.clDateAgo(`- ${dateKey}`)}: ${C.clDuration(
-          `[${formatDuration(totalResults[dateKey])}]`
-        )}`
+        `${C.clDate(`- ${dateWeekday} ${dateString}`)}: ${C.clHighlight(
+          `${entries} entries`
+        )} ${C.clDuration(`[${formatDuration(duration)}]`)}`
       )
     })
   } else {
@@ -146,19 +184,21 @@ const handler = (args: WeekCommandArguments) => {
         )}`
       )
 
-      sheetResultDates.forEach((date: string) => {
-        const result = sheetResults[date]
+      sheetResultDates.forEach((dateString: string) => {
+        const date = new Date(dateString)
+        const dateWeekday = weekday(date.getDay() + 1)
+        const result = sheetResults[dateString]
         const { duration, entries } = result
 
         if (duration === 0) {
-          log(`  ${C.clDateAgo(`- ${date}`)}: ${C.clHighlight('no entries')}`)
-        } else {
-          log(
-            `  ${C.clDateAgo(`- ${date}`)}: ${C.clHighlight(
-              `${entries} entries,`
-            )} ${C.clDuration(`[${formatDuration(duration)}]`)}`
-          )
+          return
         }
+
+        log(
+          `  ${C.clDate(`- ${dateWeekday} ${dateString}`)}: ${C.clHighlight(
+            `${entries} entries,`
+          )} ${C.clDuration(`[${formatDuration(duration)}]`)}`
+        )
       })
 
       if (i < sheetNames.length - 1) {

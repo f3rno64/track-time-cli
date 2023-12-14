@@ -14,7 +14,7 @@ const getSheetEntryColumns = (
 ): string[] => {
   const { id, start, end, description } = entry
   const idUI = C.clID(`${id}`)
-  const startUI = C.clDateAgo(
+  const startUI = C.clDate(
     printDateAgo ? ago(start) : new Date(start).toLocaleDateString()
   )
   const finalEnd = end === null ? new Date() : end
@@ -25,7 +25,7 @@ const getSheetEntryColumns = (
   const endUI =
     end === null
       ? ''
-      : C.clDateAgo(
+      : C.clDate(
         printDateAgo ? ago(start) : new Date(end).toLocaleDateString()
       )
 

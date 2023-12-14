@@ -60,7 +60,7 @@ const handler = async (args: SheetsCommandArgs) => {
     log(
       `${C.clText('Showing sheets since')} ${C.clHighlight(
         sinceDate.toLocaleString()
-      )} ${C.clDateAgo(`[${ago(sinceDate)}]`)}`
+      )} ${C.clDate(`[${ago(sinceDate)}]`)}`
     )
     log('')
   }
