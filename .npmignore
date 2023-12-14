@@ -1,6 +1,6 @@
 /.yarn
 /src
-/tests
+/dist/tests
 /.nyc_output
 .mocharc.json
 tsconfig.json

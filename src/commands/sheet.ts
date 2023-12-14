@@ -3,7 +3,6 @@ import _isEmpty from 'lodash/isEmpty'
 import log from '../log'
 import * as C from '../color'
 import * as P from '../print'
-import * as U from '../utils'
 import { genSheet } from '../sheets'
 import { findSheet, saveDB } from '../db'
 import { type TimeTrackerDB } from '../types'
@@ -59,6 +58,10 @@ const handler = async (args: SheetCommandArgs) => {
   }
 
   if (_isEmpty(name)) {
+    if (activeSheetName === null) {
+      throw new Error('No active time sheet')
+    }
+
     const sheet = findSheet(db, activeSheetName)
 
     if (typeof sheet === 'undefined') {
@@ -102,5 +105,5 @@ const handler = async (args: SheetCommandArgs) => {
 export { handler }
 export default {
   ...COMMAND_CONFIG,
-  handler: U.cmdHandler(handler)
+  handler
 }

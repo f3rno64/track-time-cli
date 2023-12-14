@@ -558,6 +558,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/humanize-duration@npm:^3.27.3":
+  version: 3.27.3
+  resolution: "@types/humanize-duration@npm:3.27.3"
+  checksum: 90fc7ddf6ea526f42eec12f2b6261024ab2c46ce331f46c65848d2618ed133aacf123ae04bb1bc33ab15f584423e4f484b8110c2e480d10c62ee66efca0ee5e2
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:*, @types/json-schema@npm:^7.0.12":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
@@ -606,6 +613,15 @@ __metadata:
   version: 7.5.6
   resolution: "@types/semver@npm:7.5.6"
   checksum: 196dc32db5f68cbcde2e6a42bb4aa5cbb100fa2b7bd9c8c82faaaf3e03fbe063e205dbb4f03c7cdf53da2edb70a0d34c9f2e601b54281b377eb8dc1743226acd
+  languageName: node
+  linkType: hard
+
+"@types/strip-ansi@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "@types/strip-ansi@npm:5.2.1"
+  dependencies:
+    strip-ansi: "npm:*"
+  checksum: 052d73697ac18bf12ffc76e8695d65d8588ee53f68cd952870991c3e3bf0c1214d42aa13004b140c1095a8ea27d4915105bafa8be43869bd66e5badca75d2d36
   languageName: node
   linkType: hard
 
@@ -2430,6 +2446,13 @@ __metadata:
     agent-base: "npm:^7.0.2"
     debug: "npm:4"
   checksum: 7735eb90073db087e7e79312e3d97c8c04baf7ea7ca7b013382b6a45abbaa61b281041a98f4e13c8c80d88f843785bcc84ba189165b4b4087b1e3496ba656d77
+  languageName: node
+  linkType: hard
+
+"humanize-duration@npm:^3.31.0":
+  version: 3.31.0
+  resolution: "humanize-duration@npm:3.31.0"
+  checksum: a78612f6920bd1348401632f4d707da877878473d0b92b6df4c8eff65700365715daae3238324a2c49e25dbddd5d033d5acbb85edc1551eb5f6120a61eb3fd2b
   languageName: node
   linkType: hard
 
@@ -4271,7 +4294,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strip-ansi@npm:^7.0.1":
+"strip-ansi@npm:*, strip-ansi@npm:^7.0.1":
   version: 7.1.0
   resolution: "strip-ansi@npm:7.1.0"
   dependencies:
@@ -4445,9 +4468,11 @@ __metadata:
     "@types/colors": "npm:^1.2.1"
     "@types/eslint__js": "npm:^8.42.3"
     "@types/format-duration": "npm:^1.0.3"
+    "@types/humanize-duration": "npm:^3.27.3"
     "@types/lodash": "npm:^4.14.202"
     "@types/mocha": "npm:^10.0.6"
     "@types/node": "npm:^20.10.1"
+    "@types/strip-ansi": "npm:^5.2.1"
     "@types/yargs": "npm:^17.0.32"
     "@typescript-eslint/eslint-plugin": "npm:^6.13.1"
     "@typescript-eslint/parser": "npm:^6.13.1"
@@ -4456,11 +4481,13 @@ __metadata:
     colors: "npm:^1.4.0"
     eslint: "npm:^8.54.0"
     format-duration: "npm:^3.0.2"
+    humanize-duration: "npm:^3.31.0"
     lodash: "npm:^4.17.21"
     mocha: "npm:^10.2.0"
     nyc: "npm:^15.1.0"
     s-ago: "npm:^2.2.0"
     standard-version: "npm:^9.5.0"
+    strip-ansi: "npm:^6.0.0"
     time-speak: "npm:^1.3.0"
     ts-node: "npm:^10.9.1"
     tslib: "npm:^2.6.2"
@@ -4468,7 +4495,7 @@ __metadata:
     updates: "npm:^15.0.4"
     yargs: "npm:^17.7.2"
   bin:
-    tt: ./dist/cli.js
+    tt: NODE_PATH=./dist ./dist/cli.js
   languageName: unknown
   linkType: soft
 

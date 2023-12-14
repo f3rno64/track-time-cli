@@ -3,9 +3,9 @@
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
-import { deleteDB, initDB } from '../../src/db'
-import { handler } from '../../src/commands/sheets'
-import { type TimeTrackerDB } from '../../src/types'
+import { deleteDB, initDB } from '../../db'
+import { handler } from '../../commands/sheets'
+import { type TimeTrackerDB } from '../../types'
 
 chai.use(chaiAsPromised)
 

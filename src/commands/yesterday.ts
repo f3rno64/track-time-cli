@@ -24,7 +24,7 @@ const isEntryForYesterday = (entry: TimeSheetEntry): boolean => {
 
 const handler = (args: YesterdayCommandArguments) => {
   const { db } = args
-  const { activeSheetName, sheets } = db
+  const { sheets } = db
   const sheetsWithEntriesForYesterday = sheets
     .map(({ entries, ...otherSheetData }) => ({
       entries: entries.filter(isEntryForYesterday),
@@ -37,10 +37,10 @@ const handler = (args: YesterdayCommandArguments) => {
   }
 
   P.printSummary(sheetsWithEntriesForYesterday, true)
-  P.printSheets(sheetsWithEntriesForYesterday, activeSheetName, true)
+  P.printSheets(sheetsWithEntriesForYesterday, true)
 }
 
 export default {
   ...COMMAND_CONFIG,
-  handler: U.cmdHandler(handler)
+  handler
 }

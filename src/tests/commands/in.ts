@@ -4,10 +4,10 @@ import chai, { expect } from 'chai'
 import _cloneDeep from 'lodash/cloneDeep'
 import chaiAsPromised from 'chai-as-promised'
 
-import { deleteDB, initDB } from '../../src/db'
-import { type TimeTrackerDB } from '../../src/types'
-import { genSheet, genSheetEntry } from '../../src/sheets'
-import { type InCommandArgs, handler } from '../../src/commands/in'
+import { deleteDB, initDB } from '../../db'
+import { type TimeTrackerDB } from '../../types'
+import { genSheet, genSheetEntry } from '../../sheets'
+import { type InCommandArgs, handler } from '../../commands/in'
 
 chai.use(chaiAsPromised)
 
@@ -15,8 +15,6 @@ let db: TimeTrackerDB = {} as unknown as TimeTrackerDB
 
 const getArgs = (overrides?: Record<string, unknown>): InCommandArgs => ({
   db,
-  at: undefined,
-  sheet: undefined,
   description: [],
   ...(overrides ?? {})
 })

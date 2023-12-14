@@ -5,7 +5,6 @@ import _isFinite from 'lodash/isFinite'
 
 import log from '../log'
 import * as C from '../color'
-import * as U from '../utils'
 import { type TimeTrackerDB } from '../types'
 import { findSheet, findSheetEntry, saveDB } from '../db'
 
@@ -64,7 +63,11 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
     ? inputDescription.join(' ')
     : inputDescription
 
-  if (_isEmpty(finalSheetName)) {
+  if (
+    typeof finalSheetName === 'undefined' ||
+    finalSheetName === null ||
+    _isEmpty(finalSheetName)
+  ) {
     throw new Error('No sheet specified and none active')
   }
 
@@ -76,7 +79,11 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
 
   const { activeEntryID } = sheet
   const finalEntryID =
-    inputEntry === null || !_isFinite(+inputEntry) ? activeEntryID : +inputEntry
+    inputEntry === null ||
+    typeof inputEntry === 'undefined' ||
+    !_isFinite(+inputEntry)
+      ? activeEntryID
+      : +inputEntry
 
   if (finalEntryID !== null && _isFinite(+finalEntryID)) {
     const entry = findSheetEntry(db, finalSheetName, +finalEntryID)
@@ -94,7 +101,7 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
           `${finalEntryID}`
         )} ${C.clText('from sheet')} ${C.clSheet(finalSheetName)}`
       )
-    } else if (!_isEmpty(description)) {
+    } else if (typeof description !== 'undefined' && !_isEmpty(description)) {
       entry.description = description
       log(
         `${C.clText('Updated entry')} ${C.clHighlight(
@@ -128,7 +135,7 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
     if (del) {
       db.sheets = db.sheets.filter((s) => s.name !== finalSheetName)
       log(`${C.clText('Deleted sheet')} ${C.clSheet(finalSheetName)}`)
-    } else if (!_isEmpty(inputName)) {
+    } else if (typeof inputName !== 'undefined' && !_isEmpty(inputName)) {
       sheet.name = inputName
       log(
         `${C.clText('Renamed sheet')} ${C.clSheet(finalSheetName)} ${C.clText(
@@ -146,5 +153,5 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
 export { handler, COMMAND_CONFIG, type EditCommandArguments }
 export default {
   ...COMMAND_CONFIG,
-  handler: U.cmdHandler(handler)
+  handler
 }

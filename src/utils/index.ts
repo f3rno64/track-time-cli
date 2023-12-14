@@ -1,5 +1,5 @@
-import cmdHandler from './cmd_handler'
-import getEndDate from './get_end_date'
-import getStartDate from './get_start_date'
+import getEntryDurationInDay from './get_entry_duration_in_day'
 
-export { cmdHandler, getEndDate, getStartDate }
+export * from './dates'
+
+export { getEntryDurationInDay }

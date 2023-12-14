@@ -3,7 +3,6 @@ import _max from 'lodash/max'
 import log from '../log'
 import * as C from '../color'
 import * as P from '../print'
-import * as U from '../utils'
 import { type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
@@ -30,20 +29,30 @@ const handler = (args: NowCommandArguments) => {
     return
   }
 
+  log(C.clText('Sheets with active entries'))
+  log('')
+
   sheetsWithActiveEntries.sort(
     ({ entries: a }, { entries: b }) =>
-      +_max(a.map(({ start }) => start)) - +_max(b.map(({ start }) => start))
+      +(_max(a.map(({ start }) => start)) ?? Date.now()) -
+      +(_max(b.map(({ start }) => start)) ?? Date.now())
   )
 
-  const [sheet] = sheetsWithActiveEntries
-  const { name, activeEntryID, entries } = sheet
-  const entry = entries.find(({ id }) => id === activeEntryID)
+  sheetsWithActiveEntries.forEach(({ name, activeEntryID, entries }) => {
+    const entry = entries.find(({ id }) => id === activeEntryID)
 
-  P.printActiveSheetEntry(entry, name)
+    if (typeof entry === 'undefined') {
+      throw new Error(
+        `Active entry with ID ${activeEntryID} for sheet ${name} not found`
+      )
+    }
+
+    P.printActiveSheetEntry(entry, name)
+  })
 }
 
 export { handler }
 export default {
   ...COMMAND_CONFIG,
-  handler: U.cmdHandler(handler)
+  handler
 }

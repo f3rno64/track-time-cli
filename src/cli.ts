@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import yArgs from 'yargs'
+import yArgs, { type CommandModule } from 'yargs'
 
 import log from './log'
 import * as C from './color'
@@ -27,7 +27,7 @@ const y = yArgs
   .recommendCommands()
 
 commands.forEach((def) => {
-  y.command(def)
+  y.command(def as unknown as CommandModule)
 })
 
 y.parse()

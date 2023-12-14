@@ -3,10 +3,10 @@
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
-import { deleteDB, initDB } from '../../src/db'
-import { type TimeTrackerDB } from '../../src/types'
-import { genSheet, genSheetEntry } from '../../src/sheets'
-import { type EditCommandArguments, handler } from '../../src/commands/edit'
+import { deleteDB, initDB } from '../../db'
+import { type TimeTrackerDB } from '../../types'
+import { genSheet, genSheetEntry } from '../../sheets'
+import { type EditCommandArguments, handler } from '../../commands/edit'
 
 chai.use(chaiAsPromised)
 
@@ -16,10 +16,6 @@ const getArgs = (
   overrides?: Record<string, unknown>
 ): EditCommandArguments => ({
   db,
-  sheet: undefined,
-  name: undefined,
-  entry: undefined,
-  description: undefined,
   delete: false,
   ...(overrides ?? {})
 })
@@ -140,7 +136,7 @@ describe('commands:edit:handler', () => {
       })
     )
 
-    expect(+entry.end).to.equal(+newEndDate)
+    expect(+(entry.end === null ? 0 : entry.end)).to.equal(+newEndDate)
   })
 
   it('deletes the specified sheet if requested', async () => {

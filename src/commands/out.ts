@@ -5,7 +5,6 @@ import formatDuration from 'format-duration'
 
 import log from '../log'
 import * as C from '../color'
-import * as U from '../utils'
 import { findSheet, saveDB } from '../db'
 import { type TimeTrackerDB } from '../types'
 
@@ -17,55 +16,40 @@ interface OutCommandArgs {
 }
 
 const COMMAND_CONFIG = {
-  command: 'out [options]',
+  command: 'out',
   describe: 'Check out of the currently active time sheet entry',
   builder: {
     at: {
       describe: 'Check out at a specific time'
-    },
-
-    sheet: {
-      describe: 'Name of sheet to check in to',
-      default: ''
-    },
-
-    entry: {
-      describe: 'ID of entry to check out from',
-      default: ''
     }
   }
 }
 
 const handler = async (args: OutCommandArgs) => {
-  const { at, sheet: inputSheetName, entry: inputEntry, db } = args
+  const { at, db } = args
   const endDate = _isEmpty(at) ? new Date() : parseDate(at)
-
   const { activeSheetName } = db
-  const finalSheetName = _isEmpty(inputSheetName)
-    ? activeSheetName
-    : inputSheetName
 
-  if (_isEmpty(finalSheetName)) {
+  if (activeSheetName === null) {
     throw new Error('No active sheet')
   }
 
-  const sheet = findSheet(db, finalSheetName)
+  const sheet = findSheet(db, activeSheetName)
 
   if (typeof sheet === 'undefined') {
-    throw new Error(`Sheet ${inputSheetName} does not exist`)
+    throw new Error(`Sheet ${activeSheetName} does not exist`)
   }
 
   const { name: sheetName, activeEntryID } = sheet
-  const finalActiveEntryID = _isEmpty(inputEntry) ? activeEntryID : inputEntry
 
-  if (!_isFinite(finalActiveEntryID)) {
+  if (!_isFinite(activeEntryID)) {
     throw new Error(`No active entry for sheet ${sheetName}`)
   }
 
-  const entry = sheet.entries.find(({ id }) => id === finalActiveEntryID)
+  const entry = sheet.entries.find(({ id }) => id === activeEntryID)
 
   if (typeof entry === 'undefined') {
-    throw new Error(`No entry found with ID ${finalActiveEntryID}`)
+    throw new Error(`No entry found with ID ${activeEntryID}`)
   } else {
     entry.end = endDate
     sheet.activeEntryID = null
@@ -74,10 +58,12 @@ const handler = async (args: OutCommandArgs) => {
 
     const { start, end, description } = entry
     const descriptionUI = C.clText(description)
-    const durationUI = C.clDuration(formatDuration(+end - +start))
+    const durationUI = C.clDuration(
+      formatDuration(end === null ? Date.now() - +start : +end - +start)
+    )
 
     log(
-      `${C.clHighlight('Checked out of')} ${C.clSheet(
+      `${C.clHighlight('Checked out of sheet')} ${C.clSheet(
         sheetName
       )}: ${descriptionUI} [${durationUI}]`
     )
@@ -86,5 +72,5 @@ const handler = async (args: OutCommandArgs) => {
 
 export default {
   ...COMMAND_CONFIG,
-  handler: U.cmdHandler(handler)
+  handler
 }

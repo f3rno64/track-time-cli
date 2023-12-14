@@ -10,7 +10,7 @@ const findLastActiveSheet = (db: TimeTrackerDB): TimeSheet | null => {
     .filter(({ entries }) => !_isEmpty(entries))
     .map(({ name, entries }) => ({
       name,
-      maxStart: _max(entries.map(({ start }) => +start))
+      maxStart: _max(entries.map(({ start }) => +start)) ?? Date.now()
     }))
 
   if (results.length === 0) {
@@ -22,7 +22,7 @@ const findLastActiveSheet = (db: TimeTrackerDB): TimeSheet | null => {
   const [lastActiveResult] = results
   const { name } = lastActiveResult
 
-  return findSheet(db, name)
+  return findSheet(db, name) ?? null
 }
 
 export default findLastActiveSheet

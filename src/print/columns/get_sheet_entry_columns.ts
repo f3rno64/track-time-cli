@@ -3,16 +3,15 @@ import colors from 'colors'
 import _isEmpty from 'lodash/isEmpty'
 import formatDuration from 'format-duration'
 
-import log from '../log'
-import * as C from '../color'
-import { type TimeSheetEntry } from '../types'
+import * as C from '../../color'
+import { type TimeSheetEntry } from '../../types'
 
-const printSheetEntry = (
+const getSheetEntryColumns = (
   entry: TimeSheetEntry,
   isActive?: boolean,
   sheetName?: string,
   printDateAgo?: boolean
-): void => {
+): string[] => {
   const { id, start, end, description } = entry
   const idUI = C.clID(`${id}`)
   const startUI = C.clDateAgo(
@@ -36,14 +35,15 @@ const printSheetEntry = (
       ? ''
       : `${C.clText('sheet')} ${C.clSheet(sheetName)}`
 
-  const result =
-    `${sheetNamePrefix} (${idUI}) [${durationUI}] ${dateUI}: ${descriptionUI}`.trim()
-
-  if (isActive === true) {
-    log(colors.bold(`  ${C.clHighlight('*')} ${result}`))
-  } else {
-    log(`    ${result}`)
-  }
+  return [
+    sheetNamePrefix,
+    `(${idUI})`,
+    `[${durationUI}]`,
+    dateUI,
+    descriptionUI
+  ].map((value: string): string =>
+    isActive ? colors.bold.underline(value) : value
+  )
 }
 
-export default printSheetEntry
+export default getSheetEntryColumns

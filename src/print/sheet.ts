@@ -10,9 +10,11 @@ const printSheet = (
 
   P.printSheetHeader(sheet, isActive)
 
-  entries.map((entry: TimeSheetEntry): void => {
-    P.printSheetEntry(entry, entry.id === activeEntryID, '', printDateAgo)
-  })
+  const sheetEntryRows = entries.map((entry: TimeSheetEntry): string[] =>
+    P.getSheetEntryColumns(entry, entry.id === activeEntryID, '', printDateAgo)
+  )
+
+  P.printJustifiedContent(sheetEntryRows)
 }
 
 export default printSheet

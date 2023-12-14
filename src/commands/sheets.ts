@@ -1,31 +1,39 @@
-import * as U from '../utils'
 import * as P from '../print'
 import { TimeSheet, type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'sheets',
-  describe: 'List all sheets'
+  describe: 'List all sheets',
+  builder: {
+    humanize: {
+      describe: 'Humanize the total duration',
+      type: 'boolean'
+    }
+  }
 }
 
 interface SheetsCommandArgs {
   db: TimeTrackerDB
+  humanize?: boolean
 }
 
 const handler = async (args: SheetsCommandArgs) => {
-  const { db } = args
+  const { humanize, db } = args
   const { activeSheetName, sheets } = db
 
   if (sheets.length === 0) {
     throw new Error('No time sheets exist')
   }
 
-  sheets.forEach((sheet: TimeSheet): void => {
-    P.printSheetHeader(sheet, sheet.name === activeSheetName)
-  })
+  const sheetHeaderRows = sheets.map((sheet: TimeSheet): string[] =>
+    P.getSheetHeaderColumns(sheet, sheet.name === activeSheetName, humanize)
+  )
+
+  P.printJustifiedContent(sheetHeaderRows)
 }
 
 export { handler }
 export default {
   ...COMMAND_CONFIG,
-  handler: U.cmdHandler(handler)
+  handler
 }

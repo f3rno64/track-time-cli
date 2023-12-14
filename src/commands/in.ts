@@ -2,7 +2,6 @@ import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 
 import * as P from '../print'
-import * as U from '../utils'
 import { genSheetEntry } from '../sheets'
 import { type TimeTrackerDB } from '../types'
 import { findSheet, findSheetEntry, saveDB } from '../db'
@@ -15,16 +14,11 @@ interface InCommandArgs {
 }
 
 const COMMAND_CONFIG = {
-  command: 'in [options] <description..>',
+  command: 'in <description..>',
   describe: 'Check in to a time sheet',
   builder: {
     at: {
       describe: 'Check in at a specific time'
-    },
-
-    sheet: {
-      describe: 'Name of sheet to check in to',
-      default: ''
     },
 
     description: {
@@ -38,6 +32,11 @@ const handler = async (args: InCommandArgs) => {
   const { description, at, db } = args
   const finalDescription = description.join(' ')
   const { activeSheetName } = db
+
+  if (activeSheetName === null) {
+    throw new Error('No active sheet')
+  }
+
   const sheet = findSheet(db, activeSheetName)
 
   if (typeof sheet === 'undefined') {
@@ -72,5 +71,5 @@ const handler = async (args: InCommandArgs) => {
 export { InCommandArgs, handler }
 export default {
   ...COMMAND_CONFIG,
-  handler: U.cmdHandler(handler)
+  handler
 }

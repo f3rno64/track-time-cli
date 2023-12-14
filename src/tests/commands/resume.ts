@@ -4,10 +4,10 @@ import _last from 'lodash/last'
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
-import { deleteDB, initDB } from '../../src/db'
-import { handler } from '../../src/commands/resume'
-import { genSheet, genSheetEntry } from '../../src/sheets'
-import { type TimeSheetEntry, type TimeTrackerDB } from '../../src/types'
+import { deleteDB, initDB } from '../../db'
+import { handler } from '../../commands/resume'
+import { genSheet, genSheetEntry } from '../../sheets'
+import { type TimeSheetEntry, type TimeTrackerDB } from '../../types'
 
 chai.use(chaiAsPromised)
 

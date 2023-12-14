@@ -1,16 +1,15 @@
 import formatDuration from 'format-duration'
 import humanizeDuration from 'humanize-duration'
 
-import log from '../log'
-import * as C from '../color'
-import { type TimeSheet } from '../types'
-import { getTotalSheetDuration } from '../sheets'
+import * as C from '../../color'
+import { type TimeSheet } from '../../types'
+import { getTotalSheetDuration } from '../../sheets'
 
-const printSheetHeader = (
+const getSheetHeaderColumns = (
   sheet: TimeSheet,
   isActive?: boolean,
   humanize?: boolean
-): void => {
+): string[] => {
   const { name, entries } = sheet
   const uiPrefix = C.clText('- Sheet')
   const uiName = C.clSheet(name)
@@ -31,7 +30,7 @@ const printSheetHeader = (
 
   const uiActiveStatus = isActive !== true ? '' : C.clHighlightRed('* Active *')
 
-  log(`${uiPrefix} ${uiName} ${uiEntries} ${uiTotalDuration} ${uiActiveStatus}`)
+  return [uiPrefix, uiName, uiEntries, uiTotalDuration, uiActiveStatus]
 }
 
-export default printSheetHeader
+export default getSheetHeaderColumns

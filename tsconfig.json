@@ -1,7 +1,12 @@
 {
+  "ts-node": {
+    "files": true
+  },
+
   "compilerOptions": {
     "target": "es2021",
     "esModuleInterop": true,
+    "incremental": true,
     "module": "commonjs",
     "lib": ["es2021"],
     "moduleResolution": "node",
@@ -17,9 +22,13 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
-    "strictNullChecks": false
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "exactOptionalPropertyTypes": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "useUnknownInCatchVariables": true
   },
-  "include": ["src/**/*", "__tests__/**/*"]
+  "include": ["src/**/*"]
 }

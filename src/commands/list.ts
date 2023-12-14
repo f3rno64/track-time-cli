@@ -1,8 +1,10 @@
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
+import _compact from 'lodash/compact'
 
+import log from '../log'
+import * as C from '../color'
 import * as P from '../print'
-import * as U from '../utils'
 import { findSheet } from '../db'
 import { type TimeSheet, type TimeTrackerDB } from '../types'
 
@@ -11,10 +13,6 @@ const COMMAND_CONFIG = {
   describe: 'List all time sheet entries',
   alias: 'l',
   builder: {
-    sheets: {
-      description: 'List of sheet names to list entries from'
-    },
-
     ago: {
       description: 'Print dates as relative time (e.g. 5 minutes ago)',
       type: 'boolean'
@@ -42,12 +40,17 @@ interface ListCommandArgs {
 const handler = (args: ListCommandArgs) => {
   const { since: inputSince, all, ago, sheets, db } = args
   const { activeSheetName, sheets: dbSheets } = db
-  const activeSheet = findSheet(db, activeSheetName)
-  const sheetsToList = _isEmpty(sheets)
+
+  // prettier-ignore
+  const sheetsToList: TimeSheet[] = _isEmpty(sheets)
     ? all
       ? dbSheets
-      : [activeSheet]
-    : sheets.map((name: string): TimeSheet => findSheet(db, name))
+      : activeSheetName === null
+        ? []
+        : _compact([findSheet(db, activeSheetName)])
+    : _compact(
+      sheets.map((name: string): TimeSheet | undefined => findSheet(db, name))
+    )
 
   if (_isEmpty(sheetsToList)) {
     throw new Error('No relevant sheets found')
@@ -62,20 +65,31 @@ const handler = (args: ListCommandArgs) => {
       : sheetsToList.map((sheet: TimeSheet): TimeSheet => {
         const { entries, ...otherSheetData } = sheet
         const filteredEntries = entries.filter(
-          ({ start, end }) => start >= since || end >= since
+          ({ start }) => start >= since
         )
 
         return {
           ...otherSheetData,
           entries: filteredEntries
-        }
+        } as TimeSheet
       })
 
   P.printSummary(filteredSheets, true)
-  P.printSheets(filteredSheets, activeSheetName, ago === true)
+  P.printSheets(filteredSheets, ago === true)
+
+  if (!all) {
+    const sheetsNotShownCount = dbSheets.length - filteredSheets.length
+
+    log('')
+    log(
+      `${C.clText('Sheets not shown')}: ${C.clHighlightRed(
+        `${sheetsNotShownCount}`
+      )}; ${C.clText('use --all to show')}`
+    )
+  }
 }
 
 export default {
   ...COMMAND_CONFIG,
-  handler: U.cmdHandler(handler)
+  handler
 }

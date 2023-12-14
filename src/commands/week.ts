@@ -51,45 +51,30 @@ const getSheetsWithEntriesInLastWeek = (sheets: TimeSheet[]) => {
     .filter(({ entries }) => entries.length > 0)
 }
 
-const getEntryDurationInInterval = (
-  start: Date,
-  end: Date,
-  entry: TimeSheetEntry
-): number => {
-  const { start: entryStart, end: entryEnd } = entry
-
-  if (+entryStart < +start && +entryEnd < +start) {
-    return 0
-  } else if (+entryStart > +end && +entryEnd > +end) {
-    return 0
-  } else if (+entryStart >= +start && +entryEnd <= +end) {
-    return +entryEnd - +entryStart
-  } else if (+entryStart >= +start && +entryEnd > +end) {
-    return +end - +entryStart
-  } else if (+entryStart < +start && +entryEnd <= +end) {
-    return +entryEnd - +start
-  } else {
-    return 0
-  }
+interface SheetResult {
+  duration: number
+  entries: number
 }
+
+type SheetResults = Record<string, SheetResult>
+type WeekBreakdownResult = Record<string, SheetResults>
+type TotalResults = Record<string, number>
 
 const handler = (args: WeekCommandArguments) => {
   const { total, db } = args
   const { sheets } = db
   const relevantSheets = getSheetsWithEntriesInLastWeek(sheets)
-  const results = {}
+  const results: WeekBreakdownResult = {}
   let totalDuration = 0
 
   relevantSheets.forEach(({ name, entries }) => {
-    const sheetResults = {}
+    const sheetResults: Record<string, SheetResult> = {}
 
     entries.forEach((entry: TimeSheetEntry) => {
       for (let i = 0; i < 7; i += 1) {
         const date = new Date(+LAST_WEEK_DATE + i * DAY_MS)
         const dateKey = date.toLocaleDateString()
-        const dateStart = U.getStartDate(date)
-        const dateEnd = U.getEndDate(date)
-        const duration = getEntryDurationInInterval(dateStart, dateEnd, entry)
+        const duration = U.getEntryDurationInDay(entry, date)
 
         totalDuration += duration
 
@@ -122,7 +107,7 @@ const handler = (args: WeekCommandArguments) => {
   log('')
 
   if (total) {
-    const totalResults = {}
+    const totalResults: TotalResults = {}
 
     Object.keys(results).forEach((sheetName: string) => {
       Object.keys(results[sheetName]).forEach((dateKey: string) => {
@@ -184,5 +169,5 @@ const handler = (args: WeekCommandArguments) => {
 
 export default {
   ...COMMAND_CONFIG,
-  handler: U.cmdHandler(handler)
+  handler
 }

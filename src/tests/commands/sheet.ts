@@ -3,10 +3,10 @@
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
-import { genSheet } from '../../src/sheets'
-import { deleteDB, initDB } from '../../src/db'
-import { handler } from '../../src/commands/sheet'
-import { type TimeTrackerDB } from '../../src/types'
+import { genSheet } from '../../sheets'
+import { deleteDB, initDB } from '../../db'
+import { handler } from '../../commands/sheet'
+import { type TimeTrackerDB } from '../../types'
 
 chai.use(chaiAsPromised)
 

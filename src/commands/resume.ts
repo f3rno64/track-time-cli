@@ -2,7 +2,6 @@ import _isFinite from 'lodash/isFinite'
 
 import log from '../log'
 import * as D from '../db'
-import * as U from '../utils'
 import * as C from '../color'
 import { genSheetEntry } from '../sheets'
 import { type TimeTrackerDB } from '../types'
@@ -58,5 +57,5 @@ const handler = async (args: ResumeCommandArgs) => {
 export { handler }
 export default {
   ...COMMAND_CONFIG,
-  handler: U.cmdHandler(handler)
+  handler
 }
