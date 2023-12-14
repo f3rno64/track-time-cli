@@ -75,9 +75,10 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
   }
 
   const { activeEntryID } = sheet
-  const finalEntryID = _isEmpty(inputEntry) ? activeEntryID : +inputEntry
+  const finalEntryID =
+    inputEntry === null || !_isFinite(+inputEntry) ? activeEntryID : +inputEntry
 
-  if (_isFinite(+finalEntryID)) {
+  if (finalEntryID !== null && _isFinite(+finalEntryID)) {
     const entry = findSheetEntry(db, finalSheetName, +finalEntryID)
 
     if (typeof entry === 'undefined') {
