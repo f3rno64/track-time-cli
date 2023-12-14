@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.1](https://github.com/f3rno64/track-time-cli/compare/v1.18.0...v1.18.1) (2023-12-14)
+
+
+### Bug Fixes
+
+* add .github to npmignore ([15fbc4a](https://github.com/f3rno64/track-time-cli/commit/15fbc4a8bb0ce87b72e9a42e4f9071fc6004fc6d))
+
 ## [1.18.0](https://github.com/f3rno64/track-time-cli/compare/v1.17.0...v1.18.0) (2023-12-14)
 
 
