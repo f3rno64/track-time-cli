@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.18.0](https://github.com/f3rno64/track-time-cli/compare/v1.17.0...v1.18.0) (2023-12-14)
+
+
+### Bug Fixes
+
+* github package publish workflow ([37b37bc](https://github.com/f3rno64/track-time-cli/commit/37b37bca8f0dfc55728757f5e8d00f7bc06f2695))
+* npm_publish workflow missing build in publish job ([e05a46e](https://github.com/f3rno64/track-time-cli/commit/e05a46e4df1846d86d963e508bae4f0f50d16e90))
+
 ### [1.17.1](https://github.com/f3rno64/track-time-cli/compare/v1.17.0...v1.17.1) (2023-12-14)
 
 ## [1.17.0](https://github.com/f3rno64/track-time-cli/compare/v1.16.0...v1.17.0) (2023-12-14)
