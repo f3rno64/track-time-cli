@@ -5,6 +5,7 @@ import _compact from 'lodash/compact'
 import log from '../log'
 import * as C from '../color'
 import * as P from '../print'
+import * as S from '../sheets'
 import { findSheet } from '../db'
 import { type TimeSheet, type TimeTrackerDB } from '../types'
 
@@ -62,17 +63,7 @@ const handler = (args: ListCommandArgs) => {
   const filteredSheets =
     since === null
       ? sheetsToList
-      : sheetsToList.map((sheet: TimeSheet): TimeSheet => {
-        const { entries, ...otherSheetData } = sheet
-        const filteredEntries = entries.filter(
-          ({ start }) => start >= since
-        )
-
-        return {
-          ...otherSheetData,
-          entries: filteredEntries
-        } as TimeSheet
-      })
+      : S.filterWithEntriesSinceDate(sheetsToList, since)
 
   P.printSummary(filteredSheets, true)
   P.printSheets(filteredSheets, ago === true)
