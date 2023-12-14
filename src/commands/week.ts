@@ -13,6 +13,7 @@ import {
 const COMMAND_CONFIG = {
   command: 'week',
   describe: 'Display a summary of activity for the past week',
+  aliases: ['w'],
   builder: {
     total: {
       describe: 'Display total duration for the week for all sheets',

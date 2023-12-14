@@ -11,6 +11,7 @@ import { findSheet, findSheetEntry, saveDB } from '../db'
 const COMMAND_CONFIG = {
   command: 'edit [description..]',
   describe: 'View, modify, or delete a time sheet entry',
+  aliases: ['e'],
   builder: {
     sheet: {
       describe: 'Name of time sheet to edit'

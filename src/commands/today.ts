@@ -4,7 +4,8 @@ import { type TimeSheetEntry, type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'today',
-  describe: 'Display a summary of activity for today'
+  describe: 'Display a summary of activity for today',
+  aliases: ['t']
 }
 
 interface TodayCommandArguments {

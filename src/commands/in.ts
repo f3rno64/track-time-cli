@@ -16,6 +16,7 @@ interface InCommandArgs {
 const COMMAND_CONFIG = {
   command: 'in <description..>',
   describe: 'Check in to a time sheet',
+  aliases: ['i'],
   builder: {
     at: {
       describe: 'Check in at a specific time'

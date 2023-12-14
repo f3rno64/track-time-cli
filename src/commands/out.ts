@@ -18,6 +18,7 @@ interface OutCommandArgs {
 const COMMAND_CONFIG = {
   command: 'out',
   describe: 'Check out of the currently active time sheet entry',
+  aliases: ['o'],
   builder: {
     at: {
       describe: 'Check out at a specific time'

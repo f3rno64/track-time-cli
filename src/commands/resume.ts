@@ -9,7 +9,7 @@ import { type TimeTrackerDB } from '../types'
 const COMMAND_CONFIG = {
   command: 'resume',
   describe: 'Resume the last active entry',
-  alias: 'r'
+  aliases: ['r']
 }
 
 interface ResumeCommandArgs {

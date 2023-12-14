@@ -8,7 +8,7 @@ import { type TimeTrackerDB } from '../types'
 const COMMAND_CONFIG = {
   command: ['now', '$0'],
   describe: 'Display all active time sheet entries',
-  alias: 'n'
+  aliases: ['n']
 }
 
 interface NowCommandArguments {

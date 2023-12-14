@@ -10,11 +10,11 @@ import { type TimeTrackerDB } from '../types'
 const COMMAND_CONFIG = {
   command: 'sheet [name]',
   describe: 'Switch to a sheet by name, creating it if needed',
+  aliases: ['s'],
   builder: {
     name: {
       describe: 'Sheet name',
-      demandOption: true,
-      default: ''
+      demandOption: true
     },
 
     delete: {

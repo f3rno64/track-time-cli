@@ -4,6 +4,7 @@ import { TimeSheet, type TimeTrackerDB } from '../types'
 const COMMAND_CONFIG = {
   command: 'sheets',
   describe: 'List all sheets',
+  aliases: ['ss'],
   builder: {
     humanize: {
       describe: 'Humanize the total duration',

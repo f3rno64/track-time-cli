@@ -11,7 +11,7 @@ import { type TimeSheet, type TimeTrackerDB } from '../types'
 const COMMAND_CONFIG = {
   command: 'list [sheets..]',
   describe: 'List all time sheet entries',
-  alias: 'l',
+  aliases: ['l'],
   builder: {
     ago: {
       description: 'Print dates as relative time (e.g. 5 minutes ago)',

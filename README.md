@@ -22,23 +22,24 @@ track-time-cli
 Display all active time sheet entries
 
 Commands:
-  track-time-cli in <description..>    Check in to a time sheet
+  track-time-cli in <description..>    Check in to a time sheet     [aliases: i]
   track-time-cli now                   Display all active time sheet entries
-                                                                       [default]
+                                                          [default] [aliases: n]
   track-time-cli out                   Check out of the currently active time
-                                       sheet entry
+                                       sheet entry                  [aliases: o]
   track-time-cli week                  Display a summary of activity for the
-                                       past week
-  track-time-cli list [sheets..]       List all time sheet entries
+                                       past week                    [aliases: w]
+  track-time-cli list [sheets..]       List all time sheet entries  [aliases: l]
   track-time-cli edit [description..]  View, modify, or delete a time sheet
-                                       entry
+                                       entry                        [aliases: e]
   track-time-cli today                 Display a summary of activity for today
+                                                                    [aliases: t]
   track-time-cli sheet [name]          Switch to a sheet by name, creating it if
-                                       needed
-  track-time-cli sheets                List all sheets
-  track-time-cli resume                Resume the last active entry
+                                       needed                       [aliases: s]
+  track-time-cli sheets                List all sheets             [aliases: ss]
+  track-time-cli resume                Resume the last active entry [aliases: r]
   track-time-cli yesterday             Display a summary of activity for
-                                       yesterday
+                                       yesterday                    [aliases: y]
 
 Options:
   --help     Show help                                                 [boolean]
