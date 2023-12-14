@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.20.3](https://github.com/f3rno64/track-time-cli/compare/v1.20.2...v1.20.3) (2023-12-14)
+
+
+### Bug Fixes
+
+* getStartDate and getEndDate ([beaa7be](https://github.com/f3rno64/track-time-cli/commit/beaa7be39394a934afc6506abe0182feb0b275b8))
+
 ### [1.20.2](https://github.com/f3rno64/track-time-cli/compare/v1.20.1...v1.20.2) (2023-12-14)
 
 ### [1.20.1](https://github.com/f3rno64/track-time-cli/compare/v1.20.0...v1.20.1) (2023-12-14)
