@@ -1,4 +1,5 @@
 /.yarn
+/.github
 /src
 /dist/tests
 /.nyc_output
