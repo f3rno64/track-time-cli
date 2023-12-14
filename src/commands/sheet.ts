@@ -13,8 +13,7 @@ const COMMAND_CONFIG = {
   aliases: ['s'],
   builder: {
     name: {
-      describe: 'Sheet name',
-      demandOption: true
+      describe: 'Sheet name'
     },
 
     delete: {
@@ -71,10 +70,9 @@ const handler = async (args: SheetCommandArgs) => {
     const { name, entries } = sheet
 
     if (entries.length === 0) {
-      console.log(
+      throw new Error(
         `${C.clText('Sheet')} ${C.clSheet(name)} ${C.clText('has no entries')}`
       )
-      return
     }
 
     P.printSheet(sheet, name === activeSheetName)

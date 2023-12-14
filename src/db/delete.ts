@@ -11,8 +11,7 @@ const deleteDB = async (): Promise<void> => {
     await fs.access(dbPath)
     await fs.rm(dbPath)
   } catch (err: unknown) {
-    console.error(`No DB exists at path ${dbPath}`)
-    throw err
+    throw new Error(`No DB exists at path ${dbPath}`)
   }
 }
 
