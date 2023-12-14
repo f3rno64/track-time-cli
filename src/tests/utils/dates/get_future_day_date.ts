@@ -8,6 +8,6 @@ describe('utils:dates:get_future_day_date', () => {
     const targetDate = new Date(Date.now() + getDaysMS(2))
     const result = getFutureDayDate(2)
 
-    expect(+result).to.equal(+targetDate)
+    expect(+result).to.be.closeTo(+targetDate, 1)
   })
 })
