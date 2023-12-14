@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/f3rno64/track-time-cli/compare/v1.14.4...v1.16.0) (2023-12-14)
+
+
+### Bug Fixes
+
+* proper husky config ([9c8e0ba](https://github.com/f3rno64/track-time-cli/commit/9c8e0ba0c4bf560bc0afd60bd3c67c826da84ca0))
+* rm workflow node version test for 14.x ([6f1abf5](https://github.com/f3rno64/track-time-cli/commit/6f1abf5ef76168f8b46fa29b8fe9f3328cdab325))
+* test failing with node 20.x ([6e5678d](https://github.com/f3rno64/track-time-cli/commit/6e5678dba86627fdfe10036fdc02f939d7664ec8))
+
 ## [1.15.0](https://github.com/f3rno64/track-time-cli/compare/v1.14.4...v1.15.0) (2023-12-14)
 
 ### [1.14.4](https://github.com/f3rno64/track-time-cli/compare/v1.14.3...v1.14.4) (2023-12-14)
