@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.19.1](https://github.com/f3rno64/track-time-cli/compare/v1.19.0...v1.19.1) (2023-12-14)
+
+
+### Bug Fixes
+
+* rm vestigial .yarnrc.yml ([413dd2d](https://github.com/f3rno64/track-time-cli/commit/413dd2dc3f75943f2d4620c680cb02fa59737b8b))
+
 ## [1.19.0](https://github.com/f3rno64/track-time-cli/compare/v1.18.1...v1.19.0) (2023-12-14)
 
 ### [1.18.1](https://github.com/f3rno64/track-time-cli/compare/v1.18.0...v1.18.1) (2023-12-14)
