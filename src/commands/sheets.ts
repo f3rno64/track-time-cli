@@ -7,6 +7,7 @@ import humanizeDuration from 'humanize-duration'
 
 import log from '../log'
 import * as C from '../color'
+import * as U from '../utils'
 import * as P from '../print'
 import { TimeSheet, type TimeTrackerDB } from '../types'
 
@@ -21,7 +22,13 @@ const COMMAND_CONFIG = {
     },
 
     since: {
-      describe: 'Filter sheets, entries, and durations since a given date'
+      describe: 'Filter sheets, entries, and durations since a given date',
+      type: 'string'
+    },
+
+    today: {
+      describe: 'Show results for today',
+      type: 'boolean'
     }
   }
 }
@@ -30,20 +37,30 @@ interface SheetsCommandArgs {
   db: TimeTrackerDB
   humanize?: boolean
   since?: string
+  today?: boolean
 }
 
 const handler = async (args: SheetsCommandArgs) => {
-  const { since, humanize, db } = args
+  const { today, since, humanize, db } = args
   const { activeSheetName, sheets } = db
+
+  if (!_isEmpty(since) && today) {
+    throw new Error('Cannot use both --since and --today')
+  }
 
   if (sheets.length === 0) {
     throw new Error('No time sheets exist')
   }
 
-  const sinceDate = _isEmpty(since) ? null : parseDate(since)
+  // prettier-ignore
+  const sinceDate = !_isEmpty(since)
+    ? parseDate(since)
+    : today
+      ? U.getStartDate()
+      : null
 
   // prettier-ignore
-  const filteredSheets = _isEmpty(since)
+  const filteredSheets = sinceDate === null
     ? sheets
     : sheets.map(
       ({ entries, ...otherSheetData }) => ({
@@ -56,14 +73,27 @@ const handler = async (args: SheetsCommandArgs) => {
     throw new Error(`No sheets since ${sinceDate.toLocaleString()}`)
   }
 
-  if (!_isEmpty(since)) {
+  if (today) {
     log(
-      `${C.clText('Showing sheets since')} ${C.clHighlight(
+      `${C.clText('* Showing')} ${C.clHighlight(
+        `${filteredSheets.length}`
+      )} ${C.clText('sheets for today')}`
+    )
+  } else if (sinceDate !== null) {
+    log(
+      `${C.clText('* Showing sheets since')} ${C.clHighlight(
         sinceDate.toLocaleString()
       )} ${C.clDate(`[${ago(sinceDate)}]`)}`
     )
-    log('')
+  } else {
+    log(
+      `${C.clText('* Showing')} ${C.clHighlight(
+        `${filteredSheets.length}`
+      )} ${C.clText('sheets')}`
+    )
   }
+
+  log('')
 
   const sheetHeaderRows = filteredSheets.map((sheet: TimeSheet): string[] =>
     P.getSheetHeaderColumns(sheet, sheet.name === activeSheetName, humanize)

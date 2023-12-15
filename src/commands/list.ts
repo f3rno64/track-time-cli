@@ -1,3 +1,4 @@
+import sAgo from 's-ago'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 import _compact from 'lodash/compact'
@@ -5,6 +6,7 @@ import _compact from 'lodash/compact'
 import log from '../log'
 import * as C from '../color'
 import * as P from '../print'
+import * as U from '../utils'
 import * as S from '../sheets'
 import { findSheet } from '../db'
 import { type TimeSheet, type TimeTrackerDB } from '../types'
@@ -20,7 +22,13 @@ const COMMAND_CONFIG = {
     },
 
     since: {
-      description: 'Only list entries since the specified date'
+      description: 'Only list entries since the specified date',
+      type: 'string'
+    },
+
+    today: {
+      describe: 'Show results for today',
+      type: 'boolean'
     },
 
     all: {
@@ -36,11 +44,16 @@ interface ListCommandArgs {
   ago: boolean
   all: boolean
   since: string
+  today: boolean
 }
 
 const handler = (args: ListCommandArgs) => {
-  const { since: inputSince, all, ago, sheets, db } = args
+  const { today, since, all, ago, sheets, db } = args
   const { activeSheetName, sheets: dbSheets } = db
+
+  if (!_isEmpty(since) && today) {
+    throw new Error('Cannot use both --since and --today')
+  }
 
   // prettier-ignore
   const sheetsToList: TimeSheet[] = _isEmpty(sheets)
@@ -50,22 +63,56 @@ const handler = (args: ListCommandArgs) => {
         ? []
         : _compact([findSheet(db, activeSheetName)])
     : _compact(
-      sheets.map((name: string): TimeSheet | undefined => findSheet(db, name))
+      sheets.map((name: string): TimeSheet => {
+        const sheet = findSheet(db, name)
+
+        if (typeof sheet === 'undefined') {
+          throw new Error(`No sheet found with name ${name}`)
+        }
+
+        return sheet
+      })
     )
 
   if (_isEmpty(sheetsToList)) {
     throw new Error('No relevant sheets found')
   }
 
-  const since = _isEmpty(inputSince) ? null : parseDate(inputSince)
+  // prettier-ignore
+  const sinceDate = !_isEmpty(since)
+    ? parseDate(since)
+    : today
+      ? U.getStartDate()
+      : null
 
   // prettier-ignore
   const filteredSheets =
-    since === null
+    sinceDate === null
       ? sheetsToList
-      : S.filterWithEntriesSinceDate(sheetsToList, since)
+      : S.filterWithEntriesSinceDate(sheetsToList, sinceDate)
 
-  P.printSummary(filteredSheets, true)
+  if (today) {
+    log(
+      `${C.clText('* Showing')} ${C.clHighlight(
+        `${filteredSheets.length}`
+      )} ${C.clText('sheets for today')}`
+    )
+  } else if (sinceDate !== null) {
+    log(
+      `${C.clText('* Showing sheets since')} ${C.clHighlight(
+        sinceDate.toLocaleString()
+      )} ${C.clDate(`[${sAgo(sinceDate)}]`)}`
+    )
+  } else {
+    log(
+      `${C.clText('* Showing')} ${C.clHighlight(
+        `${filteredSheets.length}`
+      )} ${C.clText('sheets')}`
+    )
+  }
+
+  log('')
+
   P.printSheets(filteredSheets, ago === true)
 
   if (!all) {
@@ -73,9 +120,11 @@ const handler = (args: ListCommandArgs) => {
 
     log('')
     log(
-      `  ${C.clHighlightRed(`${sheetsNotShownCount}`)} ${C.clText(
-        'Sheets not shown'
-      )}. ${C.clText('use --all to show')}`
+      `${C.clText('*')} ${C.clHighlightRed(
+        `${sheetsNotShownCount}`
+      )} ${C.clText('Sheets not shown')}. ${C.clText('use')} ${C.clHighlightRed(
+        '--all'
+      )} ${C.clText('to show')}`
     )
   }
 }
