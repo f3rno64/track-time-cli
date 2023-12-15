@@ -4,7 +4,6 @@ import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 import DB from '../../db'
-import { genSheet, genSheetEntry } from '../../sheets'
 import { type EditCommandArguments, handler } from '../../commands/edit'
 
 chai.use(chaiAsPromised)
@@ -35,8 +34,8 @@ describe('commands:edit:handler', () => {
   })
 
   it('throws an error if the specified sheet does not exist', () => {
-    const sheetA = genSheet('test-sheet-a')
-    const sheetB = genSheet('test-sheet-b')
+    const sheetA = DB.genSheet('test-sheet-a')
+    const sheetB = DB.genSheet('test-sheet-b')
 
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
@@ -47,9 +46,9 @@ describe('commands:edit:handler', () => {
   })
 
   it('throws an error if the specified sheet entry does not exist', () => {
-    const entryA = genSheetEntry(0, 'test-entry-a')
-    const entryB = genSheetEntry(1, 'test-entry-b')
-    const sheet = genSheet('test-sheet', [entryA, entryB])
+    const entryA = DB.genSheetEntry(0, 'test-entry-a')
+    const entryB = DB.genSheetEntry(1, 'test-entry-b')
+    const sheet = DB.genSheet('test-sheet', [entryA, entryB])
 
     db.db?.sheets.push(sheet)
 
@@ -59,8 +58,8 @@ describe('commands:edit:handler', () => {
   })
 
   it('throws an error if editing a sheet but no name was provided', () => {
-    const sheetA = genSheet('test-sheet-a')
-    const sheetB = genSheet('test-sheet-b')
+    const sheetA = DB.genSheet('test-sheet-a')
+    const sheetB = DB.genSheet('test-sheet-b')
 
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
@@ -71,7 +70,7 @@ describe('commands:edit:handler', () => {
   })
 
   it('edits the name of the specified sheet', async () => {
-    const sheet = genSheet('test-sheet-a')
+    const sheet = DB.genSheet('test-sheet-a')
 
     db.db?.sheets.push(sheet)
 
@@ -81,8 +80,8 @@ describe('commands:edit:handler', () => {
   })
 
   it('edits the description of the specified sheet entry', async () => {
-    const entry = genSheetEntry(0, 'test-description')
-    const sheet = genSheet('test-sheet-a', [entry])
+    const entry = DB.genSheetEntry(0, 'test-description')
+    const sheet = DB.genSheet('test-sheet-a', [entry])
 
     db.db?.sheets.push(sheet)
 
@@ -101,8 +100,8 @@ describe('commands:edit:handler', () => {
   it('edits the start date of the specified sheet entry', async () => {
     const startDate = new Date(Date.now() - 24 * 60 * 60 * 1000)
     const newStartDate = new Date()
-    const entry = genSheetEntry(0, 'test-description', startDate)
-    const sheet = genSheet('test-sheet-a', [entry])
+    const entry = DB.genSheetEntry(0, 'test-description', startDate)
+    const sheet = DB.genSheet('test-sheet-a', [entry])
 
     db.db?.sheets.push(sheet)
 
@@ -121,8 +120,8 @@ describe('commands:edit:handler', () => {
     const startDate = new Date(Date.now() - 48 * 60 * 60 * 1000)
     const endDate = new Date(Date.now() - 24 * 60 * 60 * 1000)
     const newEndDate = new Date()
-    const entry = genSheetEntry(0, 'test-description', startDate, endDate)
-    const sheet = genSheet('test-sheet-a', [entry])
+    const entry = DB.genSheetEntry(0, 'test-description', startDate, endDate)
+    const sheet = DB.genSheet('test-sheet-a', [entry])
 
     db.db?.sheets.push(sheet)
 
@@ -138,8 +137,8 @@ describe('commands:edit:handler', () => {
   })
 
   it('deletes the specified sheet if requested', async () => {
-    const sheetA = genSheet('test-sheet-a')
-    const sheetB = genSheet('test-sheet-b')
+    const sheetA = DB.genSheet('test-sheet-a')
+    const sheetB = DB.genSheet('test-sheet-b')
 
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
@@ -151,9 +150,9 @@ describe('commands:edit:handler', () => {
   })
 
   it('deletes the specified sheet entry if requested', async () => {
-    const entryA = genSheetEntry(0, 'test-entry-a')
-    const entryB = genSheetEntry(1, 'test-entry-b')
-    const sheet = genSheet('test-sheet-a', [entryA, entryB])
+    const entryA = DB.genSheetEntry(0, 'test-entry-a')
+    const entryB = DB.genSheetEntry(1, 'test-entry-b')
+    const sheet = DB.genSheet('test-sheet-a', [entryA, entryB])
 
     db.db?.sheets.push(sheet)
 

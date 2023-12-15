@@ -6,7 +6,6 @@ import formatDuration from 'format-duration'
 import DB from '../db'
 import log from '../log'
 import * as C from '../color'
-import * as S from '../sheets'
 
 interface OutCommandArgs {
   db: DB
@@ -37,7 +36,7 @@ const handler = async (args: OutCommandArgs) => {
     throw new Error(`No active entry for sheet ${sheetName}`)
   }
 
-  const entry = S.findSheetEntry(sheet, activeEntryID)
+  const entry = db.getSheetEntry(sheet, activeEntryID)
 
   if (typeof entry === 'undefined') {
     throw new Error(`No entry found with ID ${activeEntryID}`)

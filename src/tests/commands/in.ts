@@ -5,7 +5,6 @@ import _cloneDeep from 'lodash/cloneDeep'
 import chaiAsPromised from 'chai-as-promised'
 
 import DB from '../../db'
-import { genSheet, genSheetEntry } from '../../sheets'
 import { type InCommandArgs, handler } from '../../commands/in'
 
 chai.use(chaiAsPromised)
@@ -35,7 +34,7 @@ describe('commands:in:handler', () => {
 
   it('throws an error if the sheet has an active entry registered but it is not in the entries list', () => {
     const testDB = _cloneDeep(db)
-    const sheet = genSheet('test-sheet')
+    const sheet = DB.genSheet('test-sheet')
 
     sheet.activeEntryID = 42
 
@@ -47,8 +46,8 @@ describe('commands:in:handler', () => {
   })
 
   it('throws an error if an entry is already active for the time sheet', () => {
-    const entry = genSheetEntry(0, 'test-description', new Date())
-    const sheet = genSheet('test-sheet', [entry], entry.id)
+    const entry = DB.genSheetEntry(0, 'test-description', new Date())
+    const sheet = DB.genSheet('test-sheet', [entry], entry.id)
 
     db.db?.sheets.push(sheet)
 
@@ -60,7 +59,7 @@ describe('commands:in:handler', () => {
   })
 
   it('creates a new time sheet entry and adds it to the sheet entry list', (done) => {
-    const sheet = genSheet('test-sheet')
+    const sheet = DB.genSheet('test-sheet')
     const { name } = sheet
     const testDB = _cloneDeep(db)
 

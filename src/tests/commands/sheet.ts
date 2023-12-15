@@ -4,7 +4,6 @@ import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 import DB from '../../db'
-import { genSheet } from '../../sheets'
 import { handler } from '../../commands/sheet'
 
 chai.use(chaiAsPromised)
@@ -30,8 +29,8 @@ describe('commands:sheet:handler', () => {
   it('removes specified sheet from the DB if it exists', async () => {
     const sheetNameA = 'test-sheet-a'
     const sheetNameB = 'test-sheet-b'
-    const sheetA = genSheet(sheetNameA)
-    const sheetB = genSheet(sheetNameB)
+    const sheetA = DB.genSheet(sheetNameA)
+    const sheetB = DB.genSheet(sheetNameB)
 
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
@@ -64,8 +63,8 @@ describe('commands:sheet:handler', () => {
   it('switches to the specified sheet', async () => {
     const sheetNameA = 'test-sheet-a'
     const sheetNameB = 'test-sheet-b'
-    const sheetA = genSheet(sheetNameA)
-    const sheetB = genSheet(sheetNameB)
+    const sheetA = DB.genSheet(sheetNameA)
+    const sheetB = DB.genSheet(sheetNameB)
 
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
@@ -79,8 +78,8 @@ describe('commands:sheet:handler', () => {
     const sheetNameA = 'test-sheet-a'
     const sheetNameB = 'test-sheet-b'
     const sheetNameC = 'test-sheet-c'
-    const sheetA = genSheet(sheetNameA)
-    const sheetB = genSheet(sheetNameB)
+    const sheetA = DB.genSheet(sheetNameA)
+    const sheetB = DB.genSheet(sheetNameB)
 
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)

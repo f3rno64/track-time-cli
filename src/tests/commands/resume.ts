@@ -7,7 +7,6 @@ import chaiAsPromised from 'chai-as-promised'
 import DB from '../../db'
 import { handler } from '../../commands/resume'
 import { type TimeSheetEntry } from '../../types'
-import { genSheet, genSheetEntry } from '../../sheets'
 
 chai.use(chaiAsPromised)
 
@@ -29,7 +28,7 @@ describe('commands:resume:handler', () => {
   })
 
   it('throws an error if there is no recent entry for the active sheet', () => {
-    const sheet = genSheet('test-sheet')
+    const sheet = DB.genSheet('test-sheet')
     const { name: sheetName } = sheet
 
     if (db.db === null) {
@@ -45,9 +44,9 @@ describe('commands:resume:handler', () => {
   })
 
   it('throws an error if the active sheet already has a running entry', () => {
-    const entryA = genSheetEntry(0, 'test-a', new Date(), new Date())
-    const entryB = genSheetEntry(0, 'test-b', new Date())
-    const sheet = genSheet('test-sheet', [entryA, entryB], entryB.id)
+    const entryA = DB.genSheetEntry(0, 'test-a', new Date(), new Date())
+    const entryB = DB.genSheetEntry(0, 'test-b', new Date())
+    const sheet = DB.genSheet('test-sheet', [entryA, entryB], entryB.id)
     const { name: sheetName } = sheet
 
     if (db.db === null) {
@@ -67,14 +66,14 @@ describe('commands:resume:handler', () => {
   })
 
   it('creates a new entry with the same description as the most recently ended entry and adds it to the sheet', (done) => {
-    const entryA = genSheetEntry(0, 'test-a', new Date(), new Date())
-    const entryB = genSheetEntry(
+    const entryA = DB.genSheetEntry(0, 'test-a', new Date(), new Date())
+    const entryB = DB.genSheetEntry(
       0,
       'test-b',
       new Date(Date.now() + 1000),
       new Date(Date.now() + 100000)
     )
-    const sheet = genSheet('test-sheet', [entryA, entryB])
+    const sheet = DB.genSheet('test-sheet', [entryA, entryB])
     const { name: sheetName } = sheet
 
     if (db.db === null) {
