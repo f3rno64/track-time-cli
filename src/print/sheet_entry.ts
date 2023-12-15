@@ -14,12 +14,12 @@ const printSheetEntry = (
   printDateAgo?: boolean
 ): void => {
   const { id, start, end, description } = entry
-  const idUI = C.clID(`${id}`)
+  const idUI = C.clID(`(${id})`)
   const startUI = C.clDate(
     printDateAgo ? ago(start) : new Date(start).toLocaleDateString()
   )
   const finalEnd = end === null ? new Date() : end
-  const descriptionUI = C.clText(description)
+  const descriptionUI = C.clText(`[${description}]`)
   const durationUI = C.clDuration(formatDuration(+finalEnd - +start))
 
   // prettier-ignore
@@ -37,7 +37,7 @@ const printSheetEntry = (
       : `${C.clText('sheet')} ${C.clSheet(sheetName)}`
 
   const result =
-    `${sheetNamePrefix} (${idUI}) [${durationUI}] ${dateUI}: ${descriptionUI}`.trim()
+    `${sheetNamePrefix} ${idUI} ${durationUI} ${dateUI}: ${descriptionUI}`.trim()
 
   if (isActive === true) {
     log(colors.bold(`  ${C.clHighlight('*')} ${result}`))
