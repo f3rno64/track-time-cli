@@ -24,7 +24,7 @@ describe('commands:sheet:handler', () => {
 
   it('throws an error if trying to delete a sheet that does not exist', () => {
     const sheetName = 'non-existent-sheet'
-    const p = handler({ db, name: '', delete: sheetName })
+    const p = handler({ db, name: sheetName, delete: true })
 
     expect(p).to.be.rejectedWith(`Sheet ${sheetName} does not exist`)
   })
@@ -38,22 +38,22 @@ describe('commands:sheet:handler', () => {
     db.sheets.push(sheetA)
     db.sheets.push(sheetB)
 
-    await handler({ db, name: '', delete: sheetNameA })
+    await handler({ db, name: sheetNameA, delete: true })
 
     expect(db.sheets.length).to.equal(2)
     expect(db.sheets.find(({ name }) => name === sheetNameA)).to.be.undefined
   })
 
-  it('throws an error if no sheet name is provided and no active sheet exists', () => {
+  it('throws an error if no name is given and no active sheet exists', () => {
     db.activeSheetName = null
 
-    const p = handler({ db, name: '', delete: '' })
+    const p = handler({ db, name: '', delete: false })
 
     expect(p).to.be.rejectedWith('No active time sheet')
   })
 
   it('throws an error if the specified sheet is already active', () => {
-    const p = handler({ db, name: 'main', delete: '' })
+    const p = handler({ db, name: 'main', delete: false })
 
     expect(p).to.be.rejectedWith('Sheet main already active')
   })
@@ -67,14 +67,14 @@ describe('commands:sheet:handler', () => {
     db.sheets.push(sheetA)
     db.sheets.push(sheetB)
 
-    await handler({ db, name: sheetNameA, delete: '' })
+    await handler({ db, name: sheetNameA, delete: false })
 
     const { activeSheetName } = db
 
     expect(activeSheetName).to.equal(sheetNameA)
   })
 
-  it('creates a new sheet with the given name if it does not already exist', async () => {
+  it('creates a new sheet with the name if it does not exist', async () => {
     const sheetNameA = 'test-sheet-a'
     const sheetNameB = 'test-sheet-b'
     const sheetNameC = 'test-sheet-c'
@@ -84,7 +84,7 @@ describe('commands:sheet:handler', () => {
     db.sheets.push(sheetA)
     db.sheets.push(sheetB)
 
-    await handler({ db, name: sheetNameC, delete: '' })
+    await handler({ db, name: sheetNameC, delete: false })
 
     const { activeSheetName, sheets } = db
     const newSheet = sheets.find(({ name }) => name === sheetNameC)

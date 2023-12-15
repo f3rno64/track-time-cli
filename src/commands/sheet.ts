@@ -2,14 +2,13 @@ import _isEmpty from 'lodash/isEmpty'
 
 import log from '../log'
 import * as C from '../color'
-import * as P from '../print'
 import { genSheet } from '../sheets'
 import { findSheet, saveDB } from '../db'
 import { type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'sheet [name]',
-  describe: 'Switch to a sheet by name, creating it if needed',
+  describe: 'Switch to or delete a sheet by name',
   aliases: ['s'],
   builder: {
     name: {
@@ -31,57 +30,39 @@ interface SheetCommandArgs {
 }
 
 const handler = async (args: SheetCommandArgs) => {
-  const { name, delete: nameOfSheetToDelete, db } = args
+  const { name, delete: del, db } = args
   const { activeSheetName } = db
+  const sheetName = _isEmpty(name) ? activeSheetName : name
 
-  if (!_isEmpty(nameOfSheetToDelete)) {
-    const { sheets } = db
-    const existingSheet = findSheet(db, nameOfSheetToDelete)
+  if (sheetName === null) {
+    throw new Error('No active sheet')
+  } else if (activeSheetName === name) {
+    throw new Error(`Sheet ${name} already active`)
+  }
 
-    if (typeof existingSheet === 'undefined') {
-      throw new Error(`Sheet ${nameOfSheetToDelete} does not exist`)
+  if (del) {
+    const sheetToDelete = findSheet(db, sheetName)
+
+    if (typeof sheetToDelete === 'undefined') {
+      throw new Error(`Sheet ${sheetName} does not exist`)
     }
 
-    db.sheets = sheets.filter(
-      ({ name: sName }) => sName !== nameOfSheetToDelete
-    )
+    db.sheets = db.sheets.filter(({ name: sName }) => sName !== sheetName)
 
-    if (db.activeSheetName === nameOfSheetToDelete) {
+    if (db.activeSheetName === sheetName) {
       db.activeSheetName = null
     }
 
     await saveDB(db)
 
-    log(`${C.clText('Deleted sheet')} ${C.clSheet(nameOfSheetToDelete)}`)
-
-    return
-  }
-
-  if (_isEmpty(name)) {
-    if (activeSheetName === null) {
-      throw new Error('No active time sheet')
-    }
-
-    const sheet = findSheet(db, activeSheetName)
-
-    if (typeof sheet === 'undefined') {
-      throw new Error('No active time sheet')
-    }
-
-    const { name, entries } = sheet
-
-    if (entries.length === 0) {
-      throw new Error(
-        `${C.clText('Sheet')} ${C.clSheet(name)} ${C.clText('has no entries')}`
-      )
-    }
-
-    P.printSheet(sheet, name === activeSheetName)
-  }
-
-  if (activeSheetName === name) {
-    throw new Error(`Sheet ${name} already active`)
-  } else if (!_isEmpty(name)) {
+    log(`${C.clText('Deleted sheet')} ${C.clSheet(sheetName)}`)
+  } else if (_isEmpty(name)) {
+    log(
+      `${C.clText('Sheet')} ${C.clHighlightRed(sheetName)} ${C.clText(
+        'is active'
+      )}`
+    )
+  } else {
     const existingSheet = findSheet(db, name)
     let sheet = null
 
@@ -97,7 +78,7 @@ const handler = async (args: SheetCommandArgs) => {
 
     await saveDB(db)
 
-    log(`${C.clText('Switched to time sheet:')} ${C.clSheet(name)}`)
+    log(`${C.clText('Switched to sheet:')} ${C.clSheet(name)}`)
   }
 }
 
