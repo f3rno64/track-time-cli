@@ -19,11 +19,13 @@ const COMMAND_CONFIG = {
   aliases: ['i'],
   builder: {
     at: {
-      describe: 'Check in at a specific time'
+      describe: 'Check in at a specific time',
+      type: 'string'
     },
 
     description: {
       describe: 'Time sheet entry description',
+      type: 'string',
       demandOption: true
     }
   }

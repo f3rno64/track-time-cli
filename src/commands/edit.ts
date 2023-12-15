@@ -14,23 +14,28 @@ const COMMAND_CONFIG = {
   aliases: ['e'],
   builder: {
     sheet: {
-      describe: 'Name of time sheet to edit'
+      describe: 'Name of time sheet to edit',
+      type: 'string'
     },
 
     name: {
-      describe: 'New name to apply to specified time sheet'
+      describe: 'New name to apply to specified time sheet',
+      type: 'string'
     },
 
     entry: {
-      describe: 'ID of entry to edit'
+      describe: 'ID of entry to edit',
+      type: 'number'
     },
 
     description: {
-      describe: 'New description for the specified entry'
+      describe: 'New description for the specified entry',
+      type: 'string'
     },
 
     delete: {
-      describe: 'Delete the specified time sheet or time sheet entry'
+      describe: 'Delete the specified time sheet or time sheet entry',
+      type: 'boolean'
     }
   }
 }

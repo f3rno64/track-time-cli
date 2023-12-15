@@ -21,7 +21,8 @@ const COMMAND_CONFIG = {
   aliases: ['o'],
   builder: {
     at: {
-      describe: 'Check out at a specific time'
+      describe: 'Check out at a specific time',
+      type: 'string'
     }
   }
 }

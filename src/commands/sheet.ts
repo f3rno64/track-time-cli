@@ -13,19 +13,20 @@ const COMMAND_CONFIG = {
   aliases: ['s'],
   builder: {
     name: {
-      describe: 'Sheet name'
+      describe: 'Sheet name',
+      type: 'string'
     },
 
     delete: {
-      describe: 'Delete sheet by name',
-      default: false
+      describe: 'Delete the specified sheet',
+      type: 'boolean'
     }
   }
 }
 
 interface SheetCommandArgs {
   db: TimeTrackerDB
-  delete: string
+  delete: boolean
   name: string
 }
 
