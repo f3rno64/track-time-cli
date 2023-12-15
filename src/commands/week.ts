@@ -23,7 +23,7 @@ const COMMAND_CONFIG = {
 
 interface WeekCommandArguments {
   db: DB
-  total: boolean
+  total?: boolean
   sheets?: string[]
 }
 

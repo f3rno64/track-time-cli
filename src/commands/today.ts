@@ -17,8 +17,8 @@ const COMMAND_CONFIG = {
 
 interface TodayCommandArguments {
   db: DB
-  ago: boolean
-  all: boolean
+  ago?: boolean
+  all?: boolean
 }
 
 const handler = (args: TodayCommandArguments) => {

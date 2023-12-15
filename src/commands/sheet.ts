@@ -1,5 +1,3 @@
-import _isEmpty from 'lodash/isEmpty'
-
 import DB from '../db'
 import log from '../log'
 import * as C from '../color'
@@ -23,14 +21,14 @@ const COMMAND_CONFIG = {
 
 interface SheetCommandArgs {
   db: DB
-  delete: boolean
-  name: string
+  delete?: boolean
+  name?: string
 }
 
 const handler = async (args: SheetCommandArgs) => {
   const { name, delete: del, db } = args
   const activeSheetName = db.getActiveSheetName()
-  const sheetName = _isEmpty(name) ? activeSheetName : name
+  const sheetName = typeof name === 'undefined' ? activeSheetName : name
 
   if (sheetName === null) {
     throw new Error('No active sheet')
@@ -42,7 +40,7 @@ const handler = async (args: SheetCommandArgs) => {
     await db.removeSheet(sheetName)
 
     log(`${C.clText('Deleted sheet')} ${C.clSheet(sheetName)}`)
-  } else if (_isEmpty(name)) {
+  } else if (typeof name === 'undefined') {
     log(
       `${C.clText('Sheet')} ${C.clHighlightRed(sheetName)} ${C.clText(
         'is active'

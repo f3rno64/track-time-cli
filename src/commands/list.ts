@@ -39,11 +39,11 @@ const COMMAND_CONFIG = {
 
 interface ListCommandArgs {
   db: DB
-  sheets: string[]
-  ago: boolean
-  all: boolean
-  since: string
-  today: boolean
+  sheets?: string[]
+  ago?: boolean
+  all?: boolean
+  since?: string
+  today?: boolean
 }
 
 const handler = (args: ListCommandArgs) => {
@@ -57,7 +57,7 @@ const handler = (args: ListCommandArgs) => {
   const dbSheets = db.getAllSheets()
 
   // prettier-ignore
-  const sheetsToList: TimeSheet[] = !_isEmpty(sheetNames)
+  const sheetsToList: TimeSheet[] = typeof sheetNames !== 'undefined'
     ? sheetNames.map(db.getSheet)
     : all
       ? dbSheets

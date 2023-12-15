@@ -10,9 +10,9 @@ import * as S from '../sheets'
 
 interface OutCommandArgs {
   db: DB
-  at: string[]
-  sheet: string
-  entry: string
+  at?: string[]
+  sheet?: string
+  entry?: string
 }
 
 const COMMAND_CONFIG = {
