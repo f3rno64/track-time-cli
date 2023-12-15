@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.21.0](https://github.com/f3rno64/track-time-cli/compare/v1.20.3...v1.21.0) (2023-12-15)
+
+
+### Bug Fixes
+
+* sheet command delete logic ([6351e65](https://github.com/f3rno64/track-time-cli/commit/6351e65b627f84ad29620510bbd17543603f9004))
+
 ### [1.20.3](https://github.com/f3rno64/track-time-cli/compare/v1.20.2...v1.20.3) (2023-12-14)
 
 
