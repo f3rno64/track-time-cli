@@ -6,17 +6,24 @@ import * as S from '../sheets'
 const COMMAND_CONFIG = {
   command: 'today',
   describe: 'Display a summary of activity for today',
-  aliases: ['t']
+  aliases: ['t'],
+  builder: {
+    all: {
+      describe: 'Include all time sheets in results',
+      type: 'boolean'
+    }
+  }
 }
 
 interface TodayCommandArguments {
   db: DB
   ago: boolean
+  all: boolean
 }
 
 const handler = (args: TodayCommandArguments) => {
-  const { ago, db } = args
-  const sheets = db.getAllSheets()
+  const { all, ago, db } = args
+  const sheets = all ? db.getAllSheets() : [db.getActiveSheet()]
   const sheetsWithEntriesForToday = S.getSheetsWithEntriesSinceDate(
     sheets,
     U.getStartDate()
