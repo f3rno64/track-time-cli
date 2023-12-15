@@ -4,7 +4,7 @@ import log from '../log'
 
 type ColumnWidths = Record<number, number>
 
-const DEFAULT_PADDING = 2
+const DEFAULT_PADDING = 0
 
 const printJustifiedContent = (
   rows: Array<string[]>,
