@@ -7,7 +7,6 @@ import log from '../log'
 import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
-import * as S from '../sheets'
 import { type TimeSheet } from '../types'
 
 const COMMAND_CONFIG = {
@@ -79,7 +78,7 @@ const handler = (args: ListCommandArgs) => {
   const filteredSheets =
     sinceDate === null
       ? sheetsToList
-      : S.getSheetsWithEntriesSinceDate(sheetsToList, sinceDate)
+      : U.getSheetsWithEntriesSinceDate(sheetsToList, sinceDate)
 
   if (today) {
     log(

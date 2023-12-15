@@ -2,8 +2,8 @@ import formatDuration from 'format-duration'
 import humanizeDuration from 'humanize-duration'
 
 import * as C from '../../color'
+import * as U from '../../utils'
 import { type TimeSheet } from '../../types'
-import { getTotalSheetDuration } from '../../sheets'
 
 const getSheetHeaderColumns = (
   sheet: TimeSheet,
@@ -22,8 +22,8 @@ const getSheetHeaderColumns = (
 
   const totalDuration =
     humanize === true
-      ? humanizeDuration(getTotalSheetDuration(sheet))
-      : formatDuration(getTotalSheetDuration(sheet))
+      ? humanizeDuration(U.getTotalSheetDuration(sheet))
+      : formatDuration(U.getTotalSheetDuration(sheet))
 
   const uiTotalDuration =
     entries.length === 0 ? '' : C.clDuration(`[${totalDuration}]`)

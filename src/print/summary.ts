@@ -4,8 +4,8 @@ import formatDuration from 'format-duration'
 
 import log from '../log'
 import * as C from '../color'
+import * as U from '../utils'
 import { type TimeSheet } from '../types'
-import { getTotalSheetDuration } from '../sheets'
 
 /**
  * NOTE: The `appendEmptyLine` arg allows print logic lacking explicit
@@ -15,7 +15,7 @@ const printSummary = (
   sheets: TimeSheet | TimeSheet[],
   appendEmptyLine?: boolean
 ): void => {
-  const totalDuration = getTotalSheetDuration(sheets)
+  const totalDuration = U.getTotalSheetDuration(sheets)
   const totalEntries = _isArray(sheets)
     ? _sum(sheets.map((sheet) => sheet.entries.length))
     : sheets.entries.length

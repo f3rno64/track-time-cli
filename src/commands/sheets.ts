@@ -10,7 +10,6 @@ import log from '../log'
 import * as C from '../color'
 import * as U from '../utils'
 import * as P from '../print'
-import * as S from '../sheets'
 import { TimeSheet } from '../types'
 
 const COMMAND_CONFIG = {
@@ -65,7 +64,7 @@ const handler = async (args: SheetsCommandArgs) => {
   const filteredSheets =
     sinceDate === null
       ? sheets
-      : S.getSheetsWithEntriesSinceDate(sheets, sinceDate)
+      : U.getSheetsWithEntriesSinceDate(sheets, sinceDate)
 
   if (filteredSheets.length === 0) {
     throw new Error(`No sheets since ${sinceDate.toLocaleString()}`)

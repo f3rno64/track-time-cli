@@ -3,8 +3,8 @@ import humanizeDuration from 'humanize-duration'
 
 import log from '../log'
 import * as C from '../color'
+import * as U from '../utils'
 import { type TimeSheet } from '../types'
-import { getTotalSheetDuration } from '../sheets'
 
 const printSheetHeader = (
   sheet: TimeSheet,
@@ -23,8 +23,8 @@ const printSheetHeader = (
 
   const totalDuration =
     humanize === true
-      ? humanizeDuration(getTotalSheetDuration(sheet))
-      : formatDuration(getTotalSheetDuration(sheet))
+      ? humanizeDuration(U.getTotalSheetDuration(sheet))
+      : formatDuration(U.getTotalSheetDuration(sheet))
 
   const uiTotalDuration =
     entries.length === 0 ? '' : C.clDuration(`[${totalDuration}]`)

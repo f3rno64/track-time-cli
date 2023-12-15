@@ -1,7 +1,6 @@
 import DB from '../db'
 import * as U from '../utils'
 import * as P from '../print'
-import * as S from '../sheets'
 
 const COMMAND_CONFIG = {
   command: 'today',
@@ -24,7 +23,7 @@ interface TodayCommandArguments {
 const handler = (args: TodayCommandArguments) => {
   const { all, ago, db } = args
   const sheets = all ? db.getAllSheets() : [db.getActiveSheet()]
-  const sheetsWithEntriesForToday = S.getSheetsWithEntriesSinceDate(
+  const sheetsWithEntriesForToday = U.getSheetsWithEntriesSinceDate(
     sheets,
     U.getStartDate()
   )
