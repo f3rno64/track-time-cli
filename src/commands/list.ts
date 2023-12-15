@@ -1,6 +1,8 @@
 import sAgo from 's-ago'
+import _sum from 'lodash/sum'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
+import formatDuration from 'format-duration'
 
 import DB from '../db'
 import log from '../log'
@@ -114,6 +116,23 @@ const handler = (args: ListCommandArgs) => {
       )} ${C.clText('Sheets not shown')}. ${C.clText('use')} ${C.clHighlightRed(
         '--all'
       )} ${C.clText('to show')}`
+    )
+  } else {
+    const totalDuration = _sum(
+      filteredSheets.map(({ entries }) =>
+        _sum(
+          entries.map(({ start, end }) =>
+            end === null ? Date.now() - +start : +end - +start
+          )
+        )
+      )
+    )
+
+    log('')
+    log(
+      `${C.clText('* Total duration:')} ${C.clDuration(
+        `[${formatDuration(totalDuration)}]`
+      )}`
     )
   }
 }
