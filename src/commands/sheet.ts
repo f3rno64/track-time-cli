@@ -1,10 +1,8 @@
 import _isEmpty from 'lodash/isEmpty'
 
+import DB from '../db'
 import log from '../log'
 import * as C from '../color'
-import { genSheet } from '../sheets'
-import { findSheet, saveDB } from '../db'
-import { type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'sheet [name]',
@@ -24,14 +22,14 @@ const COMMAND_CONFIG = {
 }
 
 interface SheetCommandArgs {
-  db: TimeTrackerDB
+  db: DB
   delete: boolean
   name: string
 }
 
 const handler = async (args: SheetCommandArgs) => {
   const { name, delete: del, db } = args
-  const { activeSheetName } = db
+  const activeSheetName = db.getActiveSheetName()
   const sheetName = _isEmpty(name) ? activeSheetName : name
 
   if (sheetName === null) {
@@ -41,19 +39,7 @@ const handler = async (args: SheetCommandArgs) => {
   }
 
   if (del) {
-    const sheetToDelete = findSheet(db, sheetName)
-
-    if (typeof sheetToDelete === 'undefined') {
-      throw new Error(`Sheet ${sheetName} does not exist`)
-    }
-
-    db.sheets = db.sheets.filter(({ name: sName }) => sName !== sheetName)
-
-    if (db.activeSheetName === sheetName) {
-      db.activeSheetName = null
-    }
-
-    await saveDB(db)
+    await db.removeSheet(sheetName)
 
     log(`${C.clText('Deleted sheet')} ${C.clSheet(sheetName)}`)
   } else if (_isEmpty(name)) {
@@ -63,20 +49,11 @@ const handler = async (args: SheetCommandArgs) => {
       )}`
     )
   } else {
-    const existingSheet = findSheet(db, name)
-    let sheet = null
+    const sheet = db.doesSheetExist(name)
+      ? db.getSheet(name)
+      : await db.addSheet(name)
 
-    if (typeof existingSheet === 'undefined') {
-      sheet = genSheet(name)
-      db.sheets.push(sheet)
-      await saveDB(db)
-    } else {
-      sheet = existingSheet
-    }
-
-    db.activeSheetName = sheet.name
-
-    await saveDB(db)
+    await db.setActiveSheet(sheet)
 
     log(`${C.clText('Switched to sheet:')} ${C.clSheet(name)}`)
   }

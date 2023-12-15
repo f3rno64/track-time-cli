@@ -1,6 +1,7 @@
+import DB from '../db'
+import * as U from '../utils'
 import * as P from '../print'
 import * as S from '../sheets'
-import { type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'today',
@@ -9,14 +10,17 @@ const COMMAND_CONFIG = {
 }
 
 interface TodayCommandArguments {
-  db: TimeTrackerDB
+  db: DB
   ago: boolean
 }
 
 const handler = (args: TodayCommandArguments) => {
   const { ago, db } = args
-  const { sheets } = db
-  const sheetsWithEntriesForToday = S.filterWithEntriesForToday(sheets)
+  const sheets = db.getAllSheets()
+  const sheetsWithEntriesForToday = S.getSheetsWithEntriesSinceDate(
+    sheets,
+    U.getStartDate()
+  )
 
   if (sheetsWithEntriesForToday.length === 0) {
     throw new Error('No entries for today')

@@ -4,14 +4,13 @@ import chai, { expect } from 'chai'
 import _cloneDeep from 'lodash/cloneDeep'
 import chaiAsPromised from 'chai-as-promised'
 
-import { deleteDB, initDB } from '../../db'
-import { type TimeTrackerDB } from '../../types'
+import DB from '../../db'
 import { genSheet, genSheetEntry } from '../../sheets'
 import { type InCommandArgs, handler } from '../../commands/in'
 
 chai.use(chaiAsPromised)
 
-let db: TimeTrackerDB = {} as unknown as TimeTrackerDB
+const db = new DB()
 
 const getArgs = (overrides?: Record<string, unknown>): InCommandArgs => ({
   db,
@@ -21,12 +20,11 @@ const getArgs = (overrides?: Record<string, unknown>): InCommandArgs => ({
 
 describe('commands:in:handler', () => {
   beforeEach(async () => {
-    db = await initDB()
+    await db.load()
   })
 
   afterEach(async () => {
-    await deleteDB()
-    db = {} as unknown as TimeTrackerDB
+    await db.delete()
   })
 
   it('throws an error if not provided a sheet name and no sheet is active', () => {
@@ -41,7 +39,7 @@ describe('commands:in:handler', () => {
 
     sheet.activeEntryID = 42
 
-    testDB.sheets.push(sheet)
+    testDB?.db?.sheets.push(sheet)
 
     const p = handler(getArgs({ db: testDB }))
 
@@ -52,7 +50,7 @@ describe('commands:in:handler', () => {
     const entry = genSheetEntry(0, 'test-description', new Date())
     const sheet = genSheet('test-sheet', [entry], entry.id)
 
-    db.sheets.push(sheet)
+    db.db?.sheets.push(sheet)
 
     const p = handler(getArgs({ db }))
 
@@ -66,8 +64,12 @@ describe('commands:in:handler', () => {
     const { name } = sheet
     const testDB = _cloneDeep(db)
 
-    testDB.sheets.push(sheet)
-    testDB.activeSheetName = name
+    if (testDB.db === null) {
+      throw new Error('Test DB is null')
+    }
+
+    testDB.db.sheets.push(sheet)
+    testDB.db.activeSheetName = name
 
     const atDate = new Date(Date.now() - 24 * 60 * 60 * 1000)
     const p = handler(

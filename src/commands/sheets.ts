@@ -5,11 +5,13 @@ import _isEmpty from 'lodash/isEmpty'
 import formatDuration from 'format-duration'
 import humanizeDuration from 'humanize-duration'
 
+import DB from '../db'
 import log from '../log'
 import * as C from '../color'
 import * as U from '../utils'
 import * as P from '../print'
-import { TimeSheet, type TimeTrackerDB } from '../types'
+import * as S from '../sheets'
+import { TimeSheet } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'sheets',
@@ -34,7 +36,7 @@ const COMMAND_CONFIG = {
 }
 
 interface SheetsCommandArgs {
-  db: TimeTrackerDB
+  db: DB
   humanize?: boolean
   since?: string
   today?: boolean
@@ -42,11 +44,12 @@ interface SheetsCommandArgs {
 
 const handler = async (args: SheetsCommandArgs) => {
   const { today, since, humanize, db } = args
-  const { activeSheetName, sheets } = db
 
   if (!_isEmpty(since) && today) {
     throw new Error('Cannot use both --since and --today')
   }
+
+  const sheets = db.getAllSheets()
 
   if (sheets.length === 0) {
     throw new Error('No time sheets exist')
@@ -59,15 +62,10 @@ const handler = async (args: SheetsCommandArgs) => {
       ? U.getStartDate()
       : null
 
-  // prettier-ignore
-  const filteredSheets = sinceDate === null
-    ? sheets
-    : sheets.map(
-      ({ entries, ...otherSheetData }) => ({
-        ...otherSheetData,
-        entries: entries.filter(({ start }) => start >= sinceDate)
-      })
-    ).filter(({ entries }) => entries.length > 0)
+  const filteredSheets =
+    sinceDate === null
+      ? sheets
+      : S.getSheetsWithEntriesSinceDate(sheets, sinceDate)
 
   if (filteredSheets.length === 0) {
     throw new Error(`No sheets since ${sinceDate.toLocaleString()}`)
@@ -95,6 +93,7 @@ const handler = async (args: SheetsCommandArgs) => {
 
   log('')
 
+  const activeSheetName = db.getActiveSheetName()
   const sheetHeaderRows = filteredSheets.map((sheet: TimeSheet): string[] =>
     P.getSheetHeaderColumns(sheet, sheet.name === activeSheetName, humanize)
   )

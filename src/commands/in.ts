@@ -1,16 +1,14 @@
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 
+import DB from '../db'
 import * as P from '../print'
-import { genSheetEntry } from '../sheets'
-import { type TimeTrackerDB } from '../types'
-import { findSheet, findSheetEntry, saveDB } from '../db'
 
 interface InCommandArgs {
+  db: DB
   description: string[]
   sheet?: string
   at?: string
-  db: TimeTrackerDB
 }
 
 const COMMAND_CONFIG = {
@@ -34,39 +32,24 @@ const COMMAND_CONFIG = {
 const handler = async (args: InCommandArgs) => {
   const { description, at, db } = args
   const finalDescription = description.join(' ')
-  const { activeSheetName } = db
+  const activeSheetName = db.getActiveSheetName()
 
   if (activeSheetName === null) {
     throw new Error('No active sheet')
   }
 
-  const sheet = findSheet(db, activeSheetName)
-
-  if (typeof sheet === 'undefined') {
-    throw new Error('No active sheet')
-  }
-
-  const { name, entries, activeEntryID } = sheet
+  const sheet = db.getSheet(activeSheetName)
+  const { name, activeEntryID } = sheet
 
   if (activeEntryID !== null) {
-    const entry = findSheetEntry(db, name, activeEntryID)
-
-    if (typeof entry === 'undefined') {
-      throw new Error(`Sheet ${name} has no entry with ID ${activeEntryID}`)
-    }
-
+    const entry = db.getSheetEntry(name, activeEntryID)
     const { id, description: entryDescription } = entry
 
     throw new Error(`An entry is already active (${id}): ${entryDescription}`)
   }
 
   const startDate = _isEmpty(at) ? new Date() : parseDate(at)
-  const entry = genSheetEntry(entries.length, finalDescription, startDate)
-
-  sheet.entries = [...sheet.entries, entry]
-  sheet.activeEntryID = entry.id
-
-  await saveDB(db)
+  const entry = await db.addActiveSheetEntry(name, finalDescription, startDate)
 
   P.printCheckedInEntry(entry)
 }

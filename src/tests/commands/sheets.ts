@@ -3,26 +3,28 @@
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
-import { deleteDB, initDB } from '../../db'
+import DB from '../../db'
 import { handler } from '../../commands/sheets'
-import { type TimeTrackerDB } from '../../types'
 
 chai.use(chaiAsPromised)
 
-let db: TimeTrackerDB = {} as unknown as TimeTrackerDB
+const db = new DB()
 
 describe('commands:sheets:handler', () => {
   beforeEach(async () => {
-    db = await initDB()
+    await db.load()
   })
 
   afterEach(async () => {
-    await deleteDB()
-    db = {} as unknown as TimeTrackerDB
+    await db.delete()
   })
 
   it('throws an error if no sheets exist', () => {
-    db.sheets = []
+    if (db.db == null) {
+      throw new Error('Test DB is null')
+    }
+
+    db.db.sheets = []
 
     const p = handler({ db })
 

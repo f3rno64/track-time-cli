@@ -1,12 +1,11 @@
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
-import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
 
+import DB from '../db'
 import log from '../log'
+import * as U from '../utils'
 import * as C from '../color'
-import { type TimeTrackerDB } from '../types'
-import { findSheet, findSheetEntry, saveDB } from '../db'
 
 const COMMAND_CONFIG = {
   command: 'edit [description..]',
@@ -41,7 +40,7 @@ const COMMAND_CONFIG = {
 }
 
 interface EditCommandArguments {
-  db: TimeTrackerDB
+  db: DB
   sheet?: string
   name?: string
   entry?: string
@@ -63,11 +62,9 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
     end
   } = args
 
-  const { activeSheetName } = db
+  const activeSheetName = db.getActiveSheetName()
   const finalSheetName = _isEmpty(inputSheet) ? activeSheetName : inputSheet
-  const description = _isArray(inputDescription)
-    ? inputDescription.join(' ')
-    : inputDescription
+  const description = U.parseVariadicArg(inputDescription)
 
   if (
     typeof finalSheetName === 'undefined' ||
@@ -77,12 +74,7 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
     throw new Error('No sheet specified and none active')
   }
 
-  const sheet = findSheet(db, finalSheetName)
-
-  if (typeof sheet === 'undefined') {
-    throw new Error(`Sheet ${finalSheetName} not found`)
-  }
-
+  const sheet = db.getSheet(finalSheetName)
   const { activeEntryID } = sheet
   const finalEntryID =
     inputEntry === null ||
@@ -91,17 +83,12 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
       ? activeEntryID
       : +inputEntry
 
-  if (finalEntryID !== null && _isFinite(+finalEntryID)) {
-    const entry = findSheetEntry(db, finalSheetName, +finalEntryID)
-
-    if (typeof entry === 'undefined') {
-      throw new Error(
-        `Entry ${+finalEntryID} not found in sheet ${finalSheetName}`
-      )
-    }
+  if (finalEntryID !== null && _isFinite(finalEntryID)) {
+    const entry = db.getSheetEntry(finalSheetName, finalEntryID)
 
     if (del) {
-      sheet.entries = sheet.entries.filter((e) => e.id !== entry.id)
+      await db.removeSheetEntry(sheet, entry)
+
       log(
         `${C.clText('Deleted entry')} ${C.clHighlight(
           `${finalEntryID}`
@@ -109,6 +96,9 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
       )
     } else if (typeof description !== 'undefined' && !_isEmpty(description)) {
       entry.description = description
+
+      await db.save()
+
       log(
         `${C.clText('Updated entry')} ${C.clHighlight(
           `${finalEntryID}`
@@ -119,6 +109,9 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
     } else if (!_isEmpty(start)) {
       const startDate = parseDate(start)
       entry.start = startDate
+
+      await db.save()
+
       log(
         `${C.clText('Updated entry')} ${C.clHighlight(
           `${finalEntryID}`
@@ -126,8 +119,9 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
       )
     } else if (!_isEmpty(end)) {
       const endDate = parseDate(end)
-
       entry.end = endDate
+
+      await db.save()
 
       log(
         `${C.clText('Updated entry')} ${C.clHighlight(
@@ -137,10 +131,12 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
     }
   } else {
     if (del) {
-      db.sheets = db.sheets.filter((s) => s.name !== finalSheetName)
+      await db.removeSheet(finalSheetName)
+
       log(`${C.clText('Deleted sheet')} ${C.clSheet(finalSheetName)}`)
     } else if (typeof inputName !== 'undefined' && !_isEmpty(inputName)) {
-      sheet.name = inputName
+      await db.renameSheet(sheet.name, inputName)
+
       log(
         `${C.clText('Renamed sheet')} ${C.clSheet(finalSheetName)} ${C.clText(
           'to'
@@ -150,8 +146,6 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
       throw new Error(`No new name specified for sheet ${finalSheetName}`)
     }
   }
-
-  await saveDB(db)
 }
 
 export { handler, COMMAND_CONFIG, type EditCommandArguments }

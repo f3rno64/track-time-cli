@@ -1,10 +1,8 @@
 import _isFinite from 'lodash/isFinite'
 
+import DB from '../db'
 import log from '../log'
-import * as D from '../db'
 import * as C from '../color'
-import { genSheetEntry } from '../sheets'
-import { type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'resume',
@@ -13,25 +11,15 @@ const COMMAND_CONFIG = {
 }
 
 interface ResumeCommandArgs {
-  db: TimeTrackerDB
+  db: DB
 }
 
 const handler = async (args: ResumeCommandArgs) => {
   const { db } = args
-  const lastActiveSheet = D.findLastActiveSheet(db)
-
-  if (lastActiveSheet === null) {
-    throw new Error('No active sheet')
-  }
-
-  const { name } = lastActiveSheet
-  const lastActiveEntry = D.findLastActiveSheetEntry(lastActiveSheet)
-
-  if (lastActiveEntry === null) {
-    throw new Error(`No recent entry for sheet ${name}`)
-  }
-
-  const { id, description, end } = lastActiveEntry
+  const sheet = db.getMostRecentlyActiveSheet()
+  const entry = db.getMostRecentlyActiveSheetEntry(sheet)
+  const { id, description, end } = entry
+  const { name } = sheet
 
   if (_isFinite(end)) {
     throw new Error(
@@ -39,13 +27,7 @@ const handler = async (args: ResumeCommandArgs) => {
     )
   }
 
-  const newEntryID = id + 1
-  const newEntry = genSheetEntry(newEntryID, description)
-
-  lastActiveSheet.entries.push(newEntry)
-  lastActiveSheet.activeEntryID = newEntryID
-
-  await D.saveDB(db)
+  await db.addActiveSheetEntry(sheet, description)
 
   log(
     `${C.clSheet(`${name}:`)} ${C.clText('resumed')} ${C.clHighlight(

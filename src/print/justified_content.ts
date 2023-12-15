@@ -4,14 +4,22 @@ import log from '../log'
 
 type ColumnWidths = Record<number, number>
 
-const printJustifiedContent = (rows: Array<string[]>) => {
+const DEFAULT_PADDING = 2
+
+const printJustifiedContent = (
+  rows: Array<string[]>,
+  padding: number = DEFAULT_PADDING
+) => {
   const columnWidths: ColumnWidths = {}
 
   rows.forEach((columns: string[]) => {
     columns.forEach((value: string, i: number) => {
-      const currentWidth = columnWidths[i] ?? 1
+      const currentWidth = columnWidths[i] ?? padding
 
-      columnWidths[i] = Math.max(currentWidth, stripANSI(value).length + 1)
+      columnWidths[i] = Math.max(
+        currentWidth,
+        stripANSI(value).length + padding
+      )
     })
   })
 

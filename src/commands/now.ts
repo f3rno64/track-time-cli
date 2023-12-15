@@ -1,6 +1,5 @@
+import DB from '../db'
 import * as P from '../print'
-import { findSheet } from '../db'
-import { type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
   command: ['now', '$0'],
@@ -9,23 +8,18 @@ const COMMAND_CONFIG = {
 }
 
 interface NowCommandArguments {
-  db: TimeTrackerDB
+  db: DB
 }
 
 const handler = (args: NowCommandArguments) => {
   const { db } = args
-  const { activeSheetName } = db
+  const activeSheetName = db.getActiveSheetName()
 
   if (activeSheetName === null) {
     throw new Error('No sheet is active')
   }
 
-  const sheet = findSheet(db, activeSheetName)
-
-  if (typeof sheet === 'undefined') {
-    throw new Error(`Acive sheet ${activeSheetName} not found`)
-  }
-
+  const sheet = db.getActiveSheet()
   const { activeEntryID, entries } = sheet
 
   if (activeEntryID === null) {

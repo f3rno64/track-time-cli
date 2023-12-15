@@ -3,15 +3,11 @@ import weekday from 'weekday'
 import _isEmpty from 'lodash/isEmpty'
 import formatDuration from 'format-duration'
 
+import DB from '../db'
 import log from '../log'
 import * as U from '../utils'
 import * as C from '../color'
-import { findSheet } from '../db'
-import {
-  type TimeSheetEntry,
-  type TimeSheet,
-  type TimeTrackerDB
-} from '../types'
+import { type TimeSheetEntry, type TimeSheet } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'week [sheets..]',
@@ -26,7 +22,7 @@ const COMMAND_CONFIG = {
 }
 
 interface WeekCommandArguments {
-  db: TimeTrackerDB
+  db: DB
   total: boolean
   sheets?: string[]
 }
@@ -67,21 +63,11 @@ type TotalResults = Record<string, WeekdayResult>
 
 const handler = (args: WeekCommandArguments) => {
   const { sheets: inputSheets, total, db } = args
-  const { sheets: allSheets } = db
 
-  // prettier-ignore
   const selectedSheets =
     typeof inputSheets === 'undefined' || _isEmpty(inputSheets)
-      ? allSheets
-      : inputSheets.map((sheetName: string) => {
-        const sheet = findSheet(db, sheetName)
-
-        if (typeof sheet === 'undefined') {
-          throw new Error(`Sheet ${sheetName} does not exist`)
-        }
-
-        return sheet
-      })
+      ? db.getAllSheets()
+      : inputSheets.map(db.getSheet)
 
   const relevantSheets = getSheetsWithEntriesInLastWeek(selectedSheets)
   const results: WeekdayResults = {}

@@ -3,23 +3,21 @@
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
+import DB from '../../db'
 import { genSheet } from '../../sheets'
-import { deleteDB, initDB } from '../../db'
 import { handler } from '../../commands/sheet'
-import { type TimeTrackerDB } from '../../types'
 
 chai.use(chaiAsPromised)
 
-let db: TimeTrackerDB = {} as unknown as TimeTrackerDB
+const db = new DB()
 
 describe('commands:sheet:handler', () => {
   beforeEach(async () => {
-    db = await initDB()
+    await db.load()
   })
 
   afterEach(async () => {
-    await deleteDB()
-    db = {} as unknown as TimeTrackerDB
+    await db.delete()
   })
 
   it('throws an error if trying to delete a sheet that does not exist', () => {
@@ -35,17 +33,22 @@ describe('commands:sheet:handler', () => {
     const sheetA = genSheet(sheetNameA)
     const sheetB = genSheet(sheetNameB)
 
-    db.sheets.push(sheetA)
-    db.sheets.push(sheetB)
+    db.db?.sheets.push(sheetA)
+    db.db?.sheets.push(sheetB)
 
     await handler({ db, name: sheetNameA, delete: true })
 
-    expect(db.sheets.length).to.equal(2)
-    expect(db.sheets.find(({ name }) => name === sheetNameA)).to.be.undefined
+    expect(db.db?.sheets.length).to.equal(2)
+    expect(db.db?.sheets.find(({ name }) => name === sheetNameA)).to.be
+      .undefined
   })
 
   it('throws an error if no name is given and no active sheet exists', () => {
-    db.activeSheetName = null
+    if (db.db === null) {
+      throw new Error('Test DB is null')
+    }
+
+    db.db.activeSheetName = null
 
     const p = handler({ db, name: '', delete: false })
 
@@ -64,14 +67,12 @@ describe('commands:sheet:handler', () => {
     const sheetA = genSheet(sheetNameA)
     const sheetB = genSheet(sheetNameB)
 
-    db.sheets.push(sheetA)
-    db.sheets.push(sheetB)
+    db.db?.sheets.push(sheetA)
+    db.db?.sheets.push(sheetB)
 
     await handler({ db, name: sheetNameA, delete: false })
 
-    const { activeSheetName } = db
-
-    expect(activeSheetName).to.equal(sheetNameA)
+    expect(db.getActiveSheetName()).to.equal(sheetNameA)
   })
 
   it('creates a new sheet with the name if it does not exist', async () => {
@@ -81,15 +82,15 @@ describe('commands:sheet:handler', () => {
     const sheetA = genSheet(sheetNameA)
     const sheetB = genSheet(sheetNameB)
 
-    db.sheets.push(sheetA)
-    db.sheets.push(sheetB)
+    db.db?.sheets.push(sheetA)
+    db.db?.sheets.push(sheetB)
 
     await handler({ db, name: sheetNameC, delete: false })
 
-    const { activeSheetName, sheets } = db
+    const sheets = db.getAllSheets()
     const newSheet = sheets.find(({ name }) => name === sheetNameC)
 
-    expect(activeSheetName).to.equal(sheetNameC)
+    expect(db.getActiveSheetName()).to.equal(sheetNameC)
     expect(newSheet?.name).to.equal(sheetNameC)
     expect(newSheet?.activeEntryID).to.be.null
     expect(newSheet?.entries).to.be.empty

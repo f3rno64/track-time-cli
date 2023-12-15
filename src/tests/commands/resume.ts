@@ -4,23 +4,22 @@ import _last from 'lodash/last'
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
-import { deleteDB, initDB } from '../../db'
+import DB from '../../db'
 import { handler } from '../../commands/resume'
+import { type TimeSheetEntry } from '../../types'
 import { genSheet, genSheetEntry } from '../../sheets'
-import { type TimeSheetEntry, type TimeTrackerDB } from '../../types'
 
 chai.use(chaiAsPromised)
 
-let db: TimeTrackerDB = {} as unknown as TimeTrackerDB
+const db = new DB()
 
 describe('commands:resume:handler', () => {
   beforeEach(async () => {
-    db = await initDB()
+    await db.load()
   })
 
   afterEach(async () => {
-    await deleteDB()
-    db = {} as unknown as TimeTrackerDB
+    await db.delete()
   })
 
   it('throws an error if there is no active sheet', () => {
@@ -33,8 +32,12 @@ describe('commands:resume:handler', () => {
     const sheet = genSheet('test-sheet')
     const { name: sheetName } = sheet
 
-    db.sheets.push(sheet)
-    db.activeSheetName = sheetName
+    if (db.db === null) {
+      throw new Error('Test DB is null')
+    }
+
+    db.db.sheets.push(sheet)
+    db.db.activeSheetName = sheetName
 
     const p = handler({ db })
 
@@ -47,8 +50,12 @@ describe('commands:resume:handler', () => {
     const sheet = genSheet('test-sheet', [entryA, entryB], entryB.id)
     const { name: sheetName } = sheet
 
-    db.sheets.push(sheet)
-    db.activeSheetName = sheetName
+    if (db.db === null) {
+      throw new Error('Test DB is null')
+    }
+
+    db.db.sheets.push(sheet)
+    db.db.activeSheetName = sheetName
 
     const p = handler({ db })
 
@@ -70,8 +77,12 @@ describe('commands:resume:handler', () => {
     const sheet = genSheet('test-sheet', [entryA, entryB])
     const { name: sheetName } = sheet
 
-    db.sheets.push(sheet)
-    db.activeSheetName = sheetName
+    if (db.db === null) {
+      throw new Error('Test DB is null')
+    }
+
+    db.db.sheets.push(sheet)
+    db.db.activeSheetName = sheetName
 
     handler({ db }).then(() => {
       const { activeEntryID } = sheet

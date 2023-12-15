@@ -1,6 +1,7 @@
+import DB from '../db'
 import * as U from '../utils'
 import * as P from '../print'
-import { type TimeSheetEntry, type TimeTrackerDB } from '../types'
+import { type TimeSheetEntry } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'yesterday',
@@ -9,7 +10,7 @@ const COMMAND_CONFIG = {
 }
 
 interface YesterdayCommandArguments {
-  db: TimeTrackerDB
+  db: DB
 }
 
 const isEntryForYesterday = (entry: TimeSheetEntry): boolean => {
@@ -25,7 +26,7 @@ const isEntryForYesterday = (entry: TimeSheetEntry): boolean => {
 
 const handler = (args: YesterdayCommandArguments) => {
   const { db } = args
-  const { sheets } = db
+  const sheets = db.getAllSheets()
   const sheetsWithEntriesForYesterday = sheets
     .map(({ entries, ...otherSheetData }) => ({
       entries: entries.filter(isEntryForYesterday),

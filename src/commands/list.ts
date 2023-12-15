@@ -1,15 +1,14 @@
 import sAgo from 's-ago'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
-import _compact from 'lodash/compact'
 
+import DB from '../db'
 import log from '../log'
 import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
 import * as S from '../sheets'
-import { findSheet } from '../db'
-import { type TimeSheet, type TimeTrackerDB } from '../types'
+import { type TimeSheet } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'list [sheets..]',
@@ -39,8 +38,8 @@ const COMMAND_CONFIG = {
 }
 
 interface ListCommandArgs {
+  db: DB
   sheets: string[]
-  db: TimeTrackerDB
   ago: boolean
   all: boolean
   since: string
@@ -48,31 +47,23 @@ interface ListCommandArgs {
 }
 
 const handler = (args: ListCommandArgs) => {
-  const { today, since, all, ago, sheets, db } = args
-  const { activeSheetName, sheets: dbSheets } = db
+  const { today, since, all, ago, sheets: sheetNames, db } = args
 
   if (!_isEmpty(since) && today) {
     throw new Error('Cannot use both --since and --today')
   }
 
+  const activeSheetName = db.getActiveSheetName()
+  const dbSheets = db.getAllSheets()
+
   // prettier-ignore
-  const sheetsToList: TimeSheet[] = _isEmpty(sheets)
-    ? all
+  const sheetsToList: TimeSheet[] = !_isEmpty(sheetNames)
+    ? sheetNames.map(db.getSheet)
+    : all
       ? dbSheets
       : activeSheetName === null
         ? []
-        : _compact([findSheet(db, activeSheetName)])
-    : _compact(
-      sheets.map((name: string): TimeSheet => {
-        const sheet = findSheet(db, name)
-
-        if (typeof sheet === 'undefined') {
-          throw new Error(`No sheet found with name ${name}`)
-        }
-
-        return sheet
-      })
-    )
+        : [db.getActiveSheet()]
 
   if (_isEmpty(sheetsToList)) {
     throw new Error('No relevant sheets found')
@@ -85,11 +76,10 @@ const handler = (args: ListCommandArgs) => {
       ? U.getStartDate()
       : null
 
-  // prettier-ignore
   const filteredSheets =
     sinceDate === null
       ? sheetsToList
-      : S.filterWithEntriesSinceDate(sheetsToList, sinceDate)
+      : S.getSheetsWithEntriesSinceDate(sheetsToList, sinceDate)
 
   if (today) {
     log(

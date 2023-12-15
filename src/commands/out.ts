@@ -3,16 +3,16 @@ import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
 import formatDuration from 'format-duration'
 
+import DB from '../db'
 import log from '../log'
 import * as C from '../color'
-import { findSheet, saveDB } from '../db'
-import { type TimeTrackerDB } from '../types'
+import * as S from '../sheets'
 
 interface OutCommandArgs {
+  db: DB
   at: string[]
   sheet: string
   entry: string
-  db: TimeTrackerDB
 }
 
 const COMMAND_CONFIG = {
@@ -30,33 +30,19 @@ const COMMAND_CONFIG = {
 const handler = async (args: OutCommandArgs) => {
   const { at, db } = args
   const endDate = _isEmpty(at) ? new Date() : parseDate(at)
-  const { activeSheetName } = db
-
-  if (activeSheetName === null) {
-    throw new Error('No active sheet')
-  }
-
-  const sheet = findSheet(db, activeSheetName)
-
-  if (typeof sheet === 'undefined') {
-    throw new Error(`Sheet ${activeSheetName} does not exist`)
-  }
-
+  const sheet = db.getActiveSheet()
   const { name: sheetName, activeEntryID } = sheet
 
-  if (!_isFinite(activeEntryID)) {
+  if (activeEntryID === null || !_isFinite(activeEntryID)) {
     throw new Error(`No active entry for sheet ${sheetName}`)
   }
 
-  const entry = sheet.entries.find(({ id }) => id === activeEntryID)
+  const entry = S.findSheetEntry(sheet, activeEntryID)
 
   if (typeof entry === 'undefined') {
     throw new Error(`No entry found with ID ${activeEntryID}`)
   } else {
-    entry.end = endDate
-    sheet.activeEntryID = null
-
-    await saveDB(db)
+    await db.checkOutOfSheetEntry(sheet, entry, endDate)
 
     const { start, end, description } = entry
     const descriptionUI = C.clText(description)

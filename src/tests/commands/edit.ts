@@ -3,14 +3,13 @@
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
-import { deleteDB, initDB } from '../../db'
-import { type TimeTrackerDB } from '../../types'
+import DB from '../../db'
 import { genSheet, genSheetEntry } from '../../sheets'
 import { type EditCommandArguments, handler } from '../../commands/edit'
 
 chai.use(chaiAsPromised)
 
-let db: TimeTrackerDB = {} as unknown as TimeTrackerDB
+const db = new DB()
 
 const getArgs = (
   overrides?: Record<string, unknown>
@@ -22,12 +21,11 @@ const getArgs = (
 
 describe('commands:edit:handler', () => {
   beforeEach(async () => {
-    db = await initDB()
+    await db.load()
   })
 
   afterEach(async () => {
-    await deleteDB()
-    db = {} as unknown as TimeTrackerDB
+    await db.delete()
   })
 
   it('throws an error if no sheet or entry is specified', async () => {
@@ -40,8 +38,8 @@ describe('commands:edit:handler', () => {
     const sheetA = genSheet('test-sheet-a')
     const sheetB = genSheet('test-sheet-b')
 
-    db.sheets.push(sheetA)
-    db.sheets.push(sheetB)
+    db.db?.sheets.push(sheetA)
+    db.db?.sheets.push(sheetB)
 
     const p = handler(getArgs({ sheet: 'test-sheet-c' }))
 
@@ -53,7 +51,7 @@ describe('commands:edit:handler', () => {
     const entryB = genSheetEntry(1, 'test-entry-b')
     const sheet = genSheet('test-sheet', [entryA, entryB])
 
-    db.sheets.push(sheet)
+    db.db?.sheets.push(sheet)
 
     const p = handler(getArgs({ entry: 42 }))
 
@@ -64,8 +62,8 @@ describe('commands:edit:handler', () => {
     const sheetA = genSheet('test-sheet-a')
     const sheetB = genSheet('test-sheet-b')
 
-    db.sheets.push(sheetA)
-    db.sheets.push(sheetB)
+    db.db?.sheets.push(sheetA)
+    db.db?.sheets.push(sheetB)
 
     const p = handler(getArgs({ sheet: 'test-sheet-a', name: undefined }))
 
@@ -75,7 +73,7 @@ describe('commands:edit:handler', () => {
   it('edits the name of the specified sheet', async () => {
     const sheet = genSheet('test-sheet-a')
 
-    db.sheets.push(sheet)
+    db.db?.sheets.push(sheet)
 
     await handler(getArgs({ sheet: 'test-sheet-a', name: 'new-name' }))
 
@@ -86,7 +84,7 @@ describe('commands:edit:handler', () => {
     const entry = genSheetEntry(0, 'test-description')
     const sheet = genSheet('test-sheet-a', [entry])
 
-    db.sheets.push(sheet)
+    db.db?.sheets.push(sheet)
 
     await handler(
       getArgs({
@@ -106,7 +104,7 @@ describe('commands:edit:handler', () => {
     const entry = genSheetEntry(0, 'test-description', startDate)
     const sheet = genSheet('test-sheet-a', [entry])
 
-    db.sheets.push(sheet)
+    db.db?.sheets.push(sheet)
 
     await handler(
       getArgs({
@@ -126,7 +124,7 @@ describe('commands:edit:handler', () => {
     const entry = genSheetEntry(0, 'test-description', startDate, endDate)
     const sheet = genSheet('test-sheet-a', [entry])
 
-    db.sheets.push(sheet)
+    db.db?.sheets.push(sheet)
 
     await handler(
       getArgs({
@@ -143,12 +141,12 @@ describe('commands:edit:handler', () => {
     const sheetA = genSheet('test-sheet-a')
     const sheetB = genSheet('test-sheet-b')
 
-    db.sheets.push(sheetA)
-    db.sheets.push(sheetB)
+    db.db?.sheets.push(sheetA)
+    db.db?.sheets.push(sheetB)
 
     await handler(getArgs({ sheet: 'test-sheet-a', delete: true }))
 
-    expect(db.sheets.find(({ name }) => name === 'test-sheet-a')).to.be
+    expect(db.db?.sheets.find(({ name }) => name === 'test-sheet-a')).to.be
       .undefined
   })
 
@@ -157,7 +155,7 @@ describe('commands:edit:handler', () => {
     const entryB = genSheetEntry(1, 'test-entry-b')
     const sheet = genSheet('test-sheet-a', [entryA, entryB])
 
-    db.sheets.push(sheet)
+    db.db?.sheets.push(sheet)
 
     await handler(
       getArgs({
