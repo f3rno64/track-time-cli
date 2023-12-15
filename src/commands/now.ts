@@ -1,8 +1,5 @@
-import _max from 'lodash/max'
-
-import log from '../log'
-import * as C from '../color'
 import * as P from '../print'
+import { findSheet } from '../db'
 import { type TimeTrackerDB } from '../types'
 
 const COMMAND_CONFIG = {
@@ -17,38 +14,33 @@ interface NowCommandArguments {
 
 const handler = (args: NowCommandArguments) => {
   const { db } = args
-  const { activeSheetName, sheets } = db
-  const sheetsWithActiveEntries = sheets.filter(
-    ({ entries }) => entries.filter(({ end }) => end === null).length > 0
-  )
+  const { activeSheetName } = db
 
-  if (sheetsWithActiveEntries.length === 0) {
-    log(
-      `${C.clSheet(`[${activeSheetName}]`)} ${C.clHighlight('No active entry')}`
-    )
-    return
+  if (activeSheetName === null) {
+    throw new Error('No sheet is active')
   }
 
-  log(C.clText('Sheets with active entries'))
-  log('')
+  const sheet = findSheet(db, activeSheetName)
 
-  sheetsWithActiveEntries.sort(
-    ({ entries: a }, { entries: b }) =>
-      +(_max(a.map(({ start }) => start)) ?? Date.now()) -
-      +(_max(b.map(({ start }) => start)) ?? Date.now())
-  )
+  if (typeof sheet === 'undefined') {
+    throw new Error(`Acive sheet ${activeSheetName} not found`)
+  }
 
-  sheetsWithActiveEntries.forEach(({ name, activeEntryID, entries }) => {
-    const entry = entries.find(({ id }) => id === activeEntryID)
+  const { activeEntryID, entries } = sheet
 
-    if (typeof entry === 'undefined') {
-      throw new Error(
-        `Active entry with ID ${activeEntryID} for sheet ${name} not found`
-      )
-    }
+  if (activeEntryID === null) {
+    throw new Error(`Sheet ${activeSheetName} has no active entry`)
+  }
 
-    P.printActiveSheetEntry(entry, name)
-  })
+  const entry = entries.find(({ id }) => id === activeEntryID)
+
+  if (typeof entry === 'undefined') {
+    throw new Error(
+      `Active entry ${activeEntryID} for sheet ${activeSheetName} not found`
+    )
+  }
+
+  P.printActiveSheetEntry(entry, activeSheetName)
 }
 
 export { handler }
