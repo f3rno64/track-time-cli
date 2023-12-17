@@ -3,7 +3,6 @@ import weekday from 'weekday'
 import _uniq from 'lodash/uniq'
 import parseDate from 'time-speak'
 import { eachDayOfInterval } from 'date-fns'
-import formatDuration from 'format-duration'
 
 import DB from '../db'
 import log from '../log'
@@ -62,7 +61,9 @@ const handler = (args: BreakdownCommandArguments) => {
   const since =
     typeof inputSince === 'undefined' ? new Date(0) : parseDate(inputSince)
 
-  const results: Record<string, BreakdownResult> = {}
+  const resultsPerDay: Record<string, BreakdownResult> = {}
+  const resultsPerWeekday: Record<string, BreakdownResult> = {}
+
   const filteredSheets = U.getSheetsWithEntriesSinceDate(targetSheets, since)
 
   filteredSheets.forEach((sheet: TimeSheet): void => {
@@ -77,18 +78,38 @@ const handler = (args: BreakdownCommandArguments) => {
 
       days.forEach((date: Date): void => {
         const dateKey = date.toLocaleDateString()
+        const dateWeekday = weekday(date.getDay() + 1)
         const duration = U.getEntryDurationInDay(entry, date)
 
-        if (typeof results[dateKey] === 'undefined') {
-          results[dateKey] = {
+        if (typeof resultsPerWeekday[dateWeekday] === 'undefined') {
+          resultsPerWeekday[dateWeekday] = {
             date,
             duration,
             sheets: [sheet],
             entries: [entry]
           }
         } else {
-          const resultEntry = results[dateKey]
-          results[dateKey] = {
+          const resultEntry = resultsPerWeekday[dateWeekday]
+
+          resultsPerWeekday[dateWeekday] = {
+            ...resultEntry,
+            duration: resultEntry.duration + duration,
+            entries: [...resultEntry.entries, entry],
+            sheets: _uniq([...resultEntry.sheets, sheet])
+          }
+        }
+
+        if (typeof resultsPerDay[dateKey] === 'undefined') {
+          resultsPerDay[dateKey] = {
+            date,
+            duration,
+            sheets: [sheet],
+            entries: [entry]
+          }
+        } else {
+          const resultEntry = resultsPerDay[dateKey]
+
+          resultsPerDay[dateKey] = {
             ...resultEntry,
             duration: resultEntry.duration + duration,
             entries: [...resultEntry.entries, entry],
@@ -99,39 +120,69 @@ const handler = (args: BreakdownCommandArguments) => {
     })
   })
 
-  const resultItems = Object.values(results)
+  const resultsPerDayItems = Object.values(resultsPerDay)
+  const weekdayResults = Object.keys(resultsPerWeekday)
 
-  if (resultItems.length === 0) {
+  if (resultsPerDayItems.length === 0) {
     throw new Error('No results found')
   }
 
-  log(`${C.clText('* Breakdown by Day')} (${C.clSheet(sheetNames.join(', '))})`)
-  log('')
-
-  const outputRows = resultItems.map(
-    ({ date, duration, sheets, entries }): string[] => {
-      const dateUI = ago ? sAgo(date) : date.toLocaleDateString()
-      const weekdayUI = weekday(date.getDay() + 1)
-      const entryCountUI = U.getPluralizedArrayLength(entries, 'entry')
-      const sheetCountUI = U.getPluralizedArrayLength(sheets, 'sheet')
-
-      // prettier-ignore
-      const durationUI = humanize
-        ? `[${U.getDurationLangString(duration)}]`
-        : `[${formatDuration(duration)}]`
-
-      return [
-        '-',
-        C.clHighlight(weekdayUI),
-        C.clDate(dateUI),
-        C.clText(entryCountUI),
-        C.clText(sheetCountUI),
-        C.clDuration(durationUI)
-      ]
-    }
+  log(
+    `${C.clText('  = Sheets')} ${C.clHighlightRed(
+      `(${sheetNames.length})`
+    )} ${C.clSheet(sheetNames.join(', '))} ${C.clText('=')}`
   )
 
-  P.printJustifiedContent(outputRows)
+  log('')
+
+  log(
+    `${C.clText('  = Breakdown by Day =')} (${C.clSheet(
+      sheetNames.join(', ')
+    )})`
+  )
+  log('')
+
+  const resultsPerDayOutputRows: string[][] = []
+  const resultsPerWeekdayOutputRows: string[][] = []
+
+  resultsPerDayItems.forEach(({ date, duration, sheets, entries }): void => {
+    const weekdayUI = `(${weekday(date.getDay() + 1)})`
+    const dateUI = ago ? sAgo(date) : date.toLocaleDateString()
+    const durationUI = U.getDurationLangString(duration, humanize)
+    const sheetCountUI = U.getPluralizedArrayLength(sheets, 'sheet')
+    const entryCountUI = U.getPluralizedArrayLength(entries, 'entry')
+
+    resultsPerDayOutputRows.push([
+      C.clHighlightRed('  *'),
+      C.clDate(dateUI),
+      C.clHighlight(weekdayUI),
+      C.clText(entryCountUI),
+      C.clText(sheetCountUI),
+      C.clDuration(durationUI)
+    ])
+  })
+
+  weekdayResults.forEach((weekdayStr: string): void => {
+    const result = resultsPerWeekday[weekdayStr]
+    const { duration, sheets, entries } = result
+    const durationUI = U.getDurationLangString(duration, humanize)
+    const sheetCountUI = U.getPluralizedArrayLength(sheets, 'sheet')
+    const entryCountUI = U.getPluralizedArrayLength(entries, 'entry')
+
+    resultsPerWeekdayOutputRows.push([
+      C.clHighlightRed('  *'),
+      C.clHighlight(`${weekdayStr}s`),
+      C.clText(entryCountUI),
+      C.clText(sheetCountUI),
+      C.clDuration(durationUI)
+    ])
+  })
+
+  P.printJustifiedContent(resultsPerDayOutputRows)
+  log('')
+  log(C.clText('  = Totals per Week Day ='))
+  log('')
+  P.printJustifiedContent(resultsPerWeekdayOutputRows)
 }
 
 export { handler }
