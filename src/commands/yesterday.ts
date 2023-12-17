@@ -4,13 +4,14 @@ import * as P from '../print'
 import { type TimeSheetEntry } from '../types'
 
 const COMMAND_CONFIG = {
-  command: 'yesterday',
+  command: 'yesterday [sheets..]',
   describe: 'Display a summary of activity for yesterday',
   aliases: ['y']
 }
 
 interface YesterdayCommandArguments {
   db: DB
+  sheets?: string[]
 }
 
 const isEntryForYesterday = (entry: TimeSheetEntry): boolean => {
@@ -25,8 +26,12 @@ const isEntryForYesterday = (entry: TimeSheetEntry): boolean => {
 }
 
 const handler = (args: YesterdayCommandArguments) => {
-  const { db } = args
-  const sheets = db.getAllSheets()
+  const { sheets: inputSheets, db } = args
+  const sheets =
+    typeof inputSheets === 'undefined'
+      ? db.getAllSheets()
+      : inputSheets.map((name: string) => db.getSheet(name))
+
   const sheetsWithEntriesForYesterday = sheets
     .map(({ entries, ...otherSheetData }) => ({
       entries: entries.filter(isEntryForYesterday),
