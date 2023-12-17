@@ -164,12 +164,7 @@ const handler = (args: BreakdownCommandArguments) => {
   )
 
   log('')
-
-  log(
-    `${C.clText('  = Breakdown by Day =')} (${C.clSheet(
-      sheetNames.join(', ')
-    )})`
-  )
+  log(`${C.clText('  = Breakdown by Day =')}`)
   log('')
 
   const resultsPerDayOutputRows: string[][] = []
@@ -241,11 +236,11 @@ const handler = (args: BreakdownCommandArguments) => {
 
   P.printJustifiedContent(resultsPerDayOutputRows)
   log('')
-  log(C.clText('  = Totals per Week Day ='))
+  log(C.clText('  = Breakdown by Week Day ='))
   log('')
   P.printJustifiedContent(resultsPerWeekdayOutputRows)
   log('')
-  log(C.clText('  = Totals per Hour ='))
+  log(C.clText('  = Breakdown by Hour ='))
   log('')
   P.printJustifiedContent(resultsPerHourOutputRows)
 }
