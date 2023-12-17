@@ -4,15 +4,13 @@ import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 import DB from '../../db'
-import { type EditCommandArguments, handler } from '../../commands/edit'
+import { type EditCommandArgs, handler } from '../../commands/edit'
 
 chai.use(chaiAsPromised)
 
 const db = new DB()
 
-const getArgs = (
-  overrides?: Record<string, unknown>
-): EditCommandArguments => ({
+const getArgs = (overrides?: Record<string, unknown>): EditCommandArgs => ({
   db,
   delete: false,
   ...(overrides ?? {})

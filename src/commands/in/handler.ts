@@ -1,23 +1,9 @@
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 
-import DB from '../db'
-import * as P from '../print'
-import * as O from '../options'
+import * as P from '../../print'
 
-interface InCommandArgs {
-  db: DB
-  description: string[]
-  sheet?: string
-  at?: string
-}
-
-const COMMAND_CONFIG = {
-  command: 'in <description..>',
-  describe: 'Check in to a time sheet',
-  aliases: ['i'],
-  builder: O.setup.bind(null, [O.AtOption, O.DescriptionOption])
-}
+import { type InCommandArgs } from './types'
 
 const handler = async (args: InCommandArgs) => {
   const { description, at, db } = args
@@ -44,8 +30,4 @@ const handler = async (args: InCommandArgs) => {
   P.printCheckedInEntry(entry)
 }
 
-export { InCommandArgs, handler }
-export default {
-  ...COMMAND_CONFIG,
-  handler
-}
+export default handler

@@ -2,37 +2,12 @@ import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
 
-import DB from '../db'
-import log from '../log'
-import * as U from '../utils'
-import * as C from '../color'
-import * as O from '../options'
+import log from '../../log'
+import * as C from '../../color'
+import * as U from '../../utils'
+import { type EditCommandArgs } from './types'
 
-const COMMAND_CONFIG = {
-  command: 'edit [description..]',
-  describe: 'View, modify, or delete a time sheet entry',
-  aliases: ['e'],
-  builder: O.setup.bind(null, [
-    O.SheetOption,
-    O.NameOption,
-    O.EntryOption,
-    O.DescriptionOption,
-    O.DeleteOption
-  ])
-}
-
-interface EditCommandArguments {
-  db: DB
-  sheet?: string
-  name?: string
-  entry?: string
-  description?: string
-  delete?: boolean
-  start?: string
-  end?: string
-}
-
-const handler = async (args: EditCommandArguments): Promise<void> => {
+const handler = async (args: EditCommandArgs): Promise<void> => {
   const {
     description: inputDescription,
     sheet: inputSheet,
@@ -130,8 +105,4 @@ const handler = async (args: EditCommandArguments): Promise<void> => {
   }
 }
 
-export { handler, COMMAND_CONFIG, type EditCommandArguments }
-export default {
-  ...COMMAND_CONFIG,
-  handler
-}
+export default handler

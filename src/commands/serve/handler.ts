@@ -1,35 +1,24 @@
+import express from 'express'
 import open from 'open'
 import path from 'path'
 import sass from 'node-sass'
-import express from 'express'
 import handlebars from 'handlebars'
 import { promises as fs } from 'fs'
-import manifest from '../../package.json'
+import manifest from '../../../package.json'
 
-import DB from '../db'
-import * as U from '../utils'
-import * as O from '../options'
-
-interface ServeCommandArguments {
-  db: DB
-  port?: number
-  hostname?: string
-}
+import * as U from '../../utils'
+import { type ServeCommandArgs } from './types'
 
 handlebars.registerHelper('date', (date: Date): string => date.toDateString())
 
 const { version } = manifest
-const COMMAND_CONFIG = {
-  command: 'serve',
-  describe: 'Start a server for the UI',
-  aliases: ['ui'],
-  builder: O.setup.bind(null, [O.PortOption, O.HostnameOption])
-}
-
 const l = U.getLogger('serve')
+
+// TODO: Extract
 const getTemplatePath = (templateName: string): string =>
   path.join(__dirname, '../../templates', templateName)
 
+// TODO: Extract
 const loadTemplate = async (
   templateName: string
 ): Promise<HandlebarsTemplateDelegate> => {
@@ -39,6 +28,7 @@ const loadTemplate = async (
   return handlebars.compile(templateContent.toString())
 }
 
+// TODO: Extract
 const renderStylesheet = async (name: string): Promise<string> => {
   const stylesheetPath = path.join(__dirname, `../../styles/${name}.scss`)
   const stylesheetRaw = await fs.readFile(stylesheetPath, 'utf-8')
@@ -46,7 +36,7 @@ const renderStylesheet = async (name: string): Promise<string> => {
   return sass.renderSync({ data: stylesheetRaw }).css.toString()
 }
 
-const handler = async (args: ServeCommandArguments) => {
+const handler = async (args: ServeCommandArgs) => {
   const { port, db } = args
   const app = express()
   const sheets = db.getAllSheets()
@@ -69,8 +59,4 @@ const handler = async (args: ServeCommandArguments) => {
   })
 }
 
-export { handler }
-export default {
-  ...COMMAND_CONFIG,
-  handler
-}
+export default handler

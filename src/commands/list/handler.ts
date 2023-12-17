@@ -2,43 +2,14 @@ import sAgo from 's-ago'
 import _sum from 'lodash/sum'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
-import formatDuration from 'format-duration'
-import humanizeDuration from 'humanize-duration'
 
-import DB from '../db'
-import log from '../log'
-import * as C from '../color'
-import * as P from '../print'
-import * as U from '../utils'
-import * as D from '../dates'
-import * as O from '../options'
-import { type TimeSheet } from '../types'
-
-const COMMAND_CONFIG = {
-  command: 'list [sheets..]',
-  describe: 'List all time sheet entries',
-  aliases: ['l'],
-  builder: O.setup.bind(null, [
-    O.SheetsOption,
-    O.AgoOption,
-    O.HumanizeOption,
-    O.SinceOption,
-    O.TodayOption,
-    O.AllOption,
-    O.YesterdayOption
-  ])
-}
-
-interface ListCommandArgs {
-  db: DB
-  sheets?: string[]
-  ago?: boolean
-  all?: boolean
-  since?: string
-  today?: boolean
-  yesterday?: boolean
-  humanize?: boolean
-}
+import log from '../../log'
+import * as C from '../../color'
+import * as U from '../../utils'
+import * as P from '../../print'
+import * as D from '../../dates'
+import { type TimeSheet } from '../../types'
+import { type ListCommandArgs } from './types'
 
 const handler = (args: ListCommandArgs) => {
   const {
@@ -132,9 +103,7 @@ const handler = (args: ListCommandArgs) => {
       )
     )
 
-    const totalDurationUI = humanize
-      ? humanizeDuration(totalDuration)
-      : formatDuration(totalDuration)
+    const totalDurationUI = U.getDurationLangString(totalDuration, humanize)
 
     log('')
     log(
@@ -143,7 +112,4 @@ const handler = (args: ListCommandArgs) => {
   }
 }
 
-export default {
-  ...COMMAND_CONFIG,
-  handler
-}
+export default handler

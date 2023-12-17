@@ -4,43 +4,14 @@ import _uniq from 'lodash/uniq'
 import parseDate from 'time-speak'
 import { eachHourOfInterval, eachDayOfInterval } from 'date-fns'
 
-import DB from '../db'
-import log from '../log'
-import * as U from '../utils'
-import * as C from '../color'
-import * as P from '../print'
-import * as O from '../options'
-import { type TimeSheetEntry, type TimeSheet } from '../types'
+import log from '../../log'
+import * as C from '../../color'
+import * as P from '../../print'
+import * as U from '../../utils'
+import { type TimeSheet, type TimeSheetEntry } from '../../types'
+import { type BreakdownResult, type BreakdownCommandArgs } from './types'
 
-const COMMAND_CONFIG = {
-  command: 'breakdown [sheets..]',
-  describe: 'Display total durations per day for one or more sheets',
-  aliases: ['b'],
-  builder: O.setup.bind(null, [
-    O.AllOption,
-    O.AgoOption,
-    O.HumanizeOption,
-    O.SinceOption
-  ])
-}
-
-interface BreakdownCommandArguments {
-  db: DB
-  sheets?: string[]
-  humanize?: boolean
-  all?: boolean
-  since?: string
-  ago?: boolean
-}
-
-interface BreakdownResult {
-  date: Date
-  duration: number
-  sheets: TimeSheet[]
-  entries: TimeSheetEntry[]
-}
-
-const handler = (args: BreakdownCommandArguments) => {
+const handler = (args: BreakdownCommandArgs) => {
   const {
     ago,
     humanize,
@@ -245,8 +216,4 @@ const handler = (args: BreakdownCommandArguments) => {
   P.printJustifiedContent(resultsPerHourOutputRows)
 }
 
-export { handler }
-export default {
-  ...COMMAND_CONFIG,
-  handler
-}
+export default handler

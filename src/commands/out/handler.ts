@@ -3,22 +3,9 @@ import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
 import formatDuration from 'format-duration'
 
-import DB from '../db'
-import log from '../log'
-import * as C from '../color'
-import * as O from '../options'
-
-interface OutCommandArgs {
-  db: DB
-  at?: string[]
-}
-
-const COMMAND_CONFIG = {
-  command: 'out',
-  describe: 'Check out of the currently active time sheet entry',
-  aliases: ['o'],
-  builder: O.setup.bind(null, [O.AtOption])
-}
+import log from '../../log'
+import * as C from '../../color'
+import { type OutCommandArgs } from './types'
 
 const handler = async (args: OutCommandArgs) => {
   const { at, db } = args
@@ -51,7 +38,4 @@ const handler = async (args: OutCommandArgs) => {
   }
 }
 
-export default {
-  ...COMMAND_CONFIG,
-  handler
-}
+export default handler

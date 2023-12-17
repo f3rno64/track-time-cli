@@ -1,72 +1,21 @@
 import sAgo from 's-ago'
-
-import _sum from 'lodash/sum'
 import weekday from 'weekday'
+import _sum from 'lodash/sum'
 import _isEmpty from 'lodash/isEmpty'
 
-import DB from '../db'
-import log from '../log'
-import * as U from '../utils'
-import * as C from '../color'
-import * as D from '../dates'
-import * as O from '../options'
-import { type TimeSheetEntry, type TimeSheet } from '../types'
+import log from '../../log'
+import * as C from '../../color'
+import * as U from '../../utils'
+import * as D from '../../dates'
+import { type TimeSheet, type TimeSheetEntry } from '../../types'
+import {
+  type WeekCommandArgs,
+  type WeekdayResults,
+  type WeekdayResult,
+  type TotalResults
+} from './types'
 
-const COMMAND_CONFIG = {
-  command: 'week [sheets..]',
-  describe: 'Display a summary of activity for the past week',
-  aliases: ['w'],
-  builder: O.setup.bind(null, [
-    O.TotalOption,
-    O.AgoOption,
-    O.HumanizeOption,
-    O.SheetsOption
-  ])
-}
-
-interface WeekCommandArguments {
-  db: DB
-  total?: boolean
-  sheets?: string[]
-  ago?: boolean
-  humanize?: boolean
-}
-
-const DAY_MS = 24 * 60 * 60 * 1000
-const LAST_WEEK_DATE = new Date(
-  +D.getStartOfDayDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
-)
-
-const getSheetsWithEntriesInLastWeek = (sheets: TimeSheet[]) => {
-  const startOfOneWeekAgo = D.getStartOfDayDate(LAST_WEEK_DATE)
-  const endOfToday = D.getEndOfDayDate()
-
-  return sheets
-    .filter(({ entries }) => entries.length > 0)
-    .map(({ entries, ...otherSheetData }) => ({
-      entries: entries
-        .map(({ end, ...entryData }) => ({
-          end: end === null ? new Date() : end,
-          ...entryData
-        }))
-        .filter(
-          ({ start, end }) =>
-            +start >= +startOfOneWeekAgo && +end <= +endOfToday
-        ),
-      ...otherSheetData
-    }))
-}
-
-interface WeekdayResult {
-  duration: number
-  entries: number
-}
-
-type SheetResults = Record<string, WeekdayResult>
-type WeekdayResults = Record<string, SheetResults>
-type TotalResults = Record<string, WeekdayResult>
-
-const handler = (args: WeekCommandArguments) => {
+const handler = (args: WeekCommandArgs) => {
   const { ago, humanize, sheets: inputSheets, total, db } = args
 
   const selectedSheets: TimeSheet[] =
@@ -74,7 +23,7 @@ const handler = (args: WeekCommandArguments) => {
       ? db.getAllSheets()
       : inputSheets.map(db.getSheet.bind(db))
 
-  const relevantSheets = getSheetsWithEntriesInLastWeek(selectedSheets)
+  const relevantSheets = U.getSheetsWithEntriesInLastWeek(selectedSheets)
   const results: WeekdayResults = {}
 
   let totalDuration = 0
@@ -85,7 +34,8 @@ const handler = (args: WeekCommandArguments) => {
 
     entries.forEach((entry: TimeSheetEntry) => {
       for (let i = 0; i < 7; i += 1) {
-        const date = new Date(+LAST_WEEK_DATE + i * DAY_MS)
+        const lastWeekDate = new Date(Date.now() - D.getDaysMS(7))
+        const date = new Date(+lastWeekDate + i * D.getDaysMS(1))
         const dateKey = date.toLocaleDateString()
         const duration = U.getEntryDurationInDay(entry, date)
 
@@ -207,7 +157,4 @@ const handler = (args: WeekCommandArguments) => {
   }
 }
 
-export default {
-  ...COMMAND_CONFIG,
-  handler
-}
+export default handler

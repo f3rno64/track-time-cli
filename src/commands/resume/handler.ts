@@ -1,18 +1,8 @@
 import _isFinite from 'lodash/isFinite'
 
-import DB from '../db'
-import log from '../log'
-import * as C from '../color'
-
-const COMMAND_CONFIG = {
-  command: 'resume',
-  describe: 'Resume the last active entry',
-  aliases: ['r']
-}
-
-interface ResumeCommandArgs {
-  db: DB
-}
+import log from '../../log'
+import * as C from '../../color'
+import { type ResumeCommandArgs } from './types'
 
 const handler = async (args: ResumeCommandArgs) => {
   const { db } = args
@@ -36,8 +26,4 @@ const handler = async (args: ResumeCommandArgs) => {
   )
 }
 
-export { handler }
-export default {
-  ...COMMAND_CONFIG,
-  handler
-}
+export default handler

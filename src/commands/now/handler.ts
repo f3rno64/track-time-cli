@@ -1,20 +1,7 @@
-import DB from '../db'
-import * as P from '../print'
-import * as O from '../options'
+import * as P from '../../print'
+import { type NowCommandArgs } from './types'
 
-const COMMAND_CONFIG = {
-  command: ['now', '$0'],
-  describe: 'Display all active time sheet entries',
-  aliases: ['n'],
-  builder: O.setup.bind(null, [O.HumanizeOption])
-}
-
-interface NowCommandArguments {
-  db: DB
-  humanize?: boolean
-}
-
-const handler = (args: NowCommandArguments) => {
+const handler = (args: NowCommandArgs) => {
   const { humanize, db } = args
   const activeSheetName = db.getActiveSheetName()
 
@@ -40,8 +27,4 @@ const handler = (args: NowCommandArguments) => {
   P.printActiveSheetEntry(entry, activeSheetName, humanize)
 }
 
-export { handler }
-export default {
-  ...COMMAND_CONFIG,
-  handler
-}
+export default handler

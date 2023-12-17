@@ -1,20 +1,6 @@
-import DB from '../db'
-import log from '../log'
-import * as C from '../color'
-import * as O from '../options'
-
-const COMMAND_CONFIG = {
-  command: 'sheet [name]',
-  describe: 'Switch to or delete a sheet by name',
-  aliases: ['s'],
-  builder: O.setup.bind(null, [O.DeleteOption, O.NameOption])
-}
-
-interface SheetCommandArgs {
-  db: DB
-  delete?: boolean
-  name?: string
-}
+import log from '../../log'
+import * as C from '../../color'
+import { type SheetCommandArgs } from './types'
 
 const handler = async (args: SheetCommandArgs) => {
   const { name, delete: del, db } = args
@@ -48,8 +34,4 @@ const handler = async (args: SheetCommandArgs) => {
   }
 }
 
-export { handler }
-export default {
-  ...COMMAND_CONFIG,
-  handler
-}
+export default handler

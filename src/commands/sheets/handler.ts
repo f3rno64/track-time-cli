@@ -3,28 +3,13 @@ import _sum from 'lodash/sum'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 
-import DB from '../db'
-import log from '../log'
-import * as C from '../color'
-import * as U from '../utils'
-import * as P from '../print'
-import * as D from '../dates'
-import * as O from '../options'
-import { TimeSheet } from '../types'
-
-const COMMAND_CONFIG = {
-  command: 'sheets',
-  describe: 'List all sheets',
-  aliases: ['ss'],
-  builder: O.setup.bind(null, [O.HumanizeOption, O.SinceOption, O.TodayOption])
-}
-
-interface SheetsCommandArgs {
-  db: DB
-  humanize?: boolean
-  since?: string
-  today?: boolean
-}
+import log from '../../log'
+import * as D from '../../dates'
+import * as U from '../../utils'
+import * as P from '../../print'
+import * as C from '../../color'
+import { type TimeSheet } from '../../types'
+import { type SheetsCommandArgs } from './types'
 
 const handler = async (args: SheetsCommandArgs) => {
   const { today, since, humanize, db } = args
@@ -102,8 +87,4 @@ const handler = async (args: SheetsCommandArgs) => {
   )
 }
 
-export { handler }
-export default {
-  ...COMMAND_CONFIG,
-  handler
-}
+export default handler
