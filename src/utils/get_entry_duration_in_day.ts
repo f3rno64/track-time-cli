@@ -10,8 +10,8 @@ const getEntryDurationInDay = (
   const { start, end } = entry
 
   const dayDate = _isFinite(day) ? new Date(day) : (day as Date)
-  const dayDateStart = D.getStartDate(dayDate)
-  const dayDateEnd = D.getEndDate(dayDate)
+  const dayDateStart = D.getStartOfDayDate(dayDate)
+  const dayDateEnd = D.getEndOfDayDate(dayDate)
 
   if (+start < +dayDateStart && end !== null && +end < +dayDateStart) {
     return 0

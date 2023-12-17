@@ -2,7 +2,7 @@ import sAgo from 's-ago'
 import weekday from 'weekday'
 import _uniq from 'lodash/uniq'
 import parseDate from 'time-speak'
-import { eachDayOfInterval } from 'date-fns'
+import { eachHourOfInterval, eachDayOfInterval } from 'date-fns'
 
 import DB from '../db'
 import log from '../log'
@@ -63,6 +63,7 @@ const handler = (args: BreakdownCommandArguments) => {
 
   const resultsPerDay: Record<string, BreakdownResult> = {}
   const resultsPerWeekday: Record<string, BreakdownResult> = {}
+  const resultsPerHour: Record<string, BreakdownResult> = {}
 
   const filteredSheets = U.getSheetsWithEntriesSinceDate(targetSheets, since)
 
@@ -71,12 +72,40 @@ const handler = (args: BreakdownCommandArguments) => {
 
     entries.forEach((entry: TimeSheetEntry): void => {
       const { start, end } = entry
-      const days = eachDayOfInterval({
+      const interval = {
         start,
         end: end === null ? new Date() : end
-      })
+      }
+
+      const days = eachDayOfInterval(interval)
+      const hours = eachHourOfInterval(interval).map((date: Date): number =>
+        date.getHours()
+      )
 
       days.forEach((date: Date): void => {
+        hours.forEach((hour: number): void => {
+          const hourStr = hour > 11 ? `${hour - 11}pm` : `${hour + 1}am`
+          const duration = U.getEntryDurationInHour(entry, date, hour)
+
+          if (typeof resultsPerHour[hourStr] === 'undefined') {
+            resultsPerHour[hourStr] = {
+              date,
+              duration,
+              sheets: [sheet],
+              entries: [entry]
+            }
+          } else {
+            const resultEntry = resultsPerHour[hourStr]
+
+            resultsPerHour[hourStr] = {
+              ...resultEntry,
+              duration: resultEntry.duration + duration,
+              entries: [...resultEntry.entries, entry],
+              sheets: _uniq([...resultEntry.sheets, sheet])
+            }
+          }
+        })
+
         const dateKey = date.toLocaleDateString()
         const dateWeekday = weekday(date.getDay() + 1)
         const duration = U.getEntryDurationInDay(entry, date)
@@ -120,10 +149,11 @@ const handler = (args: BreakdownCommandArguments) => {
     })
   })
 
-  const resultsPerDayItems = Object.values(resultsPerDay)
+  const dayResults = Object.values(resultsPerDay)
   const weekdayResults = Object.keys(resultsPerWeekday)
+  const hourResults = Object.keys(resultsPerHour)
 
-  if (resultsPerDayItems.length === 0) {
+  if (dayResults.length === 0) {
     throw new Error('No results found')
   }
 
@@ -144,8 +174,10 @@ const handler = (args: BreakdownCommandArguments) => {
 
   const resultsPerDayOutputRows: string[][] = []
   const resultsPerWeekdayOutputRows: string[][] = []
+  const resultsPerHourOutputRows: string[][] = []
 
-  resultsPerDayItems.forEach(({ date, duration, sheets, entries }): void => {
+  dayResults.sort(({ date: a }, { date: b }): number => (a > b ? 1 : -1))
+  dayResults.forEach(({ date, duration, sheets, entries }): void => {
     const weekdayUI = `(${weekday(date.getDay() + 1)})`
     const dateUI = ago ? sAgo(date) : date.toLocaleDateString()
     const durationUI = U.getDurationLangString(duration, humanize)
@@ -162,6 +194,7 @@ const handler = (args: BreakdownCommandArguments) => {
     ])
   })
 
+  weekdayResults.sort((a: string, b: string) => a.localeCompare(b))
   weekdayResults.forEach((weekdayStr: string): void => {
     const result = resultsPerWeekday[weekdayStr]
     const { duration, sheets, entries } = result
@@ -178,11 +211,43 @@ const handler = (args: BreakdownCommandArguments) => {
     ])
   })
 
+  hourResults.sort((a: string, b: string) => {
+    const aHour = a.includes('am')
+      ? +a.substring(0, a.length - 2)
+      : +a.substring(0, a.length - 2) + 12
+
+    const bHour = b.includes('am')
+      ? +b.substring(0, b.length - 2)
+      : +b.substring(0, b.length - 2) + 12
+
+    return aHour - bHour
+  })
+
+  hourResults.forEach((hourStr: string): void => {
+    const result = resultsPerHour[hourStr]
+    const { duration, sheets, entries } = result
+    const durationUI = U.getDurationLangString(duration, humanize)
+    const sheetCountUI = U.getPluralizedArrayLength(sheets, 'sheet')
+    const entryCountUI = U.getPluralizedArrayLength(entries, 'entry')
+
+    resultsPerHourOutputRows.push([
+      C.clHighlightRed('  *'),
+      C.clHighlight(hourStr),
+      C.clText(entryCountUI),
+      C.clText(sheetCountUI),
+      C.clDuration(durationUI)
+    ])
+  })
+
   P.printJustifiedContent(resultsPerDayOutputRows)
   log('')
   log(C.clText('  = Totals per Week Day ='))
   log('')
   P.printJustifiedContent(resultsPerWeekdayOutputRows)
+  log('')
+  log(C.clText('  = Totals per Hour ='))
+  log('')
+  P.printJustifiedContent(resultsPerHourOutputRows)
 }
 
 export { handler }

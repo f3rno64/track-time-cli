@@ -1,12 +1,12 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
-import { getEndDate } from '../../../dates'
+import { getEndOfDayDate } from '../../../dates'
 
 describe('utils:dates:get_end_date', () => {
   it('returns a date set to the end of the provided date', () => {
     const date = new Date()
-    const result = getEndDate(date)
+    const result = getEndOfDayDate(date)
 
     expect(result.getFullYear()).to.equal(date.getFullYear())
     expect(result.getMonth()).to.equal(date.getMonth())

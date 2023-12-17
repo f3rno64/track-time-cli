@@ -1,6 +1,6 @@
 import _isDate from 'lodash/isDate'
 
-const getStartDate = (date?: Date): Date => {
+const getStartOfDayDate = (date?: Date): Date => {
   const d = _isDate(date) ? date : new Date()
 
   d.setHours(0)
@@ -11,4 +11,4 @@ const getStartDate = (date?: Date): Date => {
   return d
 }
 
-export default getStartDate
+export default getStartOfDayDate

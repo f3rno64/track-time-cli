@@ -34,12 +34,12 @@ interface WeekCommandArguments {
 
 const DAY_MS = 24 * 60 * 60 * 1000
 const LAST_WEEK_DATE = new Date(
-  +D.getStartDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
+  +D.getStartOfDayDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
 )
 
 const getSheetsWithEntriesInLastWeek = (sheets: TimeSheet[]) => {
-  const startOfOneWeekAgo = D.getStartDate(LAST_WEEK_DATE)
-  const endOfToday = D.getEndDate()
+  const startOfOneWeekAgo = D.getStartOfDayDate(LAST_WEEK_DATE)
+  const endOfToday = D.getEndOfDayDate()
 
   return sheets
     .filter(({ entries }) => entries.length > 0)

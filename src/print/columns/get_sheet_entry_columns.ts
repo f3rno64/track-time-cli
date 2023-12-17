@@ -1,6 +1,7 @@
 import ago from 's-ago'
 import colors from 'colors'
 import _isEmpty from 'lodash/isEmpty'
+import _compact from 'lodash/compact'
 
 import * as C from '../../color'
 import * as U from '../../utils'
@@ -30,22 +31,23 @@ const getSheetEntryColumns = (
     end === null
       ? ''
       : C.clDate(
-        printDateAgo ? ago(start) : new Date(end).toLocaleDateString()
+        printDateAgo ? ago(end) : new Date(end).toLocaleDateString()
       )
 
-  const dateUI = end === null ? startUI : endUI
   const sheetNamePrefix =
     typeof sheetName === 'undefined' || _isEmpty(sheetName)
       ? ''
       : `${C.clText('sheet')} ${C.clSheet(sheetName)}`
 
-  return [
+  return _compact([
+    '  ',
     sheetNamePrefix,
     `(${idUI})`,
     `[${durationUI}]`,
-    `started ${dateUI}`,
+    `started ${startUI}`,
+    end === null ? null : `ended ${endUI}`,
     descriptionUI
-  ].map((value: string): string =>
+  ]).map((value: string): string =>
     isActive ? colors.bold.underline(value) : value
   )
 }

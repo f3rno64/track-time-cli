@@ -5,7 +5,7 @@ import * as D from '../../dates'
 import { type TimeSheetEntry } from '../../types'
 import { getEntryDurationInDay } from '../../utils'
 
-const YESTERDAY = D.getStartDate(D.getPastDayDate(1))
+const YESTERDAY = D.getStartOfDayDate(D.getPastDayDate(1))
 const YESTERDAY_MS = +YESTERDAY
 
 describe('utils:get_entry_duration_in_day', () => {

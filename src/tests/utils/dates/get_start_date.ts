@@ -1,12 +1,12 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
-import { getStartDate } from '../../../dates'
+import { getStartOfDayDate } from '../../../dates'
 
 describe('utils:dates:get_start_date', () => {
   it('returns a date set to the start of the provided date', () => {
     const date = new Date()
-    const result = getStartDate(date)
+    const result = getStartOfDayDate(date)
 
     expect(result.getFullYear()).to.equal(date.getFullYear())
     expect(result.getMonth()).to.equal(date.getMonth())

@@ -28,8 +28,8 @@ interface YesterdayCommandArguments {
 const isEntryForYesterday = (entry: TimeSheetEntry): boolean => {
   const { start, end } = entry
   const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000)
-  const startOfYesterday = D.getStartDate(yesterday)
-  const endOfYesterday = D.getEndDate(yesterday)
+  const startOfYesterday = D.getStartOfDayDate(yesterday)
+  const endOfYesterday = D.getEndOfDayDate(yesterday)
 
   return (
     +start >= +startOfYesterday && (end === null || +end <= +endOfYesterday)
