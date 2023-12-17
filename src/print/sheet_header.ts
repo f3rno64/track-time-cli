@@ -1,5 +1,4 @@
 import formatDuration from 'format-duration'
-import humanizeDuration from 'humanize-duration'
 
 import log from '../log'
 import * as C from '../color'
@@ -23,7 +22,7 @@ const printSheetHeader = (
 
   const totalDuration =
     humanize === true
-      ? humanizeDuration(U.getTotalSheetDuration(sheet))
+      ? U.getDurationLangString(U.getTotalSheetDuration(sheet))
       : formatDuration(U.getTotalSheetDuration(sheet))
 
   const uiTotalDuration =

@@ -1,4 +1,5 @@
 import yesterdayCommand from './yesterday'
+import breakdownCommand from './breakdown'
 import sheetsCommand from './sheets'
 import resumeCommand from './resume'
 import sheetCommand from './sheet'
@@ -21,5 +22,6 @@ export default [
   sheetCommand,
   sheetsCommand,
   resumeCommand,
-  yesterdayCommand
+  yesterdayCommand,
+  breakdownCommand
 ]

@@ -1,5 +1,4 @@
 import formatDuration from 'format-duration'
-import humanizeDuration from 'humanize-duration'
 
 import * as C from '../../color'
 import * as U from '../../utils'
@@ -22,7 +21,7 @@ const getSheetHeaderColumns = (
 
   const totalDuration =
     humanize === true
-      ? humanizeDuration(U.getTotalSheetDuration(sheet))
+      ? U.getDurationLangString(U.getTotalSheetDuration(sheet))
       : formatDuration(U.getTotalSheetDuration(sheet))
 
   const uiTotalDuration =

@@ -3,7 +3,6 @@ import _sum from 'lodash/sum'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 import formatDuration from 'format-duration'
-import humanizeDuration from 'humanize-duration'
 
 import DB from '../db'
 import log from '../log'
@@ -18,7 +17,7 @@ const COMMAND_CONFIG = {
   aliases: ['ss'],
   builder: {
     humanize: {
-      describe: 'Humanize the total duration',
+      describe: 'Print the total duration in human-readable format',
       type: 'boolean'
     },
 
@@ -113,7 +112,7 @@ const handler = async (args: SheetsCommandArgs) => {
   log(
     `${C.clText('Total duration')}: ${C.clDuration(
       `[${formatDuration(totalDuration)}]`
-    )} ${C.clHighlight(humanizeDuration(totalDuration))}`
+    )} ${C.clHighlight(U.getDurationLangString(totalDuration))}`
   )
 }
 
