@@ -15,3 +15,5 @@ export interface TimeTrackerDB {
   sheets: TimeSheet[]
   activeSheetName: string | null
 }
+
+export type YArgsOptionDefinition = [string, Record<string, string | string[]>]

@@ -1,9 +1,9 @@
-import { type Argv } from 'yargs'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 
 import DB from '../db'
 import * as P from '../print'
+import * as O from '../options'
 
 interface InCommandArgs {
   db: DB
@@ -16,17 +16,7 @@ const COMMAND_CONFIG = {
   command: 'in <description..>',
   describe: 'Check in to a time sheet',
   aliases: ['i'],
-  builder: (yargs: Argv) =>
-    yargs
-      .option('at', {
-        describe: 'Check in at a specific time',
-        type: 'string'
-      })
-      .option('description', {
-        describe: 'Time sheet entry description',
-        type: 'string',
-        demandOption: true
-      })
+  builder: O.setup.bind(null, [O.AtOption, O.DescriptionOption])
 }
 
 const handler = async (args: InCommandArgs) => {

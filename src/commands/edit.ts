@@ -1,4 +1,3 @@
-import { type Argv } from 'yargs'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
@@ -7,37 +6,19 @@ import DB from '../db'
 import log from '../log'
 import * as U from '../utils'
 import * as C from '../color'
+import * as O from '../options'
 
 const COMMAND_CONFIG = {
   command: 'edit [description..]',
   describe: 'View, modify, or delete a time sheet entry',
   aliases: ['e'],
-  builder: (yargs: Argv) =>
-    yargs
-      .option('sheet', {
-        describe: 'Name of time sheet to edit',
-        alias: 's',
-        type: 'string'
-      })
-      .option('name', {
-        describe: 'New name to apply to specified time sheet',
-        alias: 'n',
-        type: 'string'
-      })
-      .option('entry', {
-        describe: 'ID of entry to edit',
-        alias: 'e',
-        type: 'number'
-      })
-      .option('description', {
-        describe: 'New description for the specified entry',
-        type: 'string'
-      })
-      .option('delete', {
-        describe: 'Delete the specified time sheet or time sheet entry',
-        alias: ['d', 'del'],
-        type: 'boolean'
-      })
+  builder: O.setup.bind(null, [
+    O.SheetOption,
+    O.NameOption,
+    O.EntryOption,
+    O.DescriptionOption,
+    O.DeleteOption
+  ])
 }
 
 interface EditCommandArguments {

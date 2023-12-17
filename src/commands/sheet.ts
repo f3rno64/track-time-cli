@@ -1,25 +1,13 @@
-import { type Argv } from 'yargs'
-
 import DB from '../db'
 import log from '../log'
 import * as C from '../color'
+import * as O from '../options'
 
 const COMMAND_CONFIG = {
   command: 'sheet [name]',
   describe: 'Switch to or delete a sheet by name',
   aliases: ['s'],
-  builder: (yargs: Argv) =>
-    yargs
-      .option('delete', {
-        describe: 'Delete the specified sheet',
-        alias: ['d', 'del'],
-        type: 'boolean',
-        default: false
-      })
-      .positional('name', {
-        describe: 'Sheet name',
-        type: 'string'
-      })
+  builder: O.setup.bind(null, [O.DeleteOption, O.NameOption])
 }
 
 interface SheetCommandArgs {

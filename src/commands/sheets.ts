@@ -1,5 +1,3 @@
-import { type Argv } from 'yargs'
-
 import ago from 's-ago'
 import _sum from 'lodash/sum'
 import parseDate from 'time-speak'
@@ -10,29 +8,14 @@ import log from '../log'
 import * as C from '../color'
 import * as U from '../utils'
 import * as P from '../print'
+import * as O from '../options'
 import { TimeSheet } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'sheets',
   describe: 'List all sheets',
   aliases: ['ss'],
-  builder: (yargs: Argv) =>
-    yargs
-      .option('humanize', {
-        describe: 'Print the total duration in human-readable format',
-        alias: 'h',
-        type: 'boolean'
-      })
-      .option('since', {
-        describe: 'Filter sheets, entries, and durations since a given date',
-        alias: 's',
-        type: 'string'
-      })
-      .option('today', {
-        describe: 'Show results for today',
-        alias: 't',
-        type: 'boolean'
-      })
+  builder: O.setup.bind(null, [O.HumanizeOption, O.SinceOption, O.TodayOption])
 }
 
 interface SheetsCommandArgs {

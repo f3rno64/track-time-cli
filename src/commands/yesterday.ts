@@ -1,36 +1,20 @@
-import { type Argv } from 'yargs'
-
 import DB from '../db'
 import log from '../log'
 import * as U from '../utils'
 import * as P from '../print'
+import * as O from '../options'
 import { type TimeSheetEntry } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'yesterday [sheets..]',
   describe: 'Display a summary of activity for yesterday',
   aliases: ['y'],
-  builder: (yargs: Argv) =>
-    yargs
-      .option('sheets', {
-        describe: 'Show results for the specified sheets',
-        type: 'array'
-      })
-      .option('ago', {
-        description: 'Print dates as relative time (e.g. 5 minutes ago)',
-        alias: ['r', 'relative'],
-        type: 'boolean'
-      })
-      .option('humanize', {
-        describe: 'Print the total duration in human-readable format',
-        alias: 'h',
-        type: 'boolean'
-      })
-      .option('all', {
-        describe: 'Include all time sheets in results',
-        alias: 'a',
-        type: 'boolean'
-      })
+  builder: O.setup.bind(null, [
+    O.SheetsOption,
+    O.AgoOption,
+    O.HumanizeOption,
+    O.AllOption
+  ])
 }
 
 interface YesterdayCommandArguments {

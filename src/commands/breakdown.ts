@@ -1,7 +1,6 @@
 import sAgo from 's-ago'
 import weekday from 'weekday'
 import _uniq from 'lodash/uniq'
-import { type Argv } from 'yargs'
 import parseDate from 'time-speak'
 import { eachDayOfInterval } from 'date-fns'
 import formatDuration from 'format-duration'
@@ -11,34 +10,19 @@ import log from '../log'
 import * as U from '../utils'
 import * as C from '../color'
 import * as P from '../print'
+import * as O from '../options'
 import { type TimeSheetEntry, type TimeSheet } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'breakdown [sheets..]',
   describe: 'Display total durations per day for one or more sheets',
   aliases: ['b'],
-  builder: (yargs: Argv) =>
-    yargs
-      .option('all', {
-        describe: 'Show results for all sheets',
-        alias: 'a',
-        type: 'boolean'
-      })
-      .option('ago', {
-        describe: 'Print dates as relative time (e.g. 5 minutes ago)',
-        alias: ['r', 'relative'],
-        type: 'boolean'
-      })
-      .option('humanize', {
-        describe: 'Print the total duration in human-readable format',
-        alias: 'h',
-        type: 'boolean'
-      })
-      .option('since', {
-        description: 'Only list entries since the specified date',
-        alias: 's',
-        type: 'string'
-      })
+  builder: O.setup.bind(null, [
+    O.AllOption,
+    O.AgoOption,
+    O.HumanizeOption,
+    O.SinceOption
+  ])
 }
 
 interface BreakdownCommandArguments {

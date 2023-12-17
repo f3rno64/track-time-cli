@@ -1,5 +1,4 @@
 import sAgo from 's-ago'
-import { type Argv } from 'yargs'
 
 import _sum from 'lodash/sum'
 import weekday from 'weekday'
@@ -9,33 +8,19 @@ import DB from '../db'
 import log from '../log'
 import * as U from '../utils'
 import * as C from '../color'
+import * as O from '../options'
 import { type TimeSheetEntry, type TimeSheet } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'week [sheets..]',
   describe: 'Display a summary of activity for the past week',
   aliases: ['w'],
-  builder: (yargs: Argv) =>
-    yargs
-      .option('total', {
-        describe: 'Display total duration for the week for all sheets',
-        alias: 't',
-        type: 'boolean'
-      })
-      .option('ago', {
-        description: 'Print dates as relative time (e.g. 5 minutes ago)',
-        alias: ['r', 'relative'],
-        type: 'boolean'
-      })
-      .option('humanize', {
-        describe: 'Print the total duration in human-readable format',
-        alias: 'h',
-        type: 'boolean'
-      })
-      .positional('sheets', {
-        describe: 'Only show results for these sheets',
-        array: true
-      })
+  builder: O.setup.bind(null, [
+    O.TotalOption,
+    O.AgoOption,
+    O.HumanizeOption,
+    O.SheetsOption
+  ])
 }
 
 interface WeekCommandArguments {

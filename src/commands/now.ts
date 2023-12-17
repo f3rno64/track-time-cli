@@ -1,18 +1,12 @@
-import { type Argv } from 'yargs'
-
 import DB from '../db'
 import * as P from '../print'
+import * as O from '../options'
 
 const COMMAND_CONFIG = {
   command: ['now', '$0'],
   describe: 'Display all active time sheet entries',
   aliases: ['n'],
-  builder: (yargs: Argv) =>
-    yargs.option('humanize', {
-      describe: 'Print the total duration in human-readable format',
-      alias: 'h',
-      type: 'boolean'
-    })
+  builder: O.setup.bind(null, [O.HumanizeOption])
 }
 
 interface NowCommandArguments {

@@ -1,6 +1,5 @@
 import sAgo from 's-ago'
 import _sum from 'lodash/sum'
-import { type Argv } from 'yargs'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 import formatDuration from 'format-duration'
@@ -11,43 +10,21 @@ import log from '../log'
 import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
+import * as O from '../options'
 import { type TimeSheet } from '../types'
 
 const COMMAND_CONFIG = {
   command: 'list [sheets..]',
   describe: 'List all time sheet entries',
   aliases: ['l'],
-  builder: (yargs: Argv) =>
-    yargs
-      .option('sheets', {
-        describe: 'List entries for the specified sheets',
-        type: 'array'
-      })
-      .option('ago', {
-        description: 'Print dates as relative time (e.g. 5 minutes ago)',
-        alias: ['r', 'relative'],
-        type: 'boolean'
-      })
-      .option('humanize', {
-        describe: 'Print the total duration in human-readable format',
-        alias: 'h',
-        type: 'boolean'
-      })
-      .option('since', {
-        description: 'Only list entries since the specified date',
-        alias: 's',
-        type: 'string'
-      })
-      .option('today', {
-        describe: 'Show results for today',
-        alias: 't',
-        type: 'boolean'
-      })
-      .option('all', {
-        description: 'List all sheets, including inactive ones',
-        alias: 'a',
-        type: 'boolean'
-      })
+  builder: O.setup.bind(null, [
+    O.SheetsOption,
+    O.AgoOption,
+    O.HumanizeOption,
+    O.SinceOption,
+    O.TodayOption,
+    O.AllOption
+  ])
 }
 
 interface ListCommandArgs {
