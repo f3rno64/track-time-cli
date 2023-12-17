@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>track-time-cli</title>
+  </head>
+
+  <style>
+    {{css}}
+  </style>
+
+  <body class="tt-ui">
+    <div class="tt-ui-content-wrapper">
+      <div class="tt-ui-header">
+        <h1>Track Time CLI Web UI</h1>
+        <p class="tt-ui-header-version">Version: {{version}}</p>
+      </div>
+
+      <ul class="tt-ui-sheets-list">
+        {{#each sheets}}
+          <li class="tt-ui-sheet">
+            <p class="tt-ui-sheet-name">Sheet: {{name}}</p>
+            <ul>
+              {{#each entries}}
+                <li class="tt-ui-sheet-entry">
+                  <div class="tt-ui-sheet-entry-details">
+                    <p>ID: {{id}}</p>
+                    <p>Start: {{date start}}</p>
+
+                    {{#if end}}
+                      <p>End: {{date end}}</p>
+                    {{/if}}
+                  </div>
+
+                  <p>{{description}}</p>
+                </li>
+              {{/each}}
+            </ul>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </body>
+</html>

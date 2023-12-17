@@ -1,0 +1,100 @@
+.tt-ui {
+  background: #fff;
+  padding: 32px 0;
+
+  .tt-ui-content-wrapper {
+    width: 800px;
+    margin: 0 auto;
+  }
+
+  .tt-ui-header {
+    padding: 32px 0;
+    line-height: 24px;
+
+    display: flex;
+    flex-direction: row;
+
+    h1 {
+      font-size: 24px;
+      margin: 0;
+      width: 100%;
+    }
+
+    .tt-ui-header-version {
+      color: #999;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+  }
+
+  .tt-ui-sheet-name {
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+  }
+
+  .tt-ui-sheets-list {
+    > * {
+      margin-bottom: 16px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .tt-ui-sheet {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 32px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      > * {
+        flex-shrink: 0;
+      }
+
+      p:last-child {
+        width: 100%;
+        text-align: right;
+      }
+    }
+  }
+
+  .tt-ui-sheet-entry {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #eee;
+    border: 1px solid #0010ea;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .tt-ui-sheet-entry-details {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+
+      & + p {
+        padding: 16px 0 8px 0;
+        text-align: left !important;
+      }
+    }
+
+    p {
+      text-align: left;
+      width: 100%;
+
+      &:first-child {
+        flex-shrink: 0;
+        width: auto;
+        margin-right: 16px;
+      }
+    }
+  }
+}

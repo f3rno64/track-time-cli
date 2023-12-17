@@ -1,4 +1,5 @@
 import isPlural from './is_plural'
+import getLogger from './get_logger'
 import ensureDirExists from './ensure_dir_exists'
 import parseVariadicArg from './parse_variadic_arg'
 import getDurationLangString from './get_duration_lang_string'
@@ -9,6 +10,7 @@ import getSheetsWithEntriesSinceDate from './get_sheets_with_entries_since_date'
 
 export {
   isPlural,
+  getLogger,
   ensureDirExists,
   parseVariadicArg,
   getDurationLangString,

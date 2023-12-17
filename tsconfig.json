@@ -6,6 +6,7 @@
   "compilerOptions": {
     "target": "es2021",
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "incremental": true,
     "module": "commonjs",
     "lib": ["es2021"],
