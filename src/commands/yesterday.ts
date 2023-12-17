@@ -1,7 +1,7 @@
 import DB from '../db'
 import log from '../log'
-import * as U from '../utils'
 import * as P from '../print'
+import * as D from '../dates'
 import * as O from '../options'
 import { type TimeSheetEntry } from '../types'
 
@@ -28,8 +28,8 @@ interface YesterdayCommandArguments {
 const isEntryForYesterday = (entry: TimeSheetEntry): boolean => {
   const { start, end } = entry
   const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000)
-  const startOfYesterday = U.getStartDate(yesterday)
-  const endOfYesterday = U.getEndDate(yesterday)
+  const startOfYesterday = D.getStartDate(yesterday)
+  const endOfYesterday = D.getEndDate(yesterday)
 
   return (
     +start >= +startOfYesterday && (end === null || +end <= +endOfYesterday)

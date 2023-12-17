@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
-import { getEndDate } from '../../../utils'
+import { getEndDate } from '../../../dates'
 
 describe('utils:dates:get_end_date', () => {
   it('returns a date set to the end of the provided date', () => {

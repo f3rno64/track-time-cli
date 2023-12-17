@@ -7,8 +7,6 @@ import getEntryDurationInDay from './get_entry_duration_in_day'
 import getPluralizedArrayLength from './get_pluralized_array_length'
 import getSheetsWithEntriesSinceDate from './get_sheets_with_entries_since_date'
 
-export * from './dates'
-
 export {
   isPlural,
   ensureDirExists,

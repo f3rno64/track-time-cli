@@ -8,6 +8,7 @@ import log from '../log'
 import * as C from '../color'
 import * as U from '../utils'
 import * as P from '../print'
+import * as D from '../dates'
 import * as O from '../options'
 import { TimeSheet } from '../types'
 
@@ -42,7 +43,7 @@ const handler = async (args: SheetsCommandArgs) => {
   const sinceDate = !_isEmpty(since)
     ? parseDate(since)
     : today
-      ? U.getStartDate()
+      ? D.getStartDate()
       : null
 
   const filteredSheets =

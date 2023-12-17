@@ -10,6 +10,7 @@ import log from '../log'
 import * as C from '../color'
 import * as P from '../print'
 import * as U from '../utils'
+import * as D from '../dates'
 import * as O from '../options'
 import { type TimeSheet } from '../types'
 
@@ -64,7 +65,7 @@ const handler = (args: ListCommandArgs) => {
   const sinceDate = !_isEmpty(since)
     ? parseDate(since)
     : today
-      ? U.getStartDate()
+      ? D.getStartDate()
       : null
 
   const filteredSheets =

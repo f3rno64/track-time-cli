@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
-import { getHoursMS } from '../../../utils'
+import { getHoursMS } from '../../../dates'
 
 describe('utils:dates:get_hours_ms', () => {
   it('returns correct values', () => {

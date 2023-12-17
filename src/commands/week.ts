@@ -8,6 +8,7 @@ import DB from '../db'
 import log from '../log'
 import * as U from '../utils'
 import * as C from '../color'
+import * as D from '../dates'
 import * as O from '../options'
 import { type TimeSheetEntry, type TimeSheet } from '../types'
 
@@ -33,12 +34,12 @@ interface WeekCommandArguments {
 
 const DAY_MS = 24 * 60 * 60 * 1000
 const LAST_WEEK_DATE = new Date(
-  +U.getStartDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
+  +D.getStartDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
 )
 
 const getSheetsWithEntriesInLastWeek = (sheets: TimeSheet[]) => {
-  const startOfOneWeekAgo = U.getStartDate(LAST_WEEK_DATE)
-  const endOfToday = U.getEndDate()
+  const startOfOneWeekAgo = D.getStartDate(LAST_WEEK_DATE)
+  const endOfToday = D.getEndDate()
 
   return sheets
     .filter(({ entries }) => entries.length > 0)

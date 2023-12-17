@@ -2,6 +2,7 @@ import DB from '../db'
 import log from '../log'
 import * as U from '../utils'
 import * as P from '../print'
+import * as D from '../dates'
 import * as O from '../options'
 
 const COMMAND_CONFIG = {
@@ -36,7 +37,7 @@ const handler = (args: TodayCommandArguments) => {
 
   const sheetsWithEntriesForToday = U.getSheetsWithEntriesSinceDate(
     sheets,
-    U.getStartDate()
+    D.getStartDate()
   )
 
   if (sheetsWithEntriesForToday.length === 0) {
