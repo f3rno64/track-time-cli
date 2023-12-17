@@ -1,4 +1,5 @@
 import DescriptionOption from './description'
+import YesterdayOption from './yesterday'
 import HumanizeOption from './humanize'
 import HostnameOption from './hostname'
 import SheetsOption from './sheets'
@@ -17,6 +18,7 @@ import setup from './setup'
 
 export {
   DescriptionOption,
+  YesterdayOption,
   HumanizeOption,
   HostnameOption,
   DeleteOption,

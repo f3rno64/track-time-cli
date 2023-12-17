@@ -24,7 +24,8 @@ const COMMAND_CONFIG = {
     O.HumanizeOption,
     O.SinceOption,
     O.TodayOption,
-    O.AllOption
+    O.AllOption,
+    O.YesterdayOption
   ])
 }
 
@@ -35,14 +36,24 @@ interface ListCommandArgs {
   all?: boolean
   since?: string
   today?: boolean
+  yesterday?: boolean
   humanize?: boolean
 }
 
 const handler = (args: ListCommandArgs) => {
-  const { humanize, today, since, all, ago, sheets: sheetNames, db } = args
+  const {
+    yesterday,
+    humanize,
+    today,
+    since,
+    all,
+    ago,
+    sheets: sheetNames,
+    db
+  } = args
 
-  if (!_isEmpty(since) && today) {
-    throw new Error('Cannot use both --since and --today')
+  if (!_isEmpty(since) && (today || yesterday)) {
+    throw new Error('Cannot use --since, --today, and --yesterday together')
   }
 
   const activeSheetName = db.getActiveSheetName()
@@ -66,7 +77,9 @@ const handler = (args: ListCommandArgs) => {
     ? parseDate(since)
     : today
       ? D.getStartOfDayDate()
-      : null
+      : yesterday
+        ? D.getStartOfDayDate(new Date(Date.now() - D.getDaysMS(1)))
+        : null
 
   const filteredSheets =
     sinceDate === null
