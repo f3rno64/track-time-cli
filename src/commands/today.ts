@@ -1,4 +1,7 @@
+import { type Argv } from 'yargs'
+
 import DB from '../db'
+import log from '../log'
 import * as U from '../utils'
 import * as P from '../print'
 
@@ -6,12 +9,27 @@ const COMMAND_CONFIG = {
   command: 'today [sheets..]',
   describe: 'Display a summary of activity for today',
   aliases: ['t'],
-  builder: {
-    all: {
-      describe: 'Include all time sheets in results',
-      type: 'boolean'
-    }
-  }
+  builder: (yargs: Argv) =>
+    yargs
+      .option('sheets', {
+        describe: 'Show results for the specified sheets',
+        type: 'array'
+      })
+      .option('ago', {
+        description: 'Print dates as relative time (e.g. 5 minutes ago)',
+        alias: ['r', 'relative'],
+        type: 'boolean'
+      })
+      .option('humanize', {
+        describe: 'Print the total duration in human-readable format',
+        alias: 'h',
+        type: 'boolean'
+      })
+      .option('all', {
+        describe: 'Include all time sheets in results',
+        alias: 'a',
+        type: 'boolean'
+      })
 }
 
 interface TodayCommandArguments {
@@ -19,10 +37,11 @@ interface TodayCommandArguments {
   ago?: boolean
   all?: boolean
   sheets?: string[]
+  humanize?: boolean
 }
 
 const handler = (args: TodayCommandArguments) => {
-  const { sheets: inputSheets, all, ago, db } = args
+  const { humanize, sheets: inputSheets, all, ago, db } = args
 
   // prettier-ignore
   const sheets = all
@@ -40,8 +59,9 @@ const handler = (args: TodayCommandArguments) => {
     throw new Error('No entries for today')
   }
 
-  P.printSummary(sheetsWithEntriesForToday, true)
-  P.printSheets(sheetsWithEntriesForToday, ago)
+  P.printSummary(sheetsWithEntriesForToday, humanize)
+  log('')
+  P.printSheets(sheetsWithEntriesForToday, ago, humanize)
 }
 
 export default {

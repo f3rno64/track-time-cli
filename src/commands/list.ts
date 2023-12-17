@@ -1,8 +1,10 @@
 import sAgo from 's-ago'
 import _sum from 'lodash/sum'
+import { type Argv } from 'yargs'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 import formatDuration from 'format-duration'
+import humanizeDuration from 'humanize-duration'
 
 import DB from '../db'
 import log from '../log'
@@ -15,27 +17,37 @@ const COMMAND_CONFIG = {
   command: 'list [sheets..]',
   describe: 'List all time sheet entries',
   aliases: ['l'],
-  builder: {
-    ago: {
-      description: 'Print dates as relative time (e.g. 5 minutes ago)',
-      type: 'boolean'
-    },
-
-    since: {
-      description: 'Only list entries since the specified date',
-      type: 'string'
-    },
-
-    today: {
-      describe: 'Show results for today',
-      type: 'boolean'
-    },
-
-    all: {
-      description: 'List all sheets, including inactive ones',
-      type: 'boolean'
-    }
-  }
+  builder: (yargs: Argv) =>
+    yargs
+      .option('sheets', {
+        describe: 'List entries for the specified sheets',
+        type: 'array'
+      })
+      .option('ago', {
+        description: 'Print dates as relative time (e.g. 5 minutes ago)',
+        alias: ['r', 'relative'],
+        type: 'boolean'
+      })
+      .option('humanize', {
+        describe: 'Print the total duration in human-readable format',
+        alias: 'h',
+        type: 'boolean'
+      })
+      .option('since', {
+        description: 'Only list entries since the specified date',
+        alias: 's',
+        type: 'string'
+      })
+      .option('today', {
+        describe: 'Show results for today',
+        alias: 't',
+        type: 'boolean'
+      })
+      .option('all', {
+        description: 'List all sheets, including inactive ones',
+        alias: 'a',
+        type: 'boolean'
+      })
 }
 
 interface ListCommandArgs {
@@ -45,10 +57,11 @@ interface ListCommandArgs {
   all?: boolean
   since?: string
   today?: boolean
+  humanize?: boolean
 }
 
 const handler = (args: ListCommandArgs) => {
-  const { today, since, all, ago, sheets: sheetNames, db } = args
+  const { humanize, today, since, all, ago, sheets: sheetNames, db } = args
 
   if (!_isEmpty(since) && today) {
     throw new Error('Cannot use both --since and --today')
@@ -104,7 +117,7 @@ const handler = (args: ListCommandArgs) => {
 
   log('')
 
-  P.printSheets(filteredSheets, ago === true)
+  P.printSheets(filteredSheets, ago === true, humanize)
 
   if (!all) {
     const sheetsNotShownCount = dbSheets.length - filteredSheets.length
@@ -128,11 +141,13 @@ const handler = (args: ListCommandArgs) => {
       )
     )
 
+    const totalDurationUI = humanize
+      ? humanizeDuration(totalDuration)
+      : formatDuration(totalDuration)
+
     log('')
     log(
-      `${C.clText('* Total duration:')} ${C.clDuration(
-        `[${formatDuration(totalDuration)}]`
-      )}`
+      `${C.clText('* Total duration:')} ${C.clDuration(`[${totalDurationUI}]`)}`
     )
   }
 }

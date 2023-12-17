@@ -1,7 +1,9 @@
+import sAgo from 's-ago'
+import { type Argv } from 'yargs'
+
 import _sum from 'lodash/sum'
 import weekday from 'weekday'
 import _isEmpty from 'lodash/isEmpty'
-import formatDuration from 'format-duration'
 
 import DB from '../db'
 import log from '../log'
@@ -13,18 +15,35 @@ const COMMAND_CONFIG = {
   command: 'week [sheets..]',
   describe: 'Display a summary of activity for the past week',
   aliases: ['w'],
-  builder: {
-    total: {
-      describe: 'Display total duration for the week for all sheets',
-      type: 'boolean'
-    }
-  }
+  builder: (yargs: Argv) =>
+    yargs
+      .option('total', {
+        describe: 'Display total duration for the week for all sheets',
+        alias: 't',
+        type: 'boolean'
+      })
+      .option('ago', {
+        description: 'Print dates as relative time (e.g. 5 minutes ago)',
+        alias: ['r', 'relative'],
+        type: 'boolean'
+      })
+      .option('humanize', {
+        describe: 'Print the total duration in human-readable format',
+        alias: 'h',
+        type: 'boolean'
+      })
+      .positional('sheets', {
+        describe: 'Only show results for these sheets',
+        array: true
+      })
 }
 
 interface WeekCommandArguments {
   db: DB
   total?: boolean
   sheets?: string[]
+  ago?: boolean
+  humanize?: boolean
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000
@@ -37,6 +56,7 @@ const getSheetsWithEntriesInLastWeek = (sheets: TimeSheet[]) => {
   const endOfToday = U.getEndDate()
 
   return sheets
+    .filter(({ entries }) => entries.length > 0)
     .map(({ entries, ...otherSheetData }) => ({
       entries: entries
         .map(({ end, ...entryData }) => ({
@@ -49,7 +69,6 @@ const getSheetsWithEntriesInLastWeek = (sheets: TimeSheet[]) => {
         ),
       ...otherSheetData
     }))
-    .filter(({ entries }) => entries.length > 0)
 }
 
 interface WeekdayResult {
@@ -62,12 +81,12 @@ type WeekdayResults = Record<string, SheetResults>
 type TotalResults = Record<string, WeekdayResult>
 
 const handler = (args: WeekCommandArguments) => {
-  const { sheets: inputSheets, total, db } = args
+  const { ago, humanize, sheets: inputSheets, total, db } = args
 
-  const selectedSheets =
+  const selectedSheets: TimeSheet[] =
     typeof inputSheets === 'undefined' || _isEmpty(inputSheets)
       ? db.getAllSheets()
-      : inputSheets.map(db.getSheet)
+      : inputSheets.map(db.getSheet.bind(db))
 
   const relevantSheets = getSheetsWithEntriesInLastWeek(selectedSheets)
   const results: WeekdayResults = {}
@@ -110,7 +129,7 @@ const handler = (args: WeekCommandArguments) => {
 
   log(
     `${C.clText('* Total duration:')} ${C.clDuration(
-      formatDuration(totalDuration)
+      U.getDurationLangString(totalDuration, humanize)
     )} ${C.clHighlight(`[${totalEntries} entries]`)}`
   )
 
@@ -151,7 +170,7 @@ const handler = (args: WeekCommandArguments) => {
       log(
         `${C.clDate(`- ${dateWeekday} ${dateString}`)}: ${C.clHighlight(
           `${entries} entries`
-        )} ${C.clDuration(`[${formatDuration(duration)}]`)}`
+        )} ${C.clDuration(`[${U.getDurationLangString(duration, humanize)}]`)}`
       )
     })
   } else {
@@ -159,18 +178,24 @@ const handler = (args: WeekCommandArguments) => {
 
     sheetNames.forEach((sheetName: string, i: number) => {
       const sheetResults = results[sheetName]
+
+      if (_isEmpty(sheetResults)) {
+        return
+      }
+
       const sheetResultDates = Object.keys(sheetResults)
       const sheetTotalDuration = _sum(
         sheetResultDates.map((date: string) => sheetResults[date].duration)
       )
 
       log(
-        `${C.clSheet(`- Sheet ${sheetName}`)} ${C.clDuration(
-          `[${formatDuration(sheetTotalDuration)}]`
+        `${C.clText('- Sheet')} ${C.clSheet(sheetName)} ${C.clDuration(
+          `[${U.getDurationLangString(sheetTotalDuration, humanize)}]`
         )}`
       )
 
       sheetResultDates.forEach((dateString: string) => {
+        const dateStringUI = ago ? sAgo(new Date(dateString)) : dateString
         const date = new Date(dateString)
         const dateWeekday = weekday(date.getDay() + 1)
         const result = sheetResults[dateString]
@@ -181,9 +206,11 @@ const handler = (args: WeekCommandArguments) => {
         }
 
         log(
-          `  ${C.clDate(`- ${dateWeekday} ${dateString}`)}: ${C.clHighlight(
-            `${entries} entries,`
-          )} ${C.clDuration(`[${formatDuration(duration)}]`)}`
+          `  ${C.clDate(`- ${dateWeekday}`)} ${C.clHighlightRed(
+            `(${dateStringUI})`
+          )}: ${C.clHighlight(`${entries} entries,`)} ${C.clDuration(
+            `[${U.getDurationLangString(duration, humanize)}]`
+          )}`
         )
       })
 

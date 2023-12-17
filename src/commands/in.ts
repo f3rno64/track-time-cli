@@ -1,3 +1,4 @@
+import { type Argv } from 'yargs'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 
@@ -15,18 +16,17 @@ const COMMAND_CONFIG = {
   command: 'in <description..>',
   describe: 'Check in to a time sheet',
   aliases: ['i'],
-  builder: {
-    at: {
-      describe: 'Check in at a specific time',
-      type: 'string'
-    },
-
-    description: {
-      describe: 'Time sheet entry description',
-      type: 'string',
-      demandOption: true
-    }
-  }
+  builder: (yargs: Argv) =>
+    yargs
+      .option('at', {
+        describe: 'Check in at a specific time',
+        type: 'string'
+      })
+      .option('description', {
+        describe: 'Time sheet entry description',
+        type: 'string',
+        demandOption: true
+      })
 }
 
 const handler = async (args: InCommandArgs) => {

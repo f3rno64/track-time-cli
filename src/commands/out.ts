@@ -1,3 +1,4 @@
+import { type Argv } from 'yargs'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
@@ -18,12 +19,12 @@ const COMMAND_CONFIG = {
   command: 'out',
   describe: 'Check out of the currently active time sheet entry',
   aliases: ['o'],
-  builder: {
-    at: {
+  builder: (yargs: Argv) =>
+    yargs.option('at', {
       describe: 'Check out at a specific time',
+      alias: 'a',
       type: 'string'
-    }
-  }
+    })
 }
 
 const handler = async (args: OutCommandArgs) => {

@@ -1,5 +1,3 @@
-import formatDuration from 'format-duration'
-
 import * as C from '../../color'
 import * as U from '../../utils'
 import { type TimeSheet } from '../../types'
@@ -19,13 +17,10 @@ const getSheetHeaderColumns = (
   const uiEntries =
     entries.length === 0 ? C.clHighlight('(no entries)') : uiEntryCount
 
-  const totalDuration =
-    humanize === true
-      ? U.getDurationLangString(U.getTotalSheetDuration(sheet))
-      : formatDuration(U.getTotalSheetDuration(sheet))
-
+  const totalDuration = U.getTotalSheetDuration(sheet)
+  const totalDurationString = U.getDurationLangString(totalDuration, humanize)
   const uiTotalDuration =
-    entries.length === 0 ? '' : C.clDuration(`[${totalDuration}]`)
+    entries.length === 0 ? '' : C.clDuration(`[${totalDurationString}]`)
 
   const uiActiveStatus = isActive !== true ? '' : C.clHighlightRed('* Active *')
 

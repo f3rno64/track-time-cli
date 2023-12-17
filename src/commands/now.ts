@@ -1,18 +1,27 @@
+import { type Argv } from 'yargs'
+
 import DB from '../db'
 import * as P from '../print'
 
 const COMMAND_CONFIG = {
   command: ['now', '$0'],
   describe: 'Display all active time sheet entries',
-  aliases: ['n']
+  aliases: ['n'],
+  builder: (yargs: Argv) =>
+    yargs.option('humanize', {
+      describe: 'Print the total duration in human-readable format',
+      alias: 'h',
+      type: 'boolean'
+    })
 }
 
 interface NowCommandArguments {
   db: DB
+  humanize?: boolean
 }
 
 const handler = (args: NowCommandArguments) => {
-  const { db } = args
+  const { humanize, db } = args
   const activeSheetName = db.getActiveSheetName()
 
   if (activeSheetName === null) {
@@ -34,7 +43,7 @@ const handler = (args: NowCommandArguments) => {
     )
   }
 
-  P.printActiveSheetEntry(entry, activeSheetName)
+  P.printActiveSheetEntry(entry, activeSheetName, humanize)
 }
 
 export { handler }

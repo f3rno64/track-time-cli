@@ -1,8 +1,9 @@
+import { type Argv } from 'yargs'
+
 import ago from 's-ago'
 import _sum from 'lodash/sum'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
-import formatDuration from 'format-duration'
 
 import DB from '../db'
 import log from '../log'
@@ -15,22 +16,23 @@ const COMMAND_CONFIG = {
   command: 'sheets',
   describe: 'List all sheets',
   aliases: ['ss'],
-  builder: {
-    humanize: {
-      describe: 'Print the total duration in human-readable format',
-      type: 'boolean'
-    },
-
-    since: {
-      describe: 'Filter sheets, entries, and durations since a given date',
-      type: 'string'
-    },
-
-    today: {
-      describe: 'Show results for today',
-      type: 'boolean'
-    }
-  }
+  builder: (yargs: Argv) =>
+    yargs
+      .option('humanize', {
+        describe: 'Print the total duration in human-readable format',
+        alias: 'h',
+        type: 'boolean'
+      })
+      .option('since', {
+        describe: 'Filter sheets, entries, and durations since a given date',
+        alias: 's',
+        type: 'string'
+      })
+      .option('today', {
+        describe: 'Show results for today',
+        alias: 't',
+        type: 'boolean'
+      })
 }
 
 interface SheetsCommandArgs {
@@ -110,9 +112,9 @@ const handler = async (args: SheetsCommandArgs) => {
 
   log('')
   log(
-    `${C.clText('Total duration')}: ${C.clDuration(
-      `[${formatDuration(totalDuration)}]`
-    )} ${C.clHighlight(U.getDurationLangString(totalDuration))}`
+    `${C.clText('Total duration')}: ${`[${C.clHighlight(
+      U.getDurationLangString(totalDuration, humanize)
+    )}]`}`
   )
 }
 

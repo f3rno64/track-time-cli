@@ -1,3 +1,5 @@
+import { type Argv } from 'yargs'
+
 import DB from '../db'
 import log from '../log'
 import * as C from '../color'
@@ -6,17 +8,18 @@ const COMMAND_CONFIG = {
   command: 'sheet [name]',
   describe: 'Switch to or delete a sheet by name',
   aliases: ['s'],
-  builder: {
-    name: {
-      describe: 'Sheet name',
-      type: 'string'
-    },
-
-    delete: {
-      describe: 'Delete the specified sheet',
-      type: 'boolean'
-    }
-  }
+  builder: (yargs: Argv) =>
+    yargs
+      .option('delete', {
+        describe: 'Delete the specified sheet',
+        alias: ['d', 'del'],
+        type: 'boolean',
+        default: false
+      })
+      .positional('name', {
+        describe: 'Sheet name',
+        type: 'string'
+      })
 }
 
 interface SheetCommandArgs {
