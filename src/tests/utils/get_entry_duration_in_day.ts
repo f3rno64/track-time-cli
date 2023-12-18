@@ -5,14 +5,14 @@ import * as D from '../../dates'
 import { type TimeSheetEntry } from '../../types'
 import { getEntryDurationInDay } from '../../utils'
 
-const YESTERDAY = D.getStartOfDayDate(D.getPastDayDate(1))
+const YESTERDAY = D.getStartOfDay(D.getPastDay(1))
 const YESTERDAY_MS = +YESTERDAY
 
 describe('utils:get_entry_duration_in_day', () => {
   it('returns 0 if entry starts and ends prior to the provided day', () => {
     const entry = {
-      start: D.getPastDayDate(7),
-      end: D.getPastDayDate(6)
+      start: D.getPastDay(7),
+      end: D.getPastDay(6)
     } as TimeSheetEntry
 
     const duration = getEntryDurationInDay(entry, YESTERDAY)
@@ -22,8 +22,8 @@ describe('utils:get_entry_duration_in_day', () => {
 
   it('returns 0 if entry starts and ends after the provided day', () => {
     const entry = {
-      start: D.getFutureDayDate(7),
-      end: D.getFutureDayDate(6)
+      start: D.getFutureDay(7),
+      end: D.getFutureDay(6)
     } as TimeSheetEntry
 
     const duration = getEntryDurationInDay(entry, YESTERDAY)

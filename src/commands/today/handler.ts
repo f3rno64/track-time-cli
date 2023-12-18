@@ -16,7 +16,7 @@ const handler = (args: TodayCommandArgs) => {
 
   const sheetsWithEntriesForToday = U.getSheetsWithEntriesSinceDate(
     sheets,
-    D.getStartOfDayDate()
+    D.getStartOfDay()
   )
 
   if (sheetsWithEntriesForToday.length === 0) {

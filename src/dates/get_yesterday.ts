@@ -1,5 +1,5 @@
-import getPastDayDate from './get_past_day_date'
+import getPastDay from './get_past_day'
 
-const getYesterday = (): Date => getPastDayDate(1)
+const getYesterday = (): Date => getPastDay(1)
 
 export default getYesterday

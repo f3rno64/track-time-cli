@@ -15,12 +15,5 @@ const getSheetsWithEntriesSinceDate = (
       )
     }))
     .filter(({ entries }) => entries.length > 0)
-    .map(({ entries, ...otherSheetData }) => ({
-      ...otherSheetData,
-      entries: entries.map(({ start, ...otherEntryData }) => ({
-        start: start < since ? since : start,
-        ...otherEntryData
-      }))
-    }))
 
 export default getSheetsWithEntriesSinceDate

@@ -28,7 +28,7 @@ const handler = async (args: SheetsCommandArgs) => {
   const sinceDate = !_isEmpty(since)
     ? parseDate(since)
     : today
-      ? D.getStartOfDayDate()
+      ? D.getStartOfDay()
       : null
 
   const filteredSheets =

@@ -1,6 +1,6 @@
 import _isDate from 'lodash/isDate'
 
-const getEndOfDayDate = (date?: Date): Date => {
+const getEndOfDay = (date?: Date): Date => {
   const d = _isDate(date) ? new Date(+date) : new Date()
 
   d.setHours(23)
@@ -11,4 +11,4 @@ const getEndOfDayDate = (date?: Date): Date => {
   return d
 }
 
-export default getEndOfDayDate
+export default getEndOfDay

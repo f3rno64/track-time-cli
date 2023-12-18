@@ -11,8 +11,8 @@ const getEntryDurationInHour = (
   const { start, end } = entry
 
   const hourDate = _isFinite(date) ? new Date(date) : (date as Date)
-  const hourDateStart = D.getStartOfHourDate(hour, hourDate)
-  const hourDateEnd = D.getEndOfHourDate(hour, hourDate)
+  const hourDateStart = D.getStartOfHour(hour, hourDate)
+  const hourDateEnd = D.getEndOfHour(hour, hourDate)
 
   if (+start < +hourDateStart && end !== null && +end < +hourDateStart) {
     return 0

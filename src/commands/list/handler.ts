@@ -47,9 +47,9 @@ const handler = (args: ListCommandArgs) => {
   const sinceDate = !_isEmpty(since)
     ? parseDate(since)
     : today
-      ? D.getStartOfDayDate()
+      ? D.getStartOfDay()
       : yesterday
-        ? D.getStartOfDayDate(new Date(Date.now() - D.getDaysMS(1)))
+        ? D.getStartOfDay(new Date(Date.now() - D.getDaysMS(1)))
         : null
 
   const filteredSheets =

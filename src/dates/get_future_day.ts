@@ -1,6 +1,6 @@
 import getDaysMS from './get_days_ms'
 
-const getFutureDayDate = (days: number): Date =>
+const getFutureDay = (days: number): Date =>
   new Date(Date.now() + getDaysMS(days))
 
-export default getFutureDayDate
+export default getFutureDay

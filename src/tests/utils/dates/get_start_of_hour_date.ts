@@ -1,13 +1,13 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
-import { getStartOfHourDate } from '../../../dates'
+import { getStartOfHour } from '../../../dates'
 
 describe('utils:dates:get_start_of_hour_date', () => {
   it('returns a date set to the end of the provided date', () => {
     const date = new Date()
     const hour = 2
-    const result = getStartOfHourDate(hour, date)
+    const result = getStartOfHour(hour, date)
 
     expect(result.getFullYear()).to.equal(date.getFullYear())
     expect(result.getMonth()).to.equal(date.getMonth())

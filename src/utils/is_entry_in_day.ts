@@ -3,8 +3,8 @@ import { type TimeSheetEntry } from '../types'
 
 const isEntryInDay = (date: Date, entry: TimeSheetEntry): boolean => {
   const { start, end } = entry
-  const startOfDay = D.getStartOfDayDate(date)
-  const endOfDay = D.getEndOfDayDate(date)
+  const startOfDay = D.getStartOfDay(date)
+  const endOfDay = D.getEndOfDay(date)
 
   return (
     (+start >= +startOfDay && (end === null || +end <= +endOfDay)) ||
