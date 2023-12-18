@@ -1,0 +1,6 @@
+{
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "all": true,
+  "exclude": ["coverage/**", "styles/**", "templates/**", "dist/**"],
+  "reporter": ["lcov", "text-summary"]
+}
