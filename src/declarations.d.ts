@@ -1,3 +1,4 @@
+declare module 'p-iteration'
 declare module 'time-speak'
 declare module 'consonant'
 declare module 'weekday'

@@ -1,3 +1,5 @@
+import DB from './db'
+
 export interface TimeSheetEntry {
   id: number
   start: Date
@@ -16,4 +18,11 @@ export interface TimeTrackerDB {
   activeSheetName: string | null
 }
 
+export interface YArgsDynamicOptionArgs {
+  db: DB
+}
+
 export type YArgsOptionDefinition = [string, Record<string, string | string[]>]
+export type YArgsDynamicOptionDefinition = (
+  args: YArgsDynamicOptionArgs
+) => Promise<YArgsOptionDefinition>
