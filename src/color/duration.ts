@@ -1,5 +1,6 @@
 import colors from 'colors'
 
-const clDuration = (duration: string): string => colors.green.bold(duration)
+const clDuration = (input: string | number): string =>
+  colors.green.bold(`${input}`)
 
 export default clDuration

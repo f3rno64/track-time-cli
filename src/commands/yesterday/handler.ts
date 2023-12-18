@@ -1,6 +1,7 @@
 import log from '../../log'
-import * as U from '../../utils'
+import * as D from '../../dates'
 import * as P from '../../print'
+import * as S from '../../sheets'
 import { type YesterdayCommandArgs } from './types'
 
 const handler = (args: YesterdayCommandArgs) => {
@@ -13,14 +14,13 @@ const handler = (args: YesterdayCommandArgs) => {
   const sheets =
     typeof inputSheets === 'undefined' || all
       ? db.getAllSheets()
-      : inputSheets.map((name: string) => db.getSheet(name))
+      : inputSheets.map(db.getSheet)
 
-  const sheetsWithEntriesForYesterday = sheets
-    .map(({ entries, ...otherSheetData }) => ({
-      entries: entries.filter(U.isEntryForYesterday),
-      ...otherSheetData
-    }))
-    .filter(({ entries }) => entries.length > 0)
+  const yesterday = D.getYesterday()
+  const sheetsWithEntriesForYesterday = S.filterSheetEntriesForDate(
+    sheets,
+    yesterday
+  )
 
   if (sheetsWithEntriesForYesterday.length === 0) {
     throw new Error('No entries for yesterday')

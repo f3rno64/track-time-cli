@@ -5,12 +5,13 @@ import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 import DB from '../../db'
+import getTestDB from '../get_test_db'
 import { handler } from '../../commands/resume'
 import { type TimeSheetEntry } from '../../types'
 
 chai.use(chaiAsPromised)
 
-const db = new DB()
+const db = getTestDB()
 
 describe('commands:resume:handler', () => {
   beforeEach(async () => {

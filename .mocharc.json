@@ -1,5 +1,12 @@
 {
+  "diff": true,
+  "full-trace": true,
+  "package": "./package.json",
+  "parallel": true,
+  "recursive": true,
   "extension": ["ts"],
   "spec": "src/tests/**/*.ts",
-  "require": ["ts-node/register", "source-map-support/register"]
+  "require": ["ts-node/register", "source-map-support/register"],
+  "watch-files": ["src/**/*.ts"],
+  "watch-ignore": ["dist", "styles", "templates"]
 }

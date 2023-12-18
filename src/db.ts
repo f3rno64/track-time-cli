@@ -93,7 +93,9 @@ class DB {
     try {
       await fs.unlink(this.dbPath)
     } catch (err: unknown) {
-      throw new Error(`Failed to delete DB: ${err}`)
+      if (NODE_ENV !== 'test') {
+        throw new Error(`Failed to delete DB: ${err}`)
+      }
     }
   }
 

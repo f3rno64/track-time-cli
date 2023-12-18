@@ -21,8 +21,9 @@
     "timesheet"
   ],
   "scripts": {
-    "test": "NODE_PATH=./src NODE_ENV=test mocha --recursive",
-    "test:coverage": "NODE_PATH=./src NODE_ENV=test nyc mocha --recursive",
+    "test": "NODE_PATH=./src NODE_ENV=test mocha",
+    "test:coverage": "NODE_PATH=./src NODE_ENV=test nyc mocha",
+    "test:watch": "NODE_PATH=./src NODE_ENV=test mocha --watch",
     "build": "NODE_PATH=./src tsc -p tsconfig.json && cp -r templates dist/ && cp -r styles dist/",
     "lint": "eslint src/**",
     "update-deps": "updates -u -g -c",
@@ -52,6 +53,7 @@
     "chai-as-promised": "^7.1.1",
     "eslint": "^8.55.0",
     "husky": "^8.0.3",
+    "is-ansi": "^1.0.0",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "source-map-support": "^0.5.21",

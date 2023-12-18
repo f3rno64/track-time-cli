@@ -1,8 +1,8 @@
 import isPlural from './is_plural'
 import getLogger from './get_logger'
+import isEntryInDay from './is_entry_in_day'
 import ensureDirExists from './ensure_dir_exists'
 import parseVariadicArg from './parse_variadic_arg'
-import isEntryForYesterday from './is_entry_for_yesterday'
 import getDurationLangString from './get_duration_lang_string'
 import getTotalSheetDuration from './get_total_sheet_duration'
 import getEntryDurationInDay from './get_entry_duration_in_day'
@@ -14,9 +14,9 @@ import getSheetsWithEntriesInLastWeek from './get_sheets_with_entries_in_last_we
 export {
   isPlural,
   getLogger,
+  isEntryInDay,
   ensureDirExists,
   parseVariadicArg,
-  isEntryForYesterday,
   getDurationLangString,
   getTotalSheetDuration,
   getEntryDurationInDay,

@@ -4,11 +4,12 @@ import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 import DB from '../../db'
+import getTestDB from '../get_test_db'
 import { handler } from '../../commands/sheet'
 
 chai.use(chaiAsPromised)
 
-const db = new DB()
+const db = getTestDB()
 
 describe('commands:sheet:handler', () => {
   beforeEach(async () => {

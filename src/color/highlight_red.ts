@@ -1,5 +1,5 @@
 import colors from 'colors'
 
-const clHighlightRed = (str: string): string => colors.bold.red(str)
+const clHighlightRed = (input: string): string => colors.bold.red(input)
 
 export default clHighlightRed

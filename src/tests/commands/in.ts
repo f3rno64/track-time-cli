@@ -5,11 +5,12 @@ import _cloneDeep from 'lodash/cloneDeep'
 import chaiAsPromised from 'chai-as-promised'
 
 import DB from '../../db'
+import getTestDB from '../get_test_db'
 import { type InCommandArgs, handler } from '../../commands/in'
 
 chai.use(chaiAsPromised)
 
-const db = new DB()
+const db = getTestDB()
 
 const getArgs = (overrides?: Record<string, unknown>): InCommandArgs => ({
   db,

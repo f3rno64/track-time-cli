@@ -13,12 +13,12 @@ import { type BreakdownResult, type BreakdownCommandArgs } from './types'
 
 const handler = (args: BreakdownCommandArgs) => {
   const {
+    db,
     ago,
-    humanize,
     all,
+    humanize,
     since: inputSince,
-    sheets: inputSheets,
-    db
+    sheets: inputSheets
   } = args
 
   // prettier-ignore

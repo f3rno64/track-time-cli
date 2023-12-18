@@ -13,13 +13,13 @@ import { type ListCommandArgs } from './types'
 
 const handler = (args: ListCommandArgs) => {
   const {
+    sheets: sheetNames,
     yesterday,
     humanize,
     today,
     since,
     all,
     ago,
-    sheets: sheetNames,
     db
   } = args
 

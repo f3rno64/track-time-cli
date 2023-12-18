@@ -9,14 +9,14 @@ import { type EditCommandArgs } from './types'
 
 const handler = async (args: EditCommandArgs): Promise<void> => {
   const {
-    description: inputDescription,
-    sheet: inputSheet,
-    entry: inputEntry,
-    name: inputName,
-    delete: del,
-    start,
     db,
-    end
+    end,
+    start,
+    delete: del,
+    name: inputName,
+    entry: inputEntry,
+    sheet: inputSheet,
+    description: inputDescription
   } = args
 
   const activeSheetName = db.getActiveSheetName()

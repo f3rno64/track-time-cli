@@ -1,5 +1,5 @@
 import colors from 'colors'
 
-const clText = (text: string): string => colors.cyan(text)
+const clText = (input: string): string => colors.cyan(input)
 
 export default clText
