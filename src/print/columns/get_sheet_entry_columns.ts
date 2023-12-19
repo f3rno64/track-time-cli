@@ -44,8 +44,9 @@ const getSheetEntryColumns = (
     sheetNamePrefix,
     `(${idUI})`,
     `[${durationUI}]`,
-    `started ${startUI}`,
-    end === null ? C.clHighlightRed('active') : `ended ${endUI}`,
+    startUI,
+    C.clHighlightRed('->'),
+    end === null ? C.clHighlightRed('active') : endUI,
     descriptionUI
   ]).map((value: string): string => (isActive ? colors.bold(value) : value))
 }
