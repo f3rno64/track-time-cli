@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.32.1](https://github.com/f3rno64/track-time-cli/compare/v1.32.0...v1.32.1) (2023-12-19)
+
+
+### Bug Fixes
+
+* resume active sheet in resume command ([a804cf6](https://github.com/f3rno64/track-time-cli/commit/a804cf688399d282851eb516f9e674dcb86c3411))
+* test ([9384ba2](https://github.com/f3rno64/track-time-cli/commit/9384ba210b412601bf072b06bde78c9d789ddd25))
+
 ## [1.32.0](https://github.com/f3rno64/track-time-cli/compare/v1.31.0...v1.32.0) (2023-12-19)
 
 ## [1.31.0](https://github.com/f3rno64/track-time-cli/compare/v1.30.0...v1.31.0) (2023-12-18)
