@@ -8,6 +8,6 @@ describe('utils:dates:get_past_day_date', () => {
     const targetDate = new Date(Date.now() - getDaysMS(2))
     const result = getPastDay(2)
 
-    expect(+result).to.equal(+targetDate)
+    expect(+result).to.be.closeTo(+targetDate, 100)
   })
 })
