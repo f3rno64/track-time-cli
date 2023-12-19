@@ -45,11 +45,9 @@ const getSheetEntryColumns = (
     `(${idUI})`,
     `[${durationUI}]`,
     `started ${startUI}`,
-    end === null ? null : `ended ${endUI}`,
+    end === null ? C.clHighlightRed('active') : `ended ${endUI}`,
     descriptionUI
-  ]).map((value: string): string =>
-    isActive ? colors.bold.underline(value) : value
-  )
+  ]).map((value: string): string => (isActive ? colors.bold(value) : value))
 }
 
 export default getSheetEntryColumns
