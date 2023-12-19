@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.32.0](https://github.com/f3rno64/track-time-cli/compare/v1.31.0...v1.32.0) (2023-12-19)
+
 ## [1.31.0](https://github.com/f3rno64/track-time-cli/compare/v1.30.0...v1.31.0) (2023-12-18)
 
 ## [1.30.0](https://github.com/f3rno64/track-time-cli/compare/v1.29.2...v1.30.0) (2023-12-18)
