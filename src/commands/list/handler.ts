@@ -14,6 +14,7 @@ import { type ListCommandArgs } from './types'
 const handler = (args: ListCommandArgs) => {
   const {
     sheets: sheetNames,
+    allSheets,
     yesterday,
     humanize,
     today,
@@ -23,8 +24,10 @@ const handler = (args: ListCommandArgs) => {
     db
   } = args
 
-  if (!_isEmpty(since) && (today || yesterday)) {
-    throw new Error('Cannot use --since, --today, and --yesterday together')
+  if (!_isEmpty(since) && (today || yesterday || all)) {
+    throw new Error(
+      'Cannot use --since, --today, --yesterday, or --all together'
+    )
   }
 
   const activeSheetName = db.getActiveSheetName()
@@ -32,8 +35,8 @@ const handler = (args: ListCommandArgs) => {
 
   // prettier-ignore
   const sheetsToList: TimeSheet[] = typeof sheetNames !== 'undefined'
-    ? sheetNames.map(db.getSheet)
-    : all
+    ? sheetNames.map(db.getSheet.bind(db))
+    : allSheets
       ? dbSheets
       : activeSheetName === null
         ? []
@@ -49,8 +52,10 @@ const handler = (args: ListCommandArgs) => {
     : today
       ? D.getStartOfDay()
       : yesterday
-        ? D.getPastDay(1)
-        : new Date(Date.now() - D.getDaysMS(1))
+        ? D.getStartOfDay(D.getPastDay(1))
+        : all
+          ? new Date(0)
+          : D.getPastDay()
 
   const filteredSheets =
     sinceDate === null

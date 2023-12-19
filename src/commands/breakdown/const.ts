@@ -5,7 +5,7 @@ export const CONFIG = {
   describe: 'Display total durations per day for one or more sheets',
   aliases: ['b'],
   builder: O.setup.bind(null, [
-    O.AllOption,
+    O.AllSheetsOption,
     O.AgoOption,
     O.HumanizeOption,
     O.SinceOption

@@ -10,6 +10,7 @@ export const CONFIG = {
     O.HumanizeOption,
     O.SinceOption,
     O.TodayOption,
+    O.AllSheetsOption,
     O.AllOption,
     O.YesterdayOption
   ])

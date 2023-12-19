@@ -9,4 +9,5 @@ export interface ListCommandArgs {
   today?: boolean
   yesterday?: boolean
   humanize?: boolean
+  allSheets?: boolean
 }

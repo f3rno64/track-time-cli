@@ -1,4 +1,5 @@
 import DescriptionOption from './description'
+import AllSheetsOption from './all_sheets'
 import YesterdayOption from './yesterday'
 import HumanizeOption from './humanize'
 import HostnameOption from './hostname'
@@ -11,14 +12,15 @@ import EntryOption from './entry'
 import TotalOption from './total'
 import NameOption from './name'
 import PortOption from './port'
-import AgoOption from './ago'
 import AllOption from './all'
+import AgoOption from './ago'
 import AtOption from './at'
 import setup from './setup'
 
 export {
   DescriptionOption,
   YesterdayOption,
+  AllSheetsOption,
   HumanizeOption,
   HostnameOption,
   DeleteOption,
@@ -30,8 +32,8 @@ export {
   TotalOption,
   NameOption,
   PortOption,
-  AgoOption,
   AllOption,
+  AgoOption,
   AtOption,
   setup
 }
