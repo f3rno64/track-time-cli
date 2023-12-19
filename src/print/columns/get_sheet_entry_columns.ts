@@ -17,7 +17,7 @@ const getSheetEntryColumns = (
   const { id, start, end, description } = entry
   const idUI = C.clID(`${id}`)
   const startUI = C.clDate(
-    printDateAgo ? ago(start) : new Date(start).toLocaleDateString()
+    printDateAgo ? ago(start) : new Date(start).toLocaleString()
   )
   const finalEnd = end === null ? new Date() : end
   const descriptionUI = C.clText(description)
@@ -31,7 +31,7 @@ const getSheetEntryColumns = (
     end === null
       ? ''
       : C.clDate(
-        printDateAgo ? ago(end) : new Date(end).toLocaleDateString()
+        printDateAgo ? ago(end) : new Date(end).toLocaleString()
       )
 
   const sheetNamePrefix =
