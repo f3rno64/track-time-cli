@@ -6,7 +6,7 @@ import { type ResumeCommandArgs } from './types'
 
 const handler = async (args: ResumeCommandArgs) => {
   const { db } = args
-  const sheet = db.getMostRecentlyActiveSheet()
+  const sheet = db.getActiveSheet()
   const entry = db.getMostRecentlyActiveSheetEntry(sheet)
   const { id, description, end } = entry
   const { name } = sheet
