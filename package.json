@@ -28,7 +28,8 @@
     "lint": "eslint src/**",
     "update-deps": "updates -u -g -c",
     "update-version": "standard-version",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "@eslint/js": "^8.55.0",
