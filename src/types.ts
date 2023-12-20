@@ -26,3 +26,12 @@ export type YArgsOptionDefinition = [string, Record<string, string | string[]>]
 export type YArgsDynamicOptionDefinition = (
   args: YArgsDynamicOptionArgs
 ) => Promise<YArgsOptionDefinition>
+
+export interface BreakdownResult {
+  date: Date
+  duration: number
+  sheets: TimeSheet[]
+  entries: TimeSheetEntry[]
+}
+
+export type BreakdownResults = Record<string, BreakdownResult>

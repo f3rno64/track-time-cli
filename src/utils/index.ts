@@ -1,6 +1,7 @@
 import isPlural from './is_plural'
 import getLogger from './get_logger'
 import isEntryInDay from './is_entry_in_day'
+import getHourString from './get_hour_string'
 import ensureDirExists from './ensure_dir_exists'
 import parseVariadicArg from './parse_variadic_arg'
 import getDurationLangString from './get_duration_lang_string'
@@ -15,6 +16,7 @@ export {
   isPlural,
   getLogger,
   isEntryInDay,
+  getHourString,
   ensureDirExists,
   parseVariadicArg,
   getDurationLangString,

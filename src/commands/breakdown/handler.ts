@@ -1,15 +1,20 @@
 import sAgo from 's-ago'
+import _map from 'lodash/map'
 import weekday from 'weekday'
-import _uniq from 'lodash/uniq'
 import parseDate from 'time-speak'
 import { eachHourOfInterval, eachDayOfInterval } from 'date-fns'
 
+import * as OU from './utils'
 import log from '../../log'
 import * as C from '../../color'
 import * as P from '../../print'
 import * as U from '../../utils'
-import { type TimeSheet, type TimeSheetEntry } from '../../types'
-import { type BreakdownResult, type BreakdownCommandArgs } from './types'
+import { type BreakdownCommandArgs } from './types'
+import {
+  type BreakdownResults,
+  type TimeSheetEntry,
+  type TimeSheet
+} from '../../types'
 
 const handler = (args: BreakdownCommandArgs) => {
   const {
@@ -28,13 +33,13 @@ const handler = (args: BreakdownCommandArgs) => {
       ? [db.getActiveSheet()]
       : inputSheets.map((sheet: string) => db.getSheet(sheet))
 
-  const sheetNames = targetSheets.map(({ name }) => name)
+  const sheetNames = _map(targetSheets, 'name')
   const since =
     typeof inputSince === 'undefined' ? new Date(0) : parseDate(inputSince)
 
-  const resultsPerDay: Record<string, BreakdownResult> = {}
-  const resultsPerWeekday: Record<string, BreakdownResult> = {}
-  const resultsPerHour: Record<string, BreakdownResult> = {}
+  const resultsPerDay: BreakdownResults = {}
+  const resultsPerHour: BreakdownResults = {}
+  const resultsPerWeekday: BreakdownResults = {}
 
   const filteredSheets = U.getSheetsWithEntriesSinceDate(targetSheets, since)
 
@@ -55,74 +60,47 @@ const handler = (args: BreakdownCommandArgs) => {
 
       days.forEach((date: Date): void => {
         hours.forEach((hour: number): void => {
-          const hourStr = hour > 11 ? `${hour - 11}pm` : `${hour + 1}am`
+          const hourStr = U.getHourString(hour)
           const duration = U.getEntryDurationInHour(entry, date, hour)
 
-          if (typeof resultsPerHour[hourStr] === 'undefined') {
-            resultsPerHour[hourStr] = {
-              date,
-              duration,
-              sheets: [sheet],
-              entries: [entry]
-            }
-          } else {
-            const resultEntry = resultsPerHour[hourStr]
-
-            resultsPerHour[hourStr] = {
-              ...resultEntry,
-              duration: resultEntry.duration + duration,
-              entries: [...resultEntry.entries, entry],
-              sheets: _uniq([...resultEntry.sheets, sheet])
-            }
-          }
+          OU.populateResults({
+            results: resultsPerHour,
+            key: hourStr,
+            duration,
+            sheet,
+            entry,
+            date
+          })
         })
 
         const dateKey = date.toLocaleDateString()
         const dateWeekday = weekday(date.getDay() + 1)
         const duration = U.getEntryDurationInDay(entry, date)
 
-        if (typeof resultsPerWeekday[dateWeekday] === 'undefined') {
-          resultsPerWeekday[dateWeekday] = {
-            date,
-            duration,
-            sheets: [sheet],
-            entries: [entry]
-          }
-        } else {
-          const resultEntry = resultsPerWeekday[dateWeekday]
+        OU.populateResults({
+          results: resultsPerWeekday,
+          key: dateWeekday,
+          duration,
+          sheet,
+          entry,
+          date
+        })
 
-          resultsPerWeekday[dateWeekday] = {
-            ...resultEntry,
-            duration: resultEntry.duration + duration,
-            entries: [...resultEntry.entries, entry],
-            sheets: _uniq([...resultEntry.sheets, sheet])
-          }
-        }
-
-        if (typeof resultsPerDay[dateKey] === 'undefined') {
-          resultsPerDay[dateKey] = {
-            date,
-            duration,
-            sheets: [sheet],
-            entries: [entry]
-          }
-        } else {
-          const resultEntry = resultsPerDay[dateKey]
-
-          resultsPerDay[dateKey] = {
-            ...resultEntry,
-            duration: resultEntry.duration + duration,
-            entries: [...resultEntry.entries, entry],
-            sheets: _uniq([...resultEntry.sheets, sheet])
-          }
-        }
+        OU.populateResults({
+          results: resultsPerDay,
+          key: dateKey,
+          duration,
+          sheet,
+          entry,
+          date
+        })
       })
     })
   })
 
   const dayResults = Object.values(resultsPerDay)
-  const weekdayResults = Object.keys(resultsPerWeekday)
   const hourResults = Object.keys(resultsPerHour)
+  const weekdayResults = Object.keys(resultsPerWeekday)
 
   if (dayResults.length === 0) {
     throw new Error('No results found')
@@ -139,8 +117,8 @@ const handler = (args: BreakdownCommandArgs) => {
   log('')
 
   const resultsPerDayOutputRows: string[][] = []
-  const resultsPerWeekdayOutputRows: string[][] = []
   const resultsPerHourOutputRows: string[][] = []
+  const resultsPerWeekdayOutputRows: string[][] = []
 
   dayResults.sort(({ date: a }, { date: b }): number => (a > b ? 1 : -1))
   dayResults.forEach(({ date, duration, sheets, entries }): void => {

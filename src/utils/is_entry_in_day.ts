@@ -8,8 +8,7 @@ const isEntryInDay = (date: Date, entry: TimeSheetEntry): boolean => {
 
   return (
     (+start >= +startOfDay && (end === null || +end <= +endOfDay)) ||
-    (+start < +startOfDay &&
-      (end === null || (+end > +startOfDay && +end <= +endOfDay)))
+    (+start <= +startOfDay && (end === null || +end >= +startOfDay))
   )
 }
 
