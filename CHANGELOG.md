@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.32.2](https://github.com/f3rno64/track-time-cli/compare/v1.32.1...v1.32.2) (2023-12-20)
+
+
+### Bug Fixes
+
+* --help with no command, provide yargs instance to handler args ([6f9d9a0](https://github.com/f3rno64/track-time-cli/commit/6f9d9a02ff359f2a1f95e37fcdde71145384241a))
+
 ### [1.32.1](https://github.com/f3rno64/track-time-cli/compare/v1.32.0...v1.32.1) (2023-12-19)
 
 
