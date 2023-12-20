@@ -1,18 +1,17 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
-import { getEndOfHour } from '../../../dates'
+import { getEndOfDay } from '../../../dates'
 
-describe('utils:dates:get_end_of_hour_date', () => {
-  it('returns a date set to the end of the provided date hour', () => {
+describe('utils:dates:get_end_of_day', () => {
+  it('returns a date set to the end of the provided date', () => {
     const date = new Date()
-    const hour = 2
-    const result = getEndOfHour(hour, date)
+    const result = getEndOfDay(date)
 
     expect(result.getFullYear()).to.equal(date.getFullYear())
     expect(result.getMonth()).to.equal(date.getMonth())
     expect(result.getDay()).to.equal(date.getDay())
-    expect(result.getHours()).to.equal(hour)
+    expect(result.getHours()).to.equal(23)
     expect(result.getMinutes()).to.equal(59)
     expect(result.getSeconds()).to.equal(59)
     expect(result.getMilliseconds()).to.equal(999)
