@@ -15,13 +15,14 @@ const y = yArgs
     await db.load()
 
     argv.db = db
+    argv.yargs = y
   })
   .fail((_, err: Error): void => {
     log(`${C.clHighlight('Error:')} ${C.clError(err.message)}`)
 
     process.exit(1)
   })
-  .help()
+  .help(false)
   .version()
   .recommendCommands()
   .example(

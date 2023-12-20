@@ -2,7 +2,13 @@ import * as P from '../../print'
 import { type NowCommandArgs } from './types'
 
 const handler = (args: NowCommandArgs) => {
-  const { humanize, db } = args
+  const { yargs, help, humanize, db } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
+
   const activeSheetName = db.getActiveSheetName()
 
   if (activeSheetName === null) {

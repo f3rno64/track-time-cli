@@ -8,6 +8,6 @@ describe('utils:dates:get_yesterday', () => {
     const expectedDate = new Date(Date.now() - getDaysMS(1))
     const result = getYesterday()
 
-    expect(+result).to.equal(+expectedDate)
+    expect(+result).to.be.closeTo(+expectedDate, 100)
   })
 })

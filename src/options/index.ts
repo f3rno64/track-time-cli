@@ -3,6 +3,7 @@ import AllSheetsOption from './all_sheets'
 import YesterdayOption from './yesterday'
 import HumanizeOption from './humanize'
 import HostnameOption from './hostname'
+import ConciseOption from './concise'
 import SheetsOption from './sheets'
 import DeleteOption from './delete'
 import SheetOption from './sheet'
@@ -11,6 +12,7 @@ import TodayOption from './today'
 import EntryOption from './entry'
 import TotalOption from './total'
 import NameOption from './name'
+import HelpOption from './help'
 import PortOption from './port'
 import AllOption from './all'
 import AgoOption from './ago'
@@ -23,6 +25,7 @@ export {
   AllSheetsOption,
   HumanizeOption,
   HostnameOption,
+  ConciseOption,
   DeleteOption,
   SheetsOption,
   SheetOption,
@@ -31,6 +34,7 @@ export {
   EntryOption,
   TotalOption,
   NameOption,
+  HelpOption,
   PortOption,
   AllOption,
   AgoOption,

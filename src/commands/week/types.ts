@@ -1,7 +1,10 @@
+import { type Argv } from 'yargs'
+
 import DB from '../../db'
 
 export interface WeekCommandArgs {
   db: DB
+  yargs: Argv
   total?: boolean
   sheets?: string[]
   ago?: boolean

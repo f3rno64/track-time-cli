@@ -1,5 +1,6 @@
 /* eslint-env mocha */
 
+import { type Argv } from 'yargs'
 import chai, { expect } from 'chai'
 import _cloneDeep from 'lodash/cloneDeep'
 import chaiAsPromised from 'chai-as-promised'
@@ -14,6 +15,7 @@ const db = getTestDB()
 
 const getArgs = (overrides?: Record<string, unknown>): InCommandArgs => ({
   db,
+  yargs: {} as Argv,
   description: [],
   ...(overrides ?? {})
 })

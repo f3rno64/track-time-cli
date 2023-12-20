@@ -17,6 +17,7 @@ const handler = (args: ListCommandArgs) => {
     allSheets,
     yesterday,
     humanize,
+    concise,
     today,
     since,
     all,
@@ -84,7 +85,7 @@ const handler = (args: ListCommandArgs) => {
 
   log('')
 
-  P.printSheets(filteredSheets, ago === true, humanize)
+  P.printSheets(filteredSheets, ago === true, humanize, concise)
 
   if (!all) {
     const sheetsNotShownCount = dbSheets.length - filteredSheets.length

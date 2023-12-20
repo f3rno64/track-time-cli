@@ -1,14 +1,20 @@
 /* eslint-env mocha */
 
+import { type Argv } from 'yargs'
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 import getTestDB from '../get_test_db'
-import { handler } from '../../commands/sheets'
+import { type SheetsCommandArgs, handler } from '../../commands/sheets'
 
 chai.use(chaiAsPromised)
 
 const db = getTestDB()
+const getArgs = (overrides?: Record<string, unknown>): SheetsCommandArgs => ({
+  db,
+  yargs: {} as Argv,
+  ...(overrides ?? {})
+})
 
 describe('commands:sheets:handler', () => {
   beforeEach(async () => {
@@ -26,7 +32,7 @@ describe('commands:sheets:handler', () => {
 
     db.db.sheets = []
 
-    const p = handler({ db })
+    const p = handler(getArgs())
 
     expect(p).to.be.rejectedWith('No time sheets exist')
   })

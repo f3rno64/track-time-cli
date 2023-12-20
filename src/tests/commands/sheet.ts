@@ -1,15 +1,21 @@
 /* eslint-env mocha */
 
+import { type Argv } from 'yargs'
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 import DB from '../../db'
 import getTestDB from '../get_test_db'
-import { handler } from '../../commands/sheet'
+import { type SheetCommandArgs, handler } from '../../commands/sheet'
 
 chai.use(chaiAsPromised)
 
 const db = getTestDB()
+const getArgs = (overrides?: Record<string, unknown>): SheetCommandArgs => ({
+  db,
+  yargs: {} as Argv,
+  ...(overrides ?? {})
+})
 
 describe('commands:sheet:handler', () => {
   beforeEach(async () => {
@@ -22,7 +28,7 @@ describe('commands:sheet:handler', () => {
 
   it('throws an error if trying to delete a sheet that does not exist', () => {
     const sheetName = 'non-existent-sheet'
-    const p = handler({ db, name: sheetName, delete: true })
+    const p = handler(getArgs({ name: sheetName, delete: true }))
 
     expect(p).to.be.rejectedWith(`Sheet ${sheetName} does not exist`)
   })
@@ -36,7 +42,7 @@ describe('commands:sheet:handler', () => {
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
 
-    await handler({ db, name: sheetNameA, delete: true })
+    await handler(getArgs({ name: sheetNameA, delete: true }))
 
     expect(db.db?.sheets.length).to.equal(2)
     expect(db.db?.sheets.find(({ name }) => name === sheetNameA)).to.be
@@ -50,13 +56,13 @@ describe('commands:sheet:handler', () => {
 
     db.db.activeSheetName = null
 
-    const p = handler({ db, name: '', delete: false })
+    const p = handler(getArgs({ name: '', delete: false }))
 
     expect(p).to.be.rejectedWith('No active time sheet')
   })
 
   it('throws an error if the specified sheet is already active', () => {
-    const p = handler({ db, name: 'main', delete: false })
+    const p = handler(getArgs({ name: 'main', delete: false }))
 
     expect(p).to.be.rejectedWith('Sheet main already active')
   })
@@ -70,7 +76,7 @@ describe('commands:sheet:handler', () => {
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
 
-    await handler({ db, name: sheetNameA, delete: false })
+    await handler(getArgs({ name: sheetNameA, delete: false }))
 
     expect(db.getActiveSheetName()).to.equal(sheetNameA)
   })
@@ -85,7 +91,7 @@ describe('commands:sheet:handler', () => {
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
 
-    await handler({ db, name: sheetNameC, delete: false })
+    await handler(getArgs({ name: sheetNameC, delete: false }))
 
     const sheets = db.getAllSheets()
     const newSheet = sheets.find(({ name }) => name === sheetNameC)

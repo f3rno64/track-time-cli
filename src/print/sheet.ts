@@ -5,7 +5,8 @@ const printSheet = (
   sheet: TimeSheet,
   isActive?: boolean,
   printDateAgo?: boolean,
-  humanize?: boolean
+  humanize?: boolean,
+  concise?: boolean
 ): void => {
   const { activeEntryID, entries } = sheet
 
@@ -17,7 +18,8 @@ const printSheet = (
       entry.id === activeEntryID,
       '',
       printDateAgo,
-      humanize
+      humanize,
+      concise
     )
   )
 

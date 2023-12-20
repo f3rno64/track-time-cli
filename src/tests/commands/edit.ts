@@ -1,5 +1,6 @@
 /* eslint-env mocha */
 
+import { type Argv } from 'yargs'
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
@@ -13,6 +14,7 @@ const db = getTestDB()
 
 const getArgs = (overrides?: Record<string, unknown>): EditCommandArgs => ({
   db,
+  yargs: {} as Argv,
   delete: false,
   ...(overrides ?? {})
 })

@@ -1,17 +1,23 @@
 /* eslint-env mocha */
 
+import { type Argv } from 'yargs'
 import _last from 'lodash/last'
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 import DB from '../../db'
 import getTestDB from '../get_test_db'
-import { handler } from '../../commands/resume'
 import { type TimeSheetEntry } from '../../types'
+import { type ResumeCommandArgs, handler } from '../../commands/resume'
 
 chai.use(chaiAsPromised)
 
 const db = getTestDB()
+const getArgs = (overrides?: Record<string, unknown>): ResumeCommandArgs => ({
+  db,
+  yargs: {} as Argv,
+  ...(overrides ?? {})
+})
 
 describe('commands:resume:handler', () => {
   beforeEach(async () => {
@@ -23,7 +29,7 @@ describe('commands:resume:handler', () => {
   })
 
   it('throws an error if there is no active sheet', () => {
-    const p = handler({ db })
+    const p = handler(getArgs())
 
     chai.expect(p).to.be.rejectedWith('No active sheet')
   })
@@ -39,7 +45,7 @@ describe('commands:resume:handler', () => {
     db.db.sheets.push(sheet)
     db.db.activeSheetName = sheetName
 
-    const p = handler({ db })
+    const p = handler(getArgs())
 
     chai.expect(p).to.be.rejectedWith(`No recent entry for sheet ${sheetName}`)
   })
@@ -57,7 +63,7 @@ describe('commands:resume:handler', () => {
     db.db.sheets.push(sheet)
     db.db.activeSheetName = sheetName
 
-    const p = handler({ db })
+    const p = handler(getArgs())
 
     chai
       .expect(p)
@@ -84,7 +90,7 @@ describe('commands:resume:handler', () => {
     db.db.sheets.push(sheet)
     db.db.activeSheetName = sheetName
 
-    handler({ db }).then(() => {
+    handler(getArgs()).then(() => {
       const { activeEntryID } = sheet
       const newEntry = _last(sheet.entries) as unknown as TimeSheetEntry
 

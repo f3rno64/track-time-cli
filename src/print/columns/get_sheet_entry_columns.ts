@@ -12,7 +12,8 @@ const getSheetEntryColumns = (
   isActive?: boolean,
   sheetName?: string,
   printDateAgo?: boolean,
-  humanize?: boolean
+  humanize?: boolean,
+  concise?: boolean
 ): string[] => {
   const { id, start, end, description } = entry
   const idUI = C.clID(`${id}`)
@@ -44,9 +45,17 @@ const getSheetEntryColumns = (
     sheetNamePrefix,
     `(${idUI})`,
     `[${durationUI}]`,
-    startUI,
-    C.clHighlightRed('->'),
-    end === null ? C.clHighlightRed('active') : endUI,
+
+    concise === true ? null : startUI,
+    concise === true ? null : C.clHighlightRed('->'),
+
+    // prettier-ignore
+    concise === true
+      ? null
+      : end === null
+        ? C.clHighlightRed('active')
+        : endUI,
+
     descriptionUI
   ]).map((value: string): string => (isActive ? colors.bold(value) : value))
 }
