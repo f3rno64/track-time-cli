@@ -2,7 +2,6 @@ import yesterdayCommand from './yesterday'
 import breakdownCommand from './breakdown'
 import sheetsCommand from './sheets'
 import resumeCommand from './resume'
-import serveCommand from './serve'
 import sheetCommand from './sheet'
 import todayCommand from './today'
 import weekCommand from './week'
@@ -21,7 +20,6 @@ export default [
   editCommand,
   todayCommand,
   sheetCommand,
-  serveCommand,
   sheetsCommand,
   resumeCommand,
   yesterdayCommand,
