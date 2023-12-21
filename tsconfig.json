@@ -8,6 +8,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "incremental": true,
+    "declaration": true,
     "module": "commonjs",
     "lib": ["es2021"],
     "moduleResolution": "node",
