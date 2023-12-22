@@ -17,8 +17,10 @@ const y = yArgs
     argv.db = db
     argv.yargs = y
   })
-  .fail((_, err: Error): void => {
-    log(`${C.clHighlight('Error:')} ${C.clError(err.message)}`)
+  .fail((_, error: Error): void => {
+    if (typeof error !== 'undefined') {
+      log(`${C.clHighlight('Error:')} ${C.clError(error.message)}`)
+    }
 
     process.exit(1)
   })
