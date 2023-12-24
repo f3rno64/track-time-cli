@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.33.0](https://github.com/f3rno64/track-time-cli/compare/v1.32.3...v1.33.0) (2023-12-24)
+
+
+### Bug Fixes
+
+* --help handling in all commands ([12c5230](https://github.com/f3rno64/track-time-cli/commit/12c5230c1d8e374b735800ea31c34816bf10c414))
+* handle fail handler call with undefined error ([652b49b](https://github.com/f3rno64/track-time-cli/commit/652b49bec10d58f8feb4b12922ce899b3d9e030f))
+* rm docs cmd from script (was copied from a personal template project) ([881cd3f](https://github.com/f3rno64/track-time-cli/commit/881cd3f82bdce17e59df39e9df6569181fc67488))
+
 ### [1.32.3](https://github.com/f3rno64/track-time-cli/compare/v1.32.2...v1.32.3) (2023-12-21)
 
 ### [1.32.2](https://github.com/f3rno64/track-time-cli/compare/v1.32.1...v1.32.2) (2023-12-20)
