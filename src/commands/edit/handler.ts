@@ -11,13 +11,20 @@ const handler = async (args: EditCommandArgs): Promise<void> => {
   const {
     db,
     end,
+    help,
     start,
+    yargs,
     delete: del,
     name: inputName,
     entry: inputEntry,
     sheet: inputSheet,
     description: inputDescription
   } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
 
   const activeSheetName = db.getActiveSheetName()
   const finalSheetName = _isEmpty(inputSheet) ? activeSheetName : inputSheet

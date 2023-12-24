@@ -8,7 +8,13 @@ import * as C from '../../color'
 import { type OutCommandArgs } from './types'
 
 const handler = async (args: OutCommandArgs) => {
-  const { at, db } = args
+  const { yargs, help, at, db } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
+
   const endDate = _isEmpty(at) ? new Date() : parseDate(at)
   const sheet = db.getActiveSheet()
   const { name: sheetName, activeEntryID } = sheet

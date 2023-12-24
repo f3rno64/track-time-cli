@@ -5,7 +5,12 @@ import * as S from '../../sheets'
 import { type YesterdayCommandArgs } from './types'
 
 const handler = (args: YesterdayCommandArgs) => {
-  const { ago, humanize, all, sheets: inputSheets, db } = args
+  const { help, yargs, ago, humanize, all, sheets: inputSheets, db } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
 
   if (typeof inputSheets !== 'undefined' && all) {
     throw new Error('Cannot specify both --all and sheets')

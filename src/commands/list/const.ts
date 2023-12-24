@@ -13,6 +13,7 @@ export const CONFIG = {
     O.AllSheetsOption,
     O.AllOption,
     O.YesterdayOption,
-    O.ConciseOption
+    O.ConciseOption,
+    O.HelpOption
   ])
 }

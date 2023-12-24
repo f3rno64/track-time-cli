@@ -9,6 +9,7 @@ export interface WeekCommandArgs {
   sheets?: string[]
   ago?: boolean
   humanize?: boolean
+  help?: boolean
 }
 
 export interface WeekdayResult {

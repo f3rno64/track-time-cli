@@ -8,4 +8,5 @@ export interface SheetsCommandArgs {
   humanize?: boolean
   since?: string
   today?: boolean
+  help?: boolean
 }

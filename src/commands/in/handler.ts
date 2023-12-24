@@ -6,7 +6,13 @@ import * as P from '../../print'
 import { type InCommandArgs } from './types'
 
 const handler = async (args: InCommandArgs) => {
-  const { description, at, db } = args
+  const { help, yargs, description, at, db } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
+
   const finalDescription = description.join(' ')
   const activeSheetName = db.getActiveSheetName()
 

@@ -6,4 +6,5 @@ export interface OutCommandArgs {
   db: DB
   yargs: Argv
   at?: string[]
+  help?: boolean
 }

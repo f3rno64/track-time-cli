@@ -8,4 +8,5 @@ export interface YesterdayCommandArgs {
   all?: boolean
   ago?: boolean
   humanize?: boolean
+  help?: boolean
 }

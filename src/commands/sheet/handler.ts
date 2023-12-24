@@ -3,7 +3,13 @@ import * as C from '../../color'
 import { type SheetCommandArgs } from './types'
 
 const handler = async (args: SheetCommandArgs) => {
-  const { name, delete: del, db } = args
+  const { yargs, help, name, delete: del, db } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
+
   const activeSheetName = db.getActiveSheetName()
   const sheetName = typeof name === 'undefined' ? activeSheetName : name
 

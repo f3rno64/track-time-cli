@@ -12,7 +12,12 @@ import { type TimeSheet } from '../../types'
 import { type SheetsCommandArgs } from './types'
 
 const handler = async (args: SheetsCommandArgs) => {
-  const { today, since, humanize, db } = args
+  const { yargs, help, today, since, humanize, db } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
 
   if (!_isEmpty(since) && today) {
     throw new Error('Cannot use both --since and --today')

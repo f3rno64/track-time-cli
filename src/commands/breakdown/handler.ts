@@ -21,10 +21,17 @@ const handler = (args: BreakdownCommandArgs) => {
     db,
     ago,
     all,
+    help,
+    yargs,
     humanize,
     since: inputSince,
     sheets: inputSheets
   } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
 
   // prettier-ignore
   const targetSheets = all

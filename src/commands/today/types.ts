@@ -9,4 +9,5 @@ export interface TodayCommandArgs {
   all?: boolean
   sheets?: string[]
   humanize?: boolean
+  help?: boolean
 }

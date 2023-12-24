@@ -14,4 +14,5 @@ export interface ListCommandArgs {
   humanize?: boolean
   allSheets?: boolean
   concise?: boolean
+  help?: boolean
 }

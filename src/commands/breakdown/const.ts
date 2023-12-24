@@ -8,6 +8,7 @@ export const CONFIG = {
     O.AllSheetsOption,
     O.AgoOption,
     O.HumanizeOption,
-    O.SinceOption
+    O.SinceOption,
+    O.HelpOption
   ])
 }

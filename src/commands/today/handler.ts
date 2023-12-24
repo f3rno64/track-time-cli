@@ -5,7 +5,12 @@ import * as P from '../../print'
 import { type TodayCommandArgs } from './types'
 
 const handler = (args: TodayCommandArgs) => {
-  const { humanize, sheets: inputSheets, all, ago, db } = args
+  const { help, yargs, humanize, sheets: inputSheets, all, ago, db } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
 
   // prettier-ignore
   const sheets = all

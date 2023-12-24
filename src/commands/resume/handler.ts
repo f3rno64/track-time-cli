@@ -5,7 +5,13 @@ import * as C from '../../color'
 import { type ResumeCommandArgs } from './types'
 
 const handler = async (args: ResumeCommandArgs) => {
-  const { db } = args
+  const { help, yargs, db } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
+
   const sheet = db.getActiveSheet()
   const entry = db.getMostRecentlyActiveSheetEntry(sheet)
   const { id, description, end } = entry

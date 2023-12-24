@@ -18,12 +18,19 @@ const handler = (args: ListCommandArgs) => {
     yesterday,
     humanize,
     concise,
+    yargs,
     today,
     since,
+    help,
     all,
     ago,
     db
   } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
 
   if (!_isEmpty(since) && (today || yesterday || all)) {
     throw new Error(

@@ -9,6 +9,7 @@ export const CONFIG = {
     O.NameOption,
     O.EntryOption,
     O.DescriptionOption,
-    O.DeleteOption
+    O.DeleteOption,
+    O.HelpOption
   ])
 }

@@ -8,4 +8,5 @@ export interface InCommandArgs {
   description: string[]
   sheet?: string
   at?: string
+  help?: boolean
 }

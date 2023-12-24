@@ -10,4 +10,5 @@ export interface BreakdownCommandArgs {
   all?: boolean
   since?: string
   ago?: boolean
+  help?: boolean
 }

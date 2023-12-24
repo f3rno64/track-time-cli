@@ -16,7 +16,12 @@ import {
 } from './types'
 
 const handler = (args: WeekCommandArgs) => {
-  const { ago, humanize, sheets: inputSheets, total, db } = args
+  const { help, yargs, ago, humanize, sheets: inputSheets, total, db } = args
+
+  if (help) {
+    yargs.showHelp()
+    process.exit(0)
+  }
 
   const selectedSheets: TimeSheet[] =
     typeof inputSheets === 'undefined' || _isEmpty(inputSheets)

@@ -5,4 +5,5 @@ import DB from '../../db'
 export interface ResumeCommandArgs {
   db: DB
   yargs: Argv
+  help?: boolean
 }

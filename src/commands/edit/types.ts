@@ -12,4 +12,5 @@ export interface EditCommandArgs {
   delete?: boolean
   start?: string
   end?: string
+  help?: boolean
 }
