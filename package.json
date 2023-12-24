@@ -30,7 +30,7 @@
     "update-deps": "updates -u -g -c",
     "update-version": "standard-version",
     "prepare": "husky install",
-    "prepare-release": "npm run lint && npm run test && npm run build && npm run docs && git add docs",
+    "prepare-release": "npm run lint && npm run test && npm run build",
     "prepublish": "npm run build",
     "release": "npm run prepare-release && npm run update-version && git push --follow-tags origin main"
   },
