@@ -19,22 +19,22 @@ const getArgs = (overrides?: Record<string, unknown>): ResumeCommandArgs => ({
   ...(overrides ?? {})
 })
 
-describe('commands:resume:handler', () => {
-  beforeEach(async () => {
+describe('commands:resume:handler', function () {
+  beforeEach(async function () {
     await db.load()
   })
 
-  afterEach(async () => {
+  afterEach(async function () {
     await db.delete()
   })
 
-  it('throws an error if there is no active sheet', () => {
+  it('throws an error if there is no active sheet', function () {
     const p = handler(getArgs())
 
     chai.expect(p).to.be.rejectedWith('No active sheet')
   })
 
-  it('throws an error if there is no recent entry for the active sheet', () => {
+  it('throws an error if there is no recent entry for the active sheet', function () {
     const sheet = DB.genSheet('test-sheet')
     const { name: sheetName } = sheet
 
@@ -50,7 +50,7 @@ describe('commands:resume:handler', () => {
     chai.expect(p).to.be.rejectedWith(`No recent entry for sheet ${sheetName}`)
   })
 
-  it('throws an error if the active sheet already has a running entry', () => {
+  it('throws an error if the active sheet already has a running entry', function () {
     const entryA = DB.genSheetEntry(0, 'test-a', new Date(), new Date())
     const entryB = DB.genSheetEntry(0, 'test-b', new Date())
     const sheet = DB.genSheet('test-sheet', [entryA, entryB], entryB.id)
@@ -72,7 +72,7 @@ describe('commands:resume:handler', () => {
       )
   })
 
-  it('creates a new entry with the same description as the most recently ended entry and adds it to the sheet', (done) => {
+  it('creates a new entry with the same description as the most recently ended entry and adds it to the sheet', function (done) {
     const entryA = DB.genSheetEntry(0, 'test-a', new Date(), new Date())
     const entryB = DB.genSheetEntry(
       0,

@@ -16,16 +16,16 @@ const getArgs = (overrides?: Record<string, unknown>): SheetsCommandArgs => ({
   ...(overrides ?? {})
 })
 
-describe('commands:sheets:handler', () => {
-  beforeEach(async () => {
+describe('commands:sheets:handler', function () {
+  beforeEach(async function () {
     await db.load()
   })
 
-  afterEach(async () => {
+  afterEach(async function () {
     await db.delete()
   })
 
-  it('throws an error if no sheets exist', () => {
+  it('throws an error if no sheets exist', function () {
     if (db.db == null) {
       throw new Error('Test DB is null')
     }

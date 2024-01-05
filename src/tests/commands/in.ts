@@ -20,22 +20,22 @@ const getArgs = (overrides?: Record<string, unknown>): InCommandArgs => ({
   ...(overrides ?? {})
 })
 
-describe('commands:in:handler', () => {
-  beforeEach(async () => {
+describe('commands:in:handler', function () {
+  beforeEach(async function () {
     await db.load()
   })
 
-  afterEach(async () => {
+  afterEach(async function () {
     await db.delete()
   })
 
-  it('throws an error if not provided a sheet name and no sheet is active', () => {
+  it('throws an error if not provided a sheet name and no sheet is active', function () {
     const p = handler(getArgs())
 
     expect(p).to.be.rejectedWith('No active sheet')
   })
 
-  it('throws an error if the sheet has an active entry registered but it is not in the entries list', () => {
+  it('throws an error if the sheet has an active entry registered but it is not in the entries list', function () {
     const testDB = _cloneDeep(db)
     const sheet = DB.genSheet('test-sheet')
 
@@ -48,7 +48,7 @@ describe('commands:in:handler', () => {
     expect(p).to.be.rejectedWith('Sheet test-sheet has no entry with ID 42')
   })
 
-  it('throws an error if an entry is already active for the time sheet', () => {
+  it('throws an error if an entry is already active for the time sheet', function () {
     const entry = DB.genSheetEntry(0, 'test-description', new Date())
     const sheet = DB.genSheet('test-sheet', [entry], entry.id)
 
@@ -61,7 +61,7 @@ describe('commands:in:handler', () => {
     )
   })
 
-  it('creates a new time sheet entry and adds it to the sheet entry list', (done) => {
+  it('creates a new time sheet entry and adds it to the sheet entry list', function (done) {
     const sheet = DB.genSheet('test-sheet')
     const { name } = sheet
     const testDB = _cloneDeep(db)

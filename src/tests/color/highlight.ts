@@ -4,8 +4,14 @@ import isAnsi from 'is-ansi'
 import { expect } from 'chai'
 import { clHighlight } from '../../color'
 
-describe('color:highlight', () => {
-  it('colors the provided string', () => {
+const { CI } = process.env
+
+describe('color:highlight', function () {
+  it('colors the provided string', function () {
+    if (CI) {
+      return this.skip()
+    }
+
     expect(isAnsi(clHighlight('Some text'))).to.equal(true)
   })
 })

@@ -3,8 +3,8 @@
 import { expect } from 'chai'
 import { getEndOfDay } from '../../../dates'
 
-describe('utils:dates:get_end_of_day', () => {
-  it('returns a date set to the end of the provided date', () => {
+describe('utils:dates:get_end_of_day', function () {
+  it('returns a date set to the end of the provided date', function () {
     const date = new Date()
     const result = getEndOfDay(date)
 
