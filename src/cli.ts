@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 
 import yArgs, { type CommandModule } from 'yargs'
+import updateNotifier from 'simple-update-notifier'
 
 import DB from './db'
 import log from './log'
 import * as C from './color'
 import commands from './commands'
+
+import pkg from '../package.json'
+
+updateNotifier({ pkg })
 
 const y = yArgs
   .scriptName('track-time-cli')
