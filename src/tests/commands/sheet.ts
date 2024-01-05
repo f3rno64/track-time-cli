@@ -17,23 +17,23 @@ const getArgs = (overrides?: Record<string, unknown>): SheetCommandArgs => ({
   ...(overrides ?? {})
 })
 
-describe('commands:sheet:handler', () => {
-  beforeEach(async () => {
+describe('commands:sheet:handler', function () {
+  beforeEach(async function () {
     await db.load()
   })
 
-  afterEach(async () => {
+  afterEach(async function () {
     await db.delete()
   })
 
-  it('throws an error if trying to delete a sheet that does not exist', () => {
+  it('throws an error if trying to delete a sheet that does not exist', function () {
     const sheetName = 'non-existent-sheet'
     const p = handler(getArgs({ name: sheetName, delete: true }))
 
     expect(p).to.be.rejectedWith(`Sheet ${sheetName} does not exist`)
   })
 
-  it('removes specified sheet from the DB if it exists', async () => {
+  it('removes specified sheet from the DB if it exists', async function () {
     const sheetNameA = 'test-sheet-a'
     const sheetNameB = 'test-sheet-b'
     const sheetA = DB.genSheet(sheetNameA)
@@ -49,7 +49,7 @@ describe('commands:sheet:handler', () => {
       .undefined
   })
 
-  it('throws an error if no name is given and no active sheet exists', () => {
+  it('throws an error if no name is given and no active sheet exists', function () {
     if (db.db === null) {
       throw new Error('Test DB is null')
     }
@@ -61,13 +61,13 @@ describe('commands:sheet:handler', () => {
     expect(p).to.be.rejectedWith('No active time sheet')
   })
 
-  it('throws an error if the specified sheet is already active', () => {
+  it('throws an error if the specified sheet is already active', function () {
     const p = handler(getArgs({ name: 'main', delete: false }))
 
     expect(p).to.be.rejectedWith('Sheet main already active')
   })
 
-  it('switches to the specified sheet', async () => {
+  it('switches to the specified sheet', async function () {
     const sheetNameA = 'test-sheet-a'
     const sheetNameB = 'test-sheet-b'
     const sheetA = DB.genSheet(sheetNameA)
@@ -81,7 +81,7 @@ describe('commands:sheet:handler', () => {
     expect(db.getActiveSheetName()).to.equal(sheetNameA)
   })
 
-  it('creates a new sheet with the name if it does not exist', async () => {
+  it('creates a new sheet with the name if it does not exist', async function () {
     const sheetNameA = 'test-sheet-a'
     const sheetNameB = 'test-sheet-b'
     const sheetNameC = 'test-sheet-c'

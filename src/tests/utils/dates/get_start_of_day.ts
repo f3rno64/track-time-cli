@@ -3,8 +3,8 @@
 import { expect } from 'chai'
 import { getStartOfDay } from '../../../dates'
 
-describe('utils:dates:get_start_of_day', () => {
-  it('returns a date set to the start of the provided date', () => {
+describe('utils:dates:get_start_of_day', function () {
+  it('returns a date set to the start of the provided date', function () {
     const date = new Date()
     const result = getStartOfDay(date)
 

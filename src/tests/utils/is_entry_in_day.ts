@@ -6,8 +6,8 @@ import DB from '../../db'
 import * as D from '../../dates'
 import { isEntryInDay } from '../../utils'
 
-describe('utils:is_entry_in_day', () => {
-  it('returns true if the entry overlaps with the day', () => {
+describe('utils:is_entry_in_day', function () {
+  it('returns true if the entry overlaps with the day', function () {
     const date = D.getPastDay(4)
     const entryStart = D.getPastDay(7)
     const entryEnd = D.getPastDay(2)

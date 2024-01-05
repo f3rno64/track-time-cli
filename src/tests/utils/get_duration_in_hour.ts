@@ -5,8 +5,8 @@ import * as D from '../../dates'
 import { type TimeSheetEntry } from '../../types'
 import { getEntryDurationInHour } from '../../utils'
 
-describe('utils:get_entry_duration_in_hour', () => {
-  it('returns 0 if entry starts and ends prior to the provided hour', () => {
+describe('utils:get_entry_duration_in_hour', function () {
+  it('returns 0 if entry starts and ends prior to the provided hour', function () {
     const date = new Date()
     const entry = {
       start: D.getPastHour(8),
@@ -18,7 +18,7 @@ describe('utils:get_entry_duration_in_hour', () => {
     expect(duration).to.equal(0)
   })
 
-  it('returns 0 if entry starts and ends after the provided hour', () => {
+  it('returns 0 if entry starts and ends after the provided hour', function () {
     const date = new Date()
     const entry = {
       start: D.getFutureHour(4),
@@ -30,7 +30,7 @@ describe('utils:get_entry_duration_in_hour', () => {
     expect(duration).to.equal(0)
   })
 
-  // it('returns correct duration if start is within the hour and end is null', () => {
+  // it('returns correct duration if start is within the hour and end is null', function () {
   //   const date = new Date()
   //   const entry = {
   //     start: new Date(+D.getStartOfHour(4) + +D.getMinutesMS(30)),
@@ -42,7 +42,7 @@ describe('utils:get_entry_duration_in_hour', () => {
   //   expect(duration).to.be.closeTo(D.getMinutesMS(30), 1)
   // })
 
-  // it('returns correct duration if start is prior to day and end is null', () => {
+  // it('returns correct duration if start is prior to day and end is null', function () {
   //   const entry = {
   //     start: new Date(YESTERDAY_MS - D.getDaysMS(1)),
   //     end: null
@@ -53,7 +53,7 @@ describe('utils:get_entry_duration_in_hour', () => {
   //   expect(duration).to.be.closeTo(D.getDaysMS(1), 1)
   // })
   //
-  // it('returns correct duration if start is prior to day and end is within day', () => {
+  // it('returns correct duration if start is prior to day and end is within day', function () {
   //   const entry = {
   //     start: new Date(YESTERDAY_MS - D.getDaysMS(2)),
   //     end: new Date(YESTERDAY_MS + D.getHoursMS(12))
@@ -64,7 +64,7 @@ describe('utils:get_entry_duration_in_hour', () => {
   //   expect(duration).to.be.closeTo(D.getHoursMS(12), 1)
   // })
   //
-  // it('returns correct duration if start is within day and end is null', () => {
+  // it('returns correct duration if start is within day and end is null', function () {
   //   const entry = {
   //     start: new Date(YESTERDAY_MS + D.getHoursMS(12)),
   //     end: null
@@ -75,7 +75,7 @@ describe('utils:get_entry_duration_in_hour', () => {
   //   expect(duration).to.be.closeTo(D.getHoursMS(12), 1)
   // })
   //
-  // it('returns correct duration if both start and end are within day', () => {
+  // it('returns correct duration if both start and end are within day', function () {
   //   const entry = {
   //     start: new Date(YESTERDAY_MS + D.getHoursMS(4)),
   //     end: new Date(YESTERDAY_MS + D.getHoursMS(12))

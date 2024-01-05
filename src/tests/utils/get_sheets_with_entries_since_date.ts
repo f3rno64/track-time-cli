@@ -6,8 +6,8 @@ import DB from '../../db'
 import * as D from '../../dates'
 import { getSheetsWithEntriesSinceDate } from '../../utils'
 
-describe('utils:get_sheets_with_entries_since_date', () => {
-  it('should only return sheets with entries since the given date', () => {
+describe('utils:get_sheets_with_entries_since_date', function () {
+  it('should only return sheets with entries since the given date', function () {
     const sinceDate = D.getPastDay(5)
     const entryA = DB.genSheetEntry(
       0,
