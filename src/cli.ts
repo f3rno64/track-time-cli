@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import _isEmpty from 'lodash/isEmpty'
 import yArgs, { type CommandModule } from 'yargs'
 import updateNotifier from 'simple-update-notifier'
 
@@ -11,6 +12,9 @@ import commands from './commands'
 import pkg from '../package.json'
 
 updateNotifier({ pkg })
+
+const { DEBUG, NODE_ENV } = process.env
+const PRINT_TRACES = DEBUG || !_isEmpty(DEBUG) || NODE_ENV === 'development'
 
 const y = yArgs
   .scriptName('track-time-cli')
@@ -24,7 +28,11 @@ const y = yArgs
   })
   .fail((_, error: Error): void => {
     if (typeof error !== 'undefined') {
-      log(`${C.clHighlight('Error:')} ${C.clError(error.message)}`)
+      const errMessage = PRINT_TRACES
+        ? error?.stack ?? error
+        : error?.message ?? error
+
+      log(`${C.clHighlight('Error:')} ${errMessage}`)
     }
 
     process.exit(1)
