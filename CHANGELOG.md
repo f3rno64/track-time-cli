@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.33.1](https://github.com/f3rno64/track-time-cli/compare/v1.33.0...v1.33.1) (2024-01-05)
+
+
+### Bug Fixes
+
+* add missing handlebars dep, closes [#1](https://github.com/f3rno64/track-time-cli/issues/1) ([7313cd6](https://github.com/f3rno64/track-time-cli/commit/7313cd6ee80f4da046c743535915bb28530ad020))
+
 ## [1.33.0](https://github.com/f3rno64/track-time-cli/compare/v1.32.3...v1.33.0) (2023-12-24)
 
 
