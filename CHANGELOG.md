@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.34.0](https://github.com/f3rno64/track-time-cli/compare/v1.33.1...v1.34.0) (2024-01-05)
+
+
+### Bug Fixes
+
+* new linter errors raised by eslint-plugin-mocha ([dd9bc7c](https://github.com/f3rno64/track-time-cli/commit/dd9bc7cf58e3b784d719ec3056fcde9b54a586db))
+* skip color tests if in CI, closes [#2](https://github.com/f3rno64/track-time-cli/issues/2) ([8fadb6d](https://github.com/f3rno64/track-time-cli/commit/8fadb6defdc9c344df67a7443bd71cd1657973da))
+
 ### [1.33.1](https://github.com/f3rno64/track-time-cli/compare/v1.33.0...v1.33.1) (2024-01-05)
 
 
