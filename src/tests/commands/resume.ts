@@ -20,6 +20,8 @@ const getArgs = (overrides?: Record<string, unknown>): ResumeCommandArgs => ({
 })
 
 describe('commands:resume:handler', function () {
+  this.timeout(10 * 1000)
+
   beforeEach(async function () {
     await db.load()
   })

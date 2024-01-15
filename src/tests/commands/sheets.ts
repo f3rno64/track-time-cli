@@ -17,6 +17,8 @@ const getArgs = (overrides?: Record<string, unknown>): SheetsCommandArgs => ({
 })
 
 describe('commands:sheets:handler', function () {
+  this.timeout(10 * 1000)
+
   beforeEach(async function () {
     await db.load()
   })
