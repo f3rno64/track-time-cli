@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.35.2](https://github.com/f3rno64/track-time-cli/compare/v1.35.1...v1.35.2) (2024-01-15)
+
+
+### Bug Fixes
+
+* increase command test timeouts ([f630669](https://github.com/f3rno64/track-time-cli/commit/f63066955d3700e3fd8016308621fe92d361c270))
+
 ### [1.35.1](https://github.com/f3rno64/track-time-cli/compare/v1.35.0...v1.35.1) (2024-01-05)
 
 ## [1.35.0](https://github.com/f3rno64/track-time-cli/compare/v1.34.0...v1.35.0) (2024-01-05)
