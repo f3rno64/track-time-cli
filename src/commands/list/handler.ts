@@ -18,6 +18,7 @@ const handler = (args: ListCommandArgs) => {
     yesterday,
     humanize,
     concise,
+    filter,
     yargs,
     today,
     since,
@@ -65,10 +66,22 @@ const handler = (args: ListCommandArgs) => {
           ? new Date(0)
           : D.getPastDay()
 
-  const filteredSheets =
+  const sheetsFilteredByDate =
     sinceDate === null
       ? sheetsToList
       : U.getSheetsWithEntriesSinceDate(sheetsToList, sinceDate)
+
+  // TODO: Extract
+  const filteredSheets = sheetsFilteredByDate
+    .map(({ entries, ...otherSheetData }) => ({
+      ...otherSheetData,
+      entries: entries.filter(({ description }) =>
+        typeof filter === 'undefined' || _isEmpty(filter)
+          ? true
+          : description.toLowerCase().includes(filter.toLowerCase())
+      )
+    }))
+    .filter(({ entries }) => entries.length > 0)
 
   if (today) {
     log(

@@ -6,6 +6,7 @@ import HostnameOption from './hostname'
 import ConciseOption from './concise'
 import SheetsOption from './sheets'
 import DeleteOption from './delete'
+import FilterOption from './filter'
 import SheetOption from './sheet'
 import SinceOption from './since'
 import TodayOption from './today'
@@ -27,6 +28,7 @@ export {
   HostnameOption,
   ConciseOption,
   DeleteOption,
+  FilterOption,
   SheetsOption,
   SheetOption,
   SinceOption,

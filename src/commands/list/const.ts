@@ -14,6 +14,7 @@ export const CONFIG = {
     O.AllOption,
     O.YesterdayOption,
     O.ConciseOption,
+    O.FilterOption,
     O.HelpOption
   ])
 }
