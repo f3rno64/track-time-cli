@@ -65,7 +65,7 @@
     "standard-version": "^9.5.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
-    "updates": "^15.0.4"
+    "updates": "^15.1.1"
   },
   "dependencies": {
     "colors": "^1.4.0",
