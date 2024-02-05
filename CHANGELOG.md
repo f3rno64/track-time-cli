@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.38.0](https://github.com/f3rno64/track-time-cli/compare/v1.37.3...v1.38.0) (2024-02-05)
+
+
+### Features
+
+* add prettier and format scripts, use in GH workflows and pre-commit ([0920a47](https://github.com/f3rno64/track-time-cli/commit/0920a4727be51d48655fedc723dfb3e5024ae086))
+* **commitlint:** add commitlint and config, husky hook ([c94b786](https://github.com/f3rno64/track-time-cli/commit/c94b7863ffccfb4861825ae3e6d7fb203cac6345))
+* **README:** improve readme, add info on commands and more ([adf162e](https://github.com/f3rno64/track-time-cli/commit/adf162e2144ba2c2f5d4a4b391e601c8d6cf534c))
+
+
+### Bug Fixes
+
+* **prettier:** add CHANGELOG.md to prettierignore ([3864aed](https://github.com/f3rno64/track-time-cli/commit/3864aed17cdab28622512def1c12a90378fe0e40))
+
 ### [1.37.3](https://github.com/f3rno64/track-time-cli/compare/v1.37.2...v1.37.3) (2024-02-05)
 
 
