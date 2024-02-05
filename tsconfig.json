@@ -4,13 +4,13 @@
   },
 
   "compilerOptions": {
-    "target": "es2021",
+    "target": "esnext",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "incremental": true,
     "declaration": true,
     "module": "commonjs",
-    "lib": ["es2021"],
+    "lib": ["esnext"],
     "moduleResolution": "node",
     "rootDir": "./src",
     "outDir": "./dist",
