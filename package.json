@@ -30,9 +30,9 @@
     "update-deps": "updates -u -g -c",
     "update-version": "standard-version",
     "prepare": "husky install",
-    "prepare-release": "npm run lint && npm run test && npm run build",
-    "prepublish": "npm run build",
-    "release": "npm run prepare-release && npm run update-version && git push --follow-tags origin main"
+    "prepare-release": "pnpm lint && pnpm test && pnpm build",
+    "prepublish": "pnpm build",
+    "release": "pnpm prepare-release && pnpm update-version && git push --follow-tags origin main"
   },
   "devDependencies": {
     "@eslint/js": "^8.55.0",
