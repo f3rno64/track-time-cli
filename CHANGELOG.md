@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.37.2](https://github.com/f3rno64/track-time-cli/compare/v1.37.1...v1.37.2) (2024-02-05)
+
+
+### Bug Fixes
+
+* NPM_TOKEN secret case in publish GH workflow ([5c9edae](https://github.com/f3rno64/track-time-cli/commit/5c9edae3e396c213a081f0782af871f6bbcdaa18))
+
 ### [1.37.1](https://github.com/f3rno64/track-time-cli/compare/v1.37.0...v1.37.1) (2024-02-05)
 
 
