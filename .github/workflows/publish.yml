@@ -36,4 +36,4 @@ jobs:
       - name: Publish
         run: pnpm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
