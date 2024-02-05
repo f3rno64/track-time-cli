@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.37.0](https://github.com/f3rno64/track-time-cli/compare/v1.36.0...v1.37.0) (2024-02-05)
+
+
+### Bug Fixes
+
+* disable husky in GH workflows ([a295153](https://github.com/f3rno64/track-time-cli/commit/a29515315e9dbb4ba48afbcde25b11749e4b1dfb))
+* move install pnpm step up in workflows ([fbade49](https://github.com/f3rno64/track-time-cli/commit/fbade490d8e9445f58b20770a2ca748293ef463c))
+* require min node v16 in CI workflow ([44c4866](https://github.com/f3rno64/track-time-cli/commit/44c4866b0c7d23d8bd856aeca969e29c56dd805a))
+* rm vestigial -c flag from updates cmd ([aafd509](https://github.com/f3rno64/track-time-cli/commit/aafd509d97ce304af68f648232dd1b302cbd0b4e))
+* update README.md GH test workflow badge link and alt text ([1ee1379](https://github.com/f3rno64/track-time-cli/commit/1ee1379e9b4f80de4d016122ef38fab312e86882))
+
 ## [1.36.0](https://github.com/f3rno64/track-time-cli/compare/v1.35.2...v1.36.0) (2024-01-18)
 
 ### [1.35.2](https://github.com/f3rno64/track-time-cli/compare/v1.35.1...v1.35.2) (2024-01-15)
