@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.37.1](https://github.com/f3rno64/track-time-cli/compare/v1.37.0...v1.37.1) (2024-02-05)
+
+
+### Bug Fixes
+
+* rm vestigial dep from publish GH workflow job ([063c4a7](https://github.com/f3rno64/track-time-cli/commit/063c4a7c14d360b2a48316df799a049956d75e77))
+
 ## [1.37.0](https://github.com/f3rno64/track-time-cli/compare/v1.36.0...v1.37.0) (2024-02-05)
 
 
