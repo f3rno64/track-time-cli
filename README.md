@@ -1,8 +1,8 @@
 # track-time-cli
 
 [![NPM Version][npm-image]][npm-url]
-![Node.JS Test Workflow](https://github.com/f3rno64/track-time-cli/actions/workflows/nodejs_test.yml/badge.svg)
 [![Downloads Stats][npm-downloads]][npm-url]
+![CI GitHub Workflow Status](https://github.com/f3rno64/track-time-cli/actions/workflows/ci.yml/badge.svg)
 
 A Node.JS CLI utility for tracking tasks in time sheets, inspired by ruby's
 [timetrap](https://github.com/samg/timetrap).
