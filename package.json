@@ -27,7 +27,7 @@
     "test:watch": "NODE_PATH=./src NODE_ENV=test mocha --watch",
     "build": "NODE_PATH=./src tsc -p tsconfig.json && cp -r templates dist/ && cp -r styles dist/",
     "lint": "eslint src/**",
-    "update-deps": "updates -u -g -c",
+    "update-deps": "updates -u -g",
     "update-version": "standard-version",
     "prepare": "husky install",
     "prepare-release": "pnpm lint && pnpm test && pnpm build",
