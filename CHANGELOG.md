@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.41.0](https://github.com/f3rno64/track-time-cli/compare/v1.39.1...v1.41.0) (2024-02-06)
+
+
+### Features
+
+* add markdownlint, stylelint, lint-staged, fix style lint errors ([e5c5e64](https://github.com/f3rno64/track-time-cli/commit/e5c5e647dab150028d3d7bce8e10e8cb338a8be7))
+
+
+### Bug Fixes
+
+* get_duration_in_hour test start/end timestamps were reversed ([72cd8b4](https://github.com/f3rno64/track-time-cli/commit/72cd8b4b8784b235732172bea58d51a8dd8131d4))
+* **lint:** lint only README.md, not auto-generated CHANGELOG.md ([46156f0](https://github.com/f3rno64/track-time-cli/commit/46156f0d17ee8041de109d640a631c042cfe16d3))
+* use static node version in GH CI workflow job step name ([fc242bd](https://github.com/f3rno64/track-time-cli/commit/fc242bdc474b53a5db0b98d4f2bd7178079701ed))
+
 ### [1.39.1](https://github.com/f3rno64/track-time-cli/compare/v1.39.0...v1.39.1) (2024-02-06)
 
 
