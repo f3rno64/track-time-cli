@@ -2,17 +2,22 @@ import ago from 's-ago'
 import _sum from 'lodash/sum'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
+import _isUndefined from 'lodash/isUndefined'
 
 import log from '../../log'
-import * as D from '../../dates'
-import * as U from '../../utils'
-import * as P from '../../print'
-import * as C from '../../color'
+import { getStartOfDay } from '../../dates'
 import { type TimeSheet } from '../../types'
 import { type SheetsCommandArgs } from './types'
+import { clDate, clHighlight, clText } from '../../color'
+import { getSheetHeaderColumns, printJustifiedContent } from '../../print'
+import {
+  getDurationLangString,
+  getSheetsWithEntriesSinceDate
+} from '../../utils'
 
-const handler = async (args: SheetsCommandArgs) => {
-  const { yargs, help, today, since, humanize, db } = args
+// eslint-disable-next-line sonarjs/cognitive-complexity
+const handler = (args: SheetsCommandArgs): void => {
+  const { db, help, humanize, since, today, yargs } = args
 
   if (help) {
     yargs.showHelp()
@@ -29,17 +34,17 @@ const handler = async (args: SheetsCommandArgs) => {
     throw new Error('No time sheets exist')
   }
 
-  // prettier-ignore
-  const sinceDate = !_isEmpty(since)
-    ? parseDate(since)
-    : today
-      ? D.getStartOfDay()
-      : null
+  const sinceDate =
+    !_isUndefined(since) && !_isEmpty(since)
+      ? new Date(+parseDate(since))
+      : today
+        ? getStartOfDay()
+        : new Date(0)
 
   const filteredSheets =
     sinceDate === null
       ? sheets
-      : U.getSheetsWithEntriesSinceDate(sheets, sinceDate)
+      : getSheetsWithEntriesSinceDate(sheets, sinceDate)
 
   if (filteredSheets.length === 0) {
     throw new Error(`No sheets since ${sinceDate.toLocaleString()}`)
@@ -47,21 +52,21 @@ const handler = async (args: SheetsCommandArgs) => {
 
   if (today) {
     log(
-      `${C.clText('* Showing')} ${C.clHighlight(
+      `${clText('* Showing')} ${clHighlight(
         `${filteredSheets.length}`
-      )} ${C.clText('sheets for today')}`
+      )} ${clText('sheets for today')}`
     )
   } else if (sinceDate !== null) {
     log(
-      `${C.clText('* Showing sheets since')} ${C.clHighlight(
+      `${clText('* Showing sheets since')} ${clHighlight(
         sinceDate.toLocaleString()
-      )} ${C.clDate(`[${ago(sinceDate)}]`)}`
+      )} ${clDate(`[${ago(sinceDate)}]`)}`
     )
   } else {
     log(
-      `${C.clText('* Showing')} ${C.clHighlight(
+      `${clText('* Showing')} ${clHighlight(
         `${filteredSheets.length}`
-      )} ${C.clText('sheets')}`
+      )} ${clText('sheets')}`
     )
   }
 
@@ -69,15 +74,15 @@ const handler = async (args: SheetsCommandArgs) => {
 
   const activeSheetName = db.getActiveSheetName()
   const sheetHeaderRows = filteredSheets.map((sheet: TimeSheet): string[] =>
-    P.getSheetHeaderColumns(sheet, sheet.name === activeSheetName, humanize)
+    getSheetHeaderColumns(sheet, sheet.name === activeSheetName, humanize)
   )
 
-  P.printJustifiedContent(sheetHeaderRows)
+  printJustifiedContent(sheetHeaderRows)
 
   const totalDuration = _sum(
     filteredSheets.map(({ entries }) =>
       _sum(
-        entries.map(({ start, end }) =>
+        entries.map(({ end, start }) =>
           end === null ? Date.now() - +start : +end - +start
         )
       )
@@ -86,8 +91,8 @@ const handler = async (args: SheetsCommandArgs) => {
 
   log('')
   log(
-    `${C.clText('Total duration')}: ${`[${C.clHighlight(
-      U.getDurationLangString(totalDuration, humanize)
+    `${clText('Total duration')}: ${`[${clHighlight(
+      getDurationLangString(totalDuration, humanize)
     )}]`}`
   )
 }

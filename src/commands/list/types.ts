@@ -5,15 +5,15 @@ import DB from '../../db'
 export interface ListCommandArgs {
   db: DB
   yargs: Argv
-  filter?: string
-  sheets?: string[]
   ago?: boolean
   all?: boolean
+  help?: boolean
   since?: string
+  filter?: string
   today?: boolean
-  yesterday?: boolean
+  concise?: boolean
+  sheets?: string[]
   humanize?: boolean
   allSheets?: boolean
-  concise?: boolean
-  help?: boolean
+  yesterday?: boolean
 }

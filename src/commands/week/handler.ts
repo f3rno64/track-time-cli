@@ -1,22 +1,37 @@
 import sAgo from 's-ago'
-import weekday from 'weekday'
 import _sum from 'lodash/sum'
+import weekday from 'weekday'
 import _isEmpty from 'lodash/isEmpty'
+import _isUndefined from 'lodash/isUndefined'
 
 import log from '../../log'
-import * as C from '../../color'
-import * as U from '../../utils'
-import * as D from '../../dates'
+import { getDaysMS } from '../../dates'
 import { type TimeSheet, type TimeSheetEntry } from '../../types'
 import {
-  type WeekCommandArgs,
-  type WeekdayResults,
+  clText,
+  clDate,
+  clSheet,
+  clDuration,
+  clHighlight,
+  clHighlightRed
+} from '../../color'
+
+import {
+  getDurationLangString,
+  getEntryDurationInDay,
+  getSheetsWithEntriesInLastWeek
+} from '../../utils'
+
+import {
+  type TotalResults,
   type WeekdayResult,
-  type TotalResults
+  type WeekdayResults,
+  type WeekCommandArgs
 } from './types'
 
-const handler = (args: WeekCommandArgs) => {
-  const { help, yargs, ago, humanize, sheets: inputSheets, total, db } = args
+// eslint-disable-next-line sonarjs/cognitive-complexity
+const handler = (args: WeekCommandArgs): void => {
+  const { ago, db, help, humanize, sheets: inputSheets, total, yargs } = args
 
   if (help) {
     yargs.showHelp()
@@ -24,25 +39,25 @@ const handler = (args: WeekCommandArgs) => {
   }
 
   const selectedSheets: TimeSheet[] =
-    typeof inputSheets === 'undefined' || _isEmpty(inputSheets)
+    _isUndefined(inputSheets) || _isEmpty(inputSheets)
       ? db.getAllSheets()
-      : inputSheets.map(db.getSheet.bind(db))
+      : inputSheets.map((name: string): TimeSheet => db.getSheet(name))
 
-  const relevantSheets = U.getSheetsWithEntriesInLastWeek(selectedSheets)
+  const relevantSheets = getSheetsWithEntriesInLastWeek(selectedSheets)
   const results: WeekdayResults = {}
 
   let totalDuration = 0
   let totalEntries = 0
 
-  relevantSheets.forEach(({ name, entries }) => {
+  relevantSheets.forEach(({ entries, name }) => {
     const sheetResults: Record<string, WeekdayResult> = {}
 
     entries.forEach((entry: TimeSheetEntry) => {
       for (let i = 0; i < 7; i += 1) {
-        const lastWeekDate = new Date(Date.now() - D.getDaysMS(7))
-        const date = new Date(+lastWeekDate + i * D.getDaysMS(1))
+        const lastWeekDate = new Date(Date.now() - getDaysMS(7))
+        const date = new Date(+lastWeekDate + i * getDaysMS(1))
         const dateKey = date.toLocaleDateString()
-        const duration = U.getEntryDurationInDay(entry, date)
+        const duration = getEntryDurationInDay(entry, date)
 
         if (duration === 0) {
           continue
@@ -51,7 +66,7 @@ const handler = (args: WeekCommandArgs) => {
         totalDuration += duration
         totalEntries += 1
 
-        if (typeof sheetResults[dateKey] === 'undefined') {
+        if (_isUndefined(sheetResults[dateKey])) {
           sheetResults[dateKey] = {
             duration,
             entries: 1
@@ -69,9 +84,9 @@ const handler = (args: WeekCommandArgs) => {
   })
 
   log(
-    `${C.clText('* Total duration:')} ${C.clDuration(
-      U.getDurationLangString(totalDuration, humanize)
-    )} ${C.clHighlight(`[${totalEntries} entries]`)}`
+    `${clText('* Total duration:')} ${clDuration(
+      getDurationLangString(totalDuration, humanize)
+    )} ${clHighlight(`[${totalEntries} entries]`)}`
   )
 
   log('')
@@ -88,7 +103,7 @@ const handler = (args: WeekCommandArgs) => {
           return
         }
 
-        if (typeof totalResults[dateKey] === 'undefined') {
+        if (_isUndefined(totalResults[dateKey])) {
           totalResults[dateKey] = {
             duration,
             entries: 1
@@ -109,9 +124,9 @@ const handler = (args: WeekCommandArgs) => {
       const { duration, entries } = result
 
       log(
-        `${C.clDate(`- ${dateWeekday} ${dateString}`)}: ${C.clHighlight(
+        `${clDate(`- ${dateWeekday} ${dateString}`)}: ${clHighlight(
           `${entries} entries`
-        )} ${C.clDuration(`[${U.getDurationLangString(duration, humanize)}]`)}`
+        )} ${clDuration(`[${getDurationLangString(duration, humanize)}]`)}`
       )
     })
   } else {
@@ -130,8 +145,8 @@ const handler = (args: WeekCommandArgs) => {
       )
 
       log(
-        `${C.clText('- Sheet')} ${C.clSheet(sheetName)} ${C.clDuration(
-          `[${U.getDurationLangString(sheetTotalDuration, humanize)}]`
+        `${clText('- Sheet')} ${clSheet(sheetName)} ${clDuration(
+          `[${getDurationLangString(sheetTotalDuration, humanize)}]`
         )}`
       )
 
@@ -147,10 +162,10 @@ const handler = (args: WeekCommandArgs) => {
         }
 
         log(
-          `  ${C.clDate(`- ${dateWeekday}`)} ${C.clHighlightRed(
+          `  ${clDate(`- ${dateWeekday}`)} ${clHighlightRed(
             `(${dateStringUI})`
-          )}: ${C.clHighlight(`${entries} entries,`)} ${C.clDuration(
-            `[${U.getDurationLangString(duration, humanize)}]`
+          )}: ${clHighlight(`${entries} entries,`)} ${clDuration(
+            `[${getDurationLangString(duration, humanize)}]`
           )}`
         )
       })

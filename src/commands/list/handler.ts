@@ -2,30 +2,42 @@ import sAgo from 's-ago'
 import _sum from 'lodash/sum'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
+import _isUndefined from 'lodash/isUndefined'
 
 import log from '../../log'
-import * as C from '../../color'
-import * as U from '../../utils'
-import * as P from '../../print'
-import * as D from '../../dates'
+import { printSheets } from '../../print'
 import { type TimeSheet } from '../../types'
 import { type ListCommandArgs } from './types'
+import { getPastDay, getStartOfDay } from '../../dates'
+import {
+  clDate,
+  clDuration,
+  clHighlight,
+  clHighlightRed,
+  clText
+} from '../../color'
 
-const handler = (args: ListCommandArgs) => {
+import {
+  getDurationLangString,
+  getSheetsWithEntriesSinceDate
+} from '../../utils'
+
+// eslint-disable-next-line sonarjs/cognitive-complexity
+const handler = (args: ListCommandArgs): void => {
   const {
-    sheets: sheetNames,
-    allSheets,
-    yesterday,
-    humanize,
-    concise,
-    filter,
-    yargs,
-    today,
-    since,
-    help,
-    all,
+    db,
     ago,
-    db
+    all,
+    help,
+    since,
+    today,
+    yargs,
+    filter,
+    concise,
+    humanize,
+    yesterday,
+    allSheets,
+    sheets: sheetNames
   } = args
 
   if (help) {
@@ -43,8 +55,8 @@ const handler = (args: ListCommandArgs) => {
   const dbSheets = db.getAllSheets()
 
   // prettier-ignore
-  const sheetsToList: TimeSheet[] = typeof sheetNames !== 'undefined'
-    ? sheetNames.map(db.getSheet.bind(db))
+  const sheetsToList: TimeSheet[] = !_isUndefined(sheetNames)
+    ? sheetNames.map((sheetName: string): TimeSheet => db.getSheet(sheetName))
     : allSheets
       ? dbSheets
       : activeSheetName === null
@@ -55,28 +67,28 @@ const handler = (args: ListCommandArgs) => {
     throw new Error('No relevant sheets found')
   }
 
-  // prettier-ignore
-  const sinceDate = !_isEmpty(since)
-    ? parseDate(since)
-    : today
-      ? D.getStartOfDay()
-      : yesterday
-        ? D.getStartOfDay(D.getPastDay(1))
-        : all
-          ? new Date(0)
-          : D.getPastDay()
+  const sinceDate =
+    !_isUndefined(since) && !_isEmpty(since)
+      ? new Date(+parseDate(since))
+      : today
+        ? getStartOfDay()
+        : yesterday
+          ? getStartOfDay(getPastDay(1))
+          : all
+            ? new Date(0)
+            : getPastDay()
 
   const sheetsFilteredByDate =
     sinceDate === null
       ? sheetsToList
-      : U.getSheetsWithEntriesSinceDate(sheetsToList, sinceDate)
+      : getSheetsWithEntriesSinceDate(sheetsToList, sinceDate)
 
   // TODO: Extract
   const filteredSheets = sheetsFilteredByDate
     .map(({ entries, ...otherSheetData }) => ({
       ...otherSheetData,
       entries: entries.filter(({ description }) =>
-        typeof filter === 'undefined' || _isEmpty(filter)
+        _isUndefined(filter) || _isEmpty(filter)
           ? true
           : description.toLowerCase().includes(filter.toLowerCase())
       )
@@ -85,56 +97,54 @@ const handler = (args: ListCommandArgs) => {
 
   if (today) {
     log(
-      `${C.clText('* Showing')} ${C.clHighlight(
+      `${clText('* Showing')} ${clHighlight(
         `${filteredSheets.length}`
-      )} ${C.clText('sheets for today')}`
+      )} ${clText('sheets for today')}`
     )
   } else if (sinceDate !== null) {
     log(
-      `${C.clText('* Showing sheets since')} ${C.clHighlight(
+      `${clText('* Showing sheets since')} ${clHighlight(
         sinceDate.toLocaleString()
-      )} ${C.clDate(`[${sAgo(sinceDate)}]`)}`
+      )} ${clDate(`[${sAgo(sinceDate)}]`)}`
     )
   } else {
     log(
-      `${C.clText('* Showing')} ${C.clHighlight(
+      `${clText('* Showing')} ${clHighlight(
         `${filteredSheets.length}`
-      )} ${C.clText('sheets')}`
+      )} ${clText('sheets')}`
     )
   }
 
   log('')
 
-  P.printSheets(filteredSheets, ago === true, humanize, concise)
+  printSheets(filteredSheets, ago === true, humanize, concise)
 
   if (!all) {
     const sheetsNotShownCount = dbSheets.length - filteredSheets.length
 
     log('')
     log(
-      `${C.clText('*')} ${C.clHighlightRed(
+      `${clText('*')} ${clHighlightRed(
         `${sheetsNotShownCount}`
-      )} ${C.clText('Sheets not shown')}. ${C.clText('use')} ${C.clHighlightRed(
+      )} ${clText('Sheets not shown')}. ${clText('use')} ${clHighlightRed(
         '--all'
-      )} ${C.clText('to show')}`
+      )} ${clText('to show')}`
     )
   } else {
     const totalDuration = _sum(
       filteredSheets.map(({ entries }) =>
         _sum(
-          entries.map(({ start, end }) =>
+          entries.map(({ end, start }) =>
             end === null ? Date.now() - +start : +end - +start
           )
         )
       )
     )
 
-    const totalDurationUI = U.getDurationLangString(totalDuration, humanize)
+    const totalDurationUI = getDurationLangString(totalDuration, humanize)
 
     log('')
-    log(
-      `${C.clText('* Total duration:')} ${C.clDuration(`[${totalDurationUI}]`)}`
-    )
+    log(`${clText('* Total duration:')} ${clDuration(`[${totalDurationUI}]`)}`)
   }
 }
 

@@ -8,7 +8,7 @@ const getSheetsWithEntriesSinceDate = (
     .map(({ entries, ...otherSheetData }) => ({
       ...otherSheetData,
       entries: entries.filter(
-        ({ start, end }) =>
+        ({ end, start }) =>
           start >= since ||
           (start < since && end !== null && end >= since) ||
           (start < since && end === null)

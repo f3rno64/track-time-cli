@@ -5,6 +5,7 @@ const log = (str: string): void => {
     return
   }
 
+  // eslint-disable-next-line no-console
   console.log(str)
 }
 

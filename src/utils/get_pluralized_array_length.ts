@@ -1,5 +1,6 @@
 import { isVowel } from 'vowel'
 import { isConsonant } from 'consonant'
+
 import isPlural from './is_plural'
 
 const getPluralizedArrayLength = (

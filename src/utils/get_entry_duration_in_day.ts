@@ -1,17 +1,17 @@
 import _isFinite from 'lodash/isFinite'
 
-import * as D from '../dates'
 import { type TimeSheetEntry } from '../types'
+import { getEndOfDay, getStartOfDay } from '../dates'
 
 const getEntryDurationInDay = (
   entry: TimeSheetEntry,
   day: Date | number
 ): number => {
-  const { start, end } = entry
+  const { end, start } = entry
 
   const dayDate = _isFinite(day) ? new Date(day) : (day as Date)
-  const dayDateStart = D.getStartOfDay(dayDate)
-  const dayDateEnd = D.getEndOfDay(dayDate)
+  const dayDateStart = getStartOfDay(dayDate)
+  const dayDateEnd = getEndOfDay(dayDate)
 
   if (+start < +dayDateStart && end !== null && +end < +dayDateStart) {
     return 0

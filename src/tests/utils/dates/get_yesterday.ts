@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
+
 import { getDaysMS, getYesterday } from '../../../dates'
 
 describe('utils:dates:get_yesterday', function () {

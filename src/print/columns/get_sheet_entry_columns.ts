@@ -1,11 +1,19 @@
 import ago from 's-ago'
 import colors from 'colors'
-import _isEmpty from 'lodash/isEmpty'
 import _compact from 'lodash/compact'
+import _isEmpty from 'lodash/isEmpty'
+import _isUndefined from 'lodash/isUndefined'
 
-import * as C from '../../color'
-import * as U from '../../utils'
 import { type TimeSheetEntry } from '../../types'
+import { getDurationLangString } from '../../utils'
+import {
+  clID,
+  clText,
+  clDate,
+  clSheet,
+  clDuration,
+  clHighlightRed
+} from '../../color'
 
 const getSheetEntryColumns = (
   entry: TimeSheetEntry,
@@ -15,30 +23,31 @@ const getSheetEntryColumns = (
   humanize?: boolean,
   concise?: boolean
 ): string[] => {
-  const { id, start, end, description } = entry
-  const idUI = C.clID(`${id}`)
-  const startUI = C.clDate(
-    printDateAgo ? ago(start) : new Date(start).toLocaleString()
+  const { description, end, id, start } = entry
+  const idUI = clID(`${id}`)
+  const startUI = clDate(
+    printDateAgo ? (ago(start) as string) : new Date(start).toLocaleString()
   )
-  const finalEnd = end === null ? new Date() : end
-  const descriptionUI = C.clText(description)
-  const duration = +finalEnd - +start
-  const finalDurationString = U.getDurationLangString(duration, humanize)
 
-  const durationUI = C.clDuration(finalDurationString)
+  const finalEnd = end === null ? new Date() : end
+  const descriptionUI = clText(description)
+  const duration = +finalEnd - +start
+  const finalDurationString = getDurationLangString(duration, humanize)
+
+  const durationUI = clDuration(finalDurationString)
 
   // prettier-ignore
   const endUI =
     end === null
       ? ''
-      : C.clDate(
-        printDateAgo ? ago(end) : new Date(end).toLocaleString()
+      : clDate(
+        printDateAgo ? (ago(end) as string): new Date(end).toLocaleString()
       )
 
   const sheetNamePrefix =
-    typeof sheetName === 'undefined' || _isEmpty(sheetName)
+    _isUndefined(sheetName) || _isEmpty(sheetName)
       ? ''
-      : `${C.clText('sheet')} ${C.clSheet(sheetName)}`
+      : `${clText('sheet')} ${clSheet(sheetName)}`
 
   return _compact([
     '  ',
@@ -47,13 +56,13 @@ const getSheetEntryColumns = (
     `[${durationUI}]`,
 
     concise === true ? null : startUI,
-    concise === true ? null : C.clHighlightRed('->'),
+    concise === true ? null : clHighlightRed('->'),
 
     // prettier-ignore
     concise === true
       ? null
       : end === null
-        ? C.clHighlightRed('active')
+        ? clHighlightRed('active')
         : endUI,
 
     descriptionUI

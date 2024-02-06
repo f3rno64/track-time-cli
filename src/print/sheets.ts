@@ -1,6 +1,6 @@
 import log from '../log'
-import printSheet from './sheet'
 import { type TimeSheet } from '../types'
+import printSheet from './sheet'
 
 const printSheets = (
   sheets: TimeSheet[],

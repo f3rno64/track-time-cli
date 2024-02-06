@@ -3,8 +3,8 @@ import { type YArgsOptionDefinition } from '../types'
 const ALL_OPTION: YArgsOptionDefinition = [
   'all',
   {
-    describe: 'Show all sheet entries',
     alias: ['a'],
+    describe: 'Show all sheet entries',
     type: 'boolean'
   }
 ]

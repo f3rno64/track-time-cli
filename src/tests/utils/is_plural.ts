@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
+
 import { isPlural } from '../../utils'
 
 describe('utils:is_plural', function () {

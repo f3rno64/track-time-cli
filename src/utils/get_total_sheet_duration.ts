@@ -11,7 +11,7 @@ const getTotalSheetDuration = (sheet: TimeSheet | TimeSheet[]): number => {
   const { entries } = sheet
 
   return (
-    _sum(entries.map(({ start, end }) => (end === null ? 0 : +end - +start))) ??
+    _sum(entries.map(({ end, start }) => (end === null ? 0 : +end - +start))) ??
     0
   )
 }

@@ -1,20 +1,33 @@
-import * as O from '../../options'
+import {
+  setup,
+  AgoOption,
+  AllOption,
+  HelpOption,
+  SinceOption,
+  TodayOption,
+  FilterOption,
+  SheetsOption,
+  ConciseOption,
+  HumanizeOption,
+  YesterdayOption,
+  AllSheetsOption
+} from '../../options'
 
 export const CONFIG = {
+  aliases: ['l'],
   command: 'list [sheets..]',
   describe: 'List all time sheet entries',
-  aliases: ['l'],
-  builder: O.setup.bind(null, [
-    O.SheetsOption,
-    O.AgoOption,
-    O.HumanizeOption,
-    O.SinceOption,
-    O.TodayOption,
-    O.AllSheetsOption,
-    O.AllOption,
-    O.YesterdayOption,
-    O.ConciseOption,
-    O.FilterOption,
-    O.HelpOption
+  builder: setup.bind(null, [
+    SheetsOption,
+    AgoOption,
+    HumanizeOption,
+    SinceOption,
+    TodayOption,
+    AllSheetsOption,
+    AllOption,
+    YesterdayOption,
+    ConciseOption,
+    FilterOption,
+    HelpOption
   ])
 }

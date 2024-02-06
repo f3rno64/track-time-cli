@@ -1,12 +1,12 @@
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
+import _isUndefined from 'lodash/isUndefined'
 
-import * as P from '../../print'
-
+import { printCheckedInEntry } from '../../print'
 import { type InCommandArgs } from './types'
 
-const handler = async (args: InCommandArgs) => {
-  const { help, yargs, description, at, db } = args
+const handler = async (args: InCommandArgs): Promise<void> => {
+  const { at, db, description, help, yargs } = args
 
   if (help) {
     yargs.showHelp()
@@ -21,19 +21,21 @@ const handler = async (args: InCommandArgs) => {
   }
 
   const sheet = db.getSheet(activeSheetName)
-  const { name, activeEntryID } = sheet
+  const { activeEntryID, name } = sheet
 
   if (activeEntryID !== null) {
     const entry = db.getSheetEntry(name, activeEntryID)
-    const { id, description: entryDescription } = entry
+    const { description: entryDescription, id } = entry
 
     throw new Error(`An entry is already active (${id}): ${entryDescription}`)
   }
 
-  const startDate = _isEmpty(at) ? new Date() : parseDate(at)
+  const startDate =
+    _isUndefined(at) || _isEmpty(at) ? new Date() : new Date(+parseDate(at))
+
   const entry = await db.addActiveSheetEntry(name, finalDescription, startDate)
 
-  P.printCheckedInEntry(entry)
+  printCheckedInEntry(entry)
 }
 
 export default handler

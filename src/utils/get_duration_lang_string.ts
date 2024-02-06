@@ -6,12 +6,12 @@ const getDurationLangString = (
   duration: number,
   humanize?: boolean
 ): string => (
-  !humanize
-    ? formatDuration(duration)
-    : humanizeDuration(duration, {
+  humanize
+    ? humanizeDuration(duration, {
       round: true,
       units: ['y', 'mo', 'w', 'd', 'h', 'm']
     })
+    : formatDuration(duration)
 )
 
 export default getDurationLangString

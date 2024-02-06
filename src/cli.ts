@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import _isEmpty from 'lodash/isEmpty'
+import _isUndefined from 'lodash/isUndefined'
 import yArgs, { type CommandModule } from 'yargs'
 import updateNotifier from 'simple-update-notifier'
 
@@ -27,10 +28,8 @@ const y = yArgs
     argv.yargs = y
   })
   .fail((_, error: Error): void => {
-    if (typeof error !== 'undefined') {
-      const errMessage = PRINT_TRACES
-        ? error?.stack ?? error
-        : error?.message ?? error
+    if (!_isUndefined(error)) {
+      const errMessage = PRINT_TRACES ? error.stack : error.message
 
       log(`${C.clHighlight('Error:')} ${errMessage}`)
     }
@@ -53,4 +52,5 @@ commands.forEach((def) => {
   y.command(def as unknown as CommandModule)
 })
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 y.parse()

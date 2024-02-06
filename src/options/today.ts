@@ -3,8 +3,8 @@ import { type YArgsOptionDefinition } from '../types'
 const TODAY_OPTION: YArgsOptionDefinition = [
   'today',
   {
-    describe: 'Show results for today',
     alias: 't',
+    describe: 'Show results for today',
     type: 'boolean'
   }
 ]

@@ -3,8 +3,8 @@ import { type YArgsOptionDefinition } from '../types'
 const FILTER_OPTION: YArgsOptionDefinition = [
   'filter',
   {
-    describe: 'Filter results by description',
     alias: ['f'],
+    describe: 'Filter results by description',
     type: 'string'
   }
 ]

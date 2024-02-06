@@ -1,28 +1,33 @@
+import _isUndefined from 'lodash/isUndefined'
+
 import log from '../../log'
-import * as D from '../../dates'
-import * as P from '../../print'
-import * as S from '../../sheets'
+import { TimeSheet } from '../../types'
+import { getYesterday } from '../../dates'
 import { type YesterdayCommandArgs } from './types'
+import { printSheets, printSummary } from '../../print'
+import { filterSheetEntriesForDate } from '../../sheets'
 
 const handler = (args: YesterdayCommandArgs) => {
-  const { help, yargs, ago, humanize, all, sheets: inputSheets, db } = args
+  const { ago, all, db, help, humanize, sheets: inputSheets, yargs } = args
 
   if (help) {
     yargs.showHelp()
     process.exit(0)
   }
 
-  if (typeof inputSheets !== 'undefined' && all) {
+  if (!_isUndefined(inputSheets) && all) {
     throw new Error('Cannot specify both --all and sheets')
+  } else if (_isUndefined(inputSheets) && !all) {
+    throw new Error('Must specify either --all or sheets')
   }
 
   const sheets =
-    typeof inputSheets === 'undefined' || all
+    _isUndefined(inputSheets) || all
       ? db.getAllSheets()
-      : inputSheets.map(db.getSheet)
+      : inputSheets.map((name: string): TimeSheet => db.getSheet(name))
 
-  const yesterday = D.getYesterday()
-  const sheetsWithEntriesForYesterday = S.filterSheetEntriesForDate(
+  const yesterday = getYesterday()
+  const sheetsWithEntriesForYesterday = filterSheetEntriesForDate(
     sheets,
     yesterday
   )
@@ -31,9 +36,9 @@ const handler = (args: YesterdayCommandArgs) => {
     throw new Error('No entries for yesterday')
   }
 
-  P.printSummary(sheetsWithEntriesForYesterday, humanize)
+  printSummary(sheetsWithEntriesForYesterday, humanize)
   log('')
-  P.printSheets(sheetsWithEntriesForYesterday, ago, humanize)
+  printSheets(sheetsWithEntriesForYesterday, ago, humanize)
 }
 
 export default handler

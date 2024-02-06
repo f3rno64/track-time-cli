@@ -1,13 +1,19 @@
-import * as O from '../../options'
+import {
+  setup,
+  HelpOption,
+  TodayOption,
+  SinceOption,
+  HumanizeOption
+} from '../../options'
 
 export const CONFIG = {
+  aliases: ['ss'],
   command: 'sheets',
   describe: 'List all sheets',
-  aliases: ['ss'],
-  builder: O.setup.bind(null, [
-    O.HumanizeOption,
-    O.SinceOption,
-    O.TodayOption,
-    O.HelpOption
+  builder: setup.bind(null, [
+    HumanizeOption,
+    SinceOption,
+    TodayOption,
+    HelpOption
   ])
 }

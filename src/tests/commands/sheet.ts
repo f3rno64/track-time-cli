@@ -28,11 +28,11 @@ describe('commands:sheet:handler', function () {
     await db.delete()
   })
 
-  it('throws an error if trying to delete a sheet that does not exist', function () {
+  it('throws an error if trying to delete a sheet that does not exist', async function () {
     const sheetName = 'non-existent-sheet'
-    const p = handler(getArgs({ name: sheetName, delete: true }))
+    const p = handler(getArgs({ delete: true, name: sheetName }))
 
-    expect(p).to.be.rejectedWith(`Sheet ${sheetName} does not exist`)
+    await expect(p).to.be.rejectedWith(`Sheet ${sheetName} not found`)
   })
 
   it('removes specified sheet from the DB if it exists', async function () {
@@ -44,29 +44,29 @@ describe('commands:sheet:handler', function () {
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
 
-    await handler(getArgs({ name: sheetNameA, delete: true }))
+    await handler(getArgs({ delete: true, name: sheetNameA }))
 
     expect(db.db?.sheets.length).to.equal(2)
     expect(db.db?.sheets.find(({ name }) => name === sheetNameA)).to.be
       .undefined
   })
 
-  it('throws an error if no name is given and no active sheet exists', function () {
+  it('throws an error if no name is given', async function () {
     if (db.db === null) {
       throw new Error('Test DB is null')
     }
 
     db.db.activeSheetName = null
 
-    const p = handler(getArgs({ name: '', delete: false }))
+    const p = handler(getArgs({ delete: false, name: '' }))
 
-    expect(p).to.be.rejectedWith('No active time sheet')
+    await expect(p).to.be.rejectedWith('New sheet name must not be empty')
   })
 
-  it('throws an error if the specified sheet is already active', function () {
-    const p = handler(getArgs({ name: 'main', delete: false }))
+  it('throws an error if the specified sheet is already active', async function () {
+    const p = handler(getArgs({ delete: false, name: 'main' }))
 
-    expect(p).to.be.rejectedWith('Sheet main already active')
+    await expect(p).to.be.rejectedWith('Sheet main already active')
   })
 
   it('switches to the specified sheet', async function () {
@@ -78,7 +78,7 @@ describe('commands:sheet:handler', function () {
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
 
-    await handler(getArgs({ name: sheetNameA, delete: false }))
+    await handler(getArgs({ delete: false, name: sheetNameA }))
 
     expect(db.getActiveSheetName()).to.equal(sheetNameA)
   })
@@ -93,7 +93,7 @@ describe('commands:sheet:handler', function () {
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
 
-    await handler(getArgs({ name: sheetNameC, delete: false }))
+    await handler(getArgs({ delete: false, name: sheetNameC }))
 
     const sheets = db.getAllSheets()
     const newSheet = sheets.find(({ name }) => name === sheetNameC)

@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
+
 import { getPluralizedArrayLength } from '../../utils'
 
 describe('utils:get_pluralized_array_length', function () {

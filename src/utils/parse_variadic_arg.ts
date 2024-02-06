@@ -1,7 +1,8 @@
 import _isArray from 'lodash/isArray'
+import _isUndefined from 'lodash/isUndefined'
 
 const parseVariadicArg = (arg: string | string[] | undefined) => {
-  if (typeof arg === 'undefined') {
+  if (_isUndefined(arg)) {
     return undefined
   }
 

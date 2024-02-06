@@ -1,9 +1,11 @@
-import log from '../../log'
-import * as C from '../../color'
-import { type SheetCommandArgs } from './types'
+import _isUndefined from 'lodash/isUndefined'
 
-const handler = async (args: SheetCommandArgs) => {
-  const { yargs, help, name, delete: del, db } = args
+import log from '../../log'
+import { type SheetCommandArgs } from './types'
+import { clHighlightRed, clSheet, clText } from '../../color'
+
+const handler = async (args: SheetCommandArgs): Promise<void> => {
+  const { db, delete: del, help, name, yargs } = args
 
   if (help) {
     yargs.showHelp()
@@ -11,7 +13,7 @@ const handler = async (args: SheetCommandArgs) => {
   }
 
   const activeSheetName = db.getActiveSheetName()
-  const sheetName = typeof name === 'undefined' ? activeSheetName : name
+  const sheetName = _isUndefined(name) ? activeSheetName : name
 
   if (sheetName === null) {
     throw new Error('No active sheet')
@@ -22,12 +24,10 @@ const handler = async (args: SheetCommandArgs) => {
   if (del) {
     await db.removeSheet(sheetName)
 
-    log(`${C.clText('Deleted sheet')} ${C.clSheet(sheetName)}`)
-  } else if (typeof name === 'undefined') {
+    log(`${clText('Deleted sheet')} ${clSheet(sheetName)}`)
+  } else if (_isUndefined(name)) {
     log(
-      `${C.clText('Sheet')} ${C.clHighlightRed(sheetName)} ${C.clText(
-        'is active'
-      )}`
+      `${clText('Sheet')} ${clHighlightRed(sheetName)} ${clText('is active')}`
     )
   } else {
     const sheet = db.doesSheetExist(name)
@@ -36,7 +36,7 @@ const handler = async (args: SheetCommandArgs) => {
 
     await db.setActiveSheet(sheet)
 
-    log(`${C.clText('Switched to sheet:')} ${C.clSheet(name)}`)
+    log(`${clText('Switched to sheet:')} ${clSheet(name)}`)
   }
 }
 

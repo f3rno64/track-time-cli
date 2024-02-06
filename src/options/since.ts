@@ -3,8 +3,8 @@ import { type YArgsOptionDefinition } from '../types'
 const SINCE_OPTION: YArgsOptionDefinition = [
   'since',
   {
-    description: 'Only list entries since the specified date',
     alias: 's',
+    description: 'Only list entries since the specified date',
     type: 'string'
   }
 ]

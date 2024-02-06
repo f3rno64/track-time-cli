@@ -7,7 +7,7 @@ export interface TodayCommandArgs {
   yargs: Argv
   ago?: boolean
   all?: boolean
+  help?: boolean
   sheets?: string[]
   humanize?: boolean
-  help?: boolean
 }

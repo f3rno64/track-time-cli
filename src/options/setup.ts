@@ -9,16 +9,17 @@ import {
 } from '../types'
 
 const setupOptions = async (
-  options: Array<YArgsOptionDefinition | YArgsDynamicOptionDefinition>,
+  options: Array<YArgsDynamicOptionDefinition | YArgsOptionDefinition>,
   yargs: Argv
 ): Promise<void> => {
   await PI.forEach(
     options,
-    async (option: YArgsOptionDefinition | YArgsDynamicOptionDefinition) => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    async (option: YArgsDynamicOptionDefinition | YArgsOptionDefinition) => {
       if (_isFunction(option)) {
         const db = new DB()
         await db.load()
-        const finalOption = await (option as YArgsDynamicOptionDefinition)({
+        const finalOption = await option({
           db
         })
 

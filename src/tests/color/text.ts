@@ -2,6 +2,7 @@
 
 import isAnsi from 'is-ansi'
 import { expect } from 'chai'
+
 import { clText } from '../../color'
 
 const { CI } = process.env

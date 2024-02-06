@@ -15,8 +15,8 @@ const db = getTestDB()
 
 const getArgs = (overrides?: Record<string, unknown>): InCommandArgs => ({
   db,
-  yargs: {} as Argv,
   description: [],
+  yargs: {} as Argv,
   ...(overrides ?? {})
 })
 
@@ -31,39 +31,49 @@ describe('commands:in:handler', function () {
     await db.delete()
   })
 
-  it('throws an error if not provided a sheet name and no sheet is active', function () {
+  it('throws an error if not provided a sheet name and no sheet is active', async function () {
+    if (db.db !== null) {
+      db.db.activeSheetName = null
+    }
+
     const p = handler(getArgs())
 
-    expect(p).to.be.rejectedWith('No active sheet')
+    await expect(p).to.be.rejectedWith('No active sheet')
   })
 
-  it('throws an error if the sheet has an active entry registered but it is not in the entries list', function () {
+  it('throws an error if the sheet has an active entry registered but it is not in the entries list', async function () {
     const testDB = _cloneDeep(db)
     const sheet = DB.genSheet('test-sheet')
 
     sheet.activeEntryID = 42
 
-    testDB?.db?.sheets.push(sheet)
+    if (testDB !== null && testDB.db !== null) {
+      testDB.db.sheets.push(sheet)
+      testDB.db.activeSheetName = sheet.name
+    }
 
     const p = handler(getArgs({ db: testDB }))
 
-    expect(p).to.be.rejectedWith('Sheet test-sheet has no entry with ID 42')
+    await expect(p).to.be.rejectedWith('Entry 42 not found in sheet test-sheet')
   })
 
-  it('throws an error if an entry is already active for the time sheet', function () {
+  it('throws an error if an entry is already active for the time sheet', async function () {
     const entry = DB.genSheetEntry(0, 'test-description', new Date())
     const sheet = DB.genSheet('test-sheet', [entry], entry.id)
 
-    db.db?.sheets.push(sheet)
+    if (db.db !== null) {
+      db.db.sheets.push(sheet)
+      db.db.activeSheetName = sheet.name
+    }
 
     const p = handler(getArgs({ db }))
 
-    expect(p).to.be.rejectedWith(
+    await expect(p).to.be.rejectedWith(
       `An entry is already active (${entry.id}): ${entry.description}`
     )
   })
 
-  it('creates a new time sheet entry and adds it to the sheet entry list', function (done) {
+  it('creates a new time sheet entry and adds it to the sheet entry list', async function () {
     const sheet = DB.genSheet('test-sheet')
     const { name } = sheet
     const testDB = _cloneDeep(db)
@@ -78,23 +88,21 @@ describe('commands:in:handler', function () {
     const atDate = new Date(Date.now() - 24 * 60 * 60 * 1000)
     const p = handler(
       getArgs({
-        db: testDB,
         at: atDate.toISOString(),
-        sheet: name,
-        description: ['test', 'description']
+        db: testDB,
+        description: ['test', 'description'],
+        sheet: name
       })
     )
 
-    expect(p).to.be.fulfilled.then(() => {
-      const { entries } = sheet
-      const [entry] = entries
+    await expect(p).to.be.fulfilled
 
-      expect(entry.id).to.equal(0)
-      expect(+entry.start).to.equal(+atDate)
-      expect(entry.end).to.equal(null)
-      expect(entry.description).to.equal('test description')
+    const { entries } = sheet
+    const [entry] = entries
 
-      done()
-    })
+    expect(entry.id).to.equal(0)
+    expect(+entry.start).to.equal(+atDate)
+    expect(entry.end).to.equal(null)
+    expect(entry.description).to.equal('test description')
   })
 })

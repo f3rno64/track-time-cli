@@ -1,6 +1,6 @@
 import _isFinite from 'lodash/isFinite'
 
-import * as D from '../dates'
+import { getEndOfHour, getStartOfHour } from '../dates'
 import { type TimeSheetEntry } from '../types'
 
 const getEntryDurationInHour = (
@@ -8,11 +8,11 @@ const getEntryDurationInHour = (
   date: Date | number,
   hour: number
 ): number => {
-  const { start, end } = entry
+  const { end, start } = entry
 
   const hourDate = _isFinite(date) ? new Date(date) : (date as Date)
-  const hourDateStart = D.getStartOfHour(hour, hourDate)
-  const hourDateEnd = D.getEndOfHour(hour, hourDate)
+  const hourDateStart = getStartOfHour(hour, hourDate)
+  const hourDateEnd = getEndOfHour(hour, hourDate)
 
   if (+start < +hourDateStart && end !== null && +end < +hourDateStart) {
     return 0

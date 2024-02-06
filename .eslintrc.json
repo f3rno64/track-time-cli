@@ -1,23 +1,72 @@
 {
+  "root": true,
   "env": {
-    "browser": true,
-    "es2021": true
+    "node": true,
+    "mocha": true,
+    "es2024": true
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 12,
-    "sourceType": "module"
+    "lib": ["esnext"],
+    "sourceType": "module",
+    "ecmaVersion": "latest",
+    "jsDocParsingMode": "all",
+    "project": "./tsconfig.json",
+    "allowAutomaticSingleRunInference": true,
+    "warnOnUnsupportedTypeScriptVersion": true
   },
-  "plugins": ["@typescript-eslint", "mocha"],
+  "plugins": [
+    "pure",
+    "mocha",
+    "github",
+    "lodash",
+    "regexp",
+    "sonarjs",
+    "unicorn",
+    "promise",
+    "immutable",
+    "no-secrets",
+    "json-format",
+    "chai-expect",
+    "switch-case",
+    "optimize-regex",
+    "@typescript-eslint",
+    "write-good-comments",
+    "@fintechstudios/eslint-plugin-chai-as-promised"
+  ],
   "extends": [
     "eslint:recommended",
+    "plugin:mocha/recommended",
+    "plugin:github/recommended",
+    "plugin:lodash/recommended",
+    "plugin:regexp/recommended",
+    "plugin:sonarjs/recommended",
+    "plugin:promise/recommended",
+    "plugin:chai-expect/recommended",
+    "plugin:switch-case/recommended",
+    "plugin:eslint-comments/recommended",
+    "plugin:jsonc/recommended-with-json",
     "plugin:@typescript-eslint/recommended",
-    "plugin:mocha/recommended"
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@fintechstudios/chai-as-promised/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "rules": {
     "indent": ["error", 2],
-    "linebreak-style": ["error", "unix"],
+    "i18n-text/no-en": "off",
+    "no-invalid-this": "off",
+    "semi": ["error", "never"],
+    "import/no-namespace": "off",
     "quotes": ["error", "single"],
-    "semi": ["error", "never"]
+    "github/array-foreach": "off",
+    "no-secrets/no-secrets": "error",
+    "linebreak-style": ["error", "unix"],
+    "lodash/prefer-lodash-method": "off",
+    "sonarjs/no-duplicate-string": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "sonarjs/no-nested-template-literals": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "filenames/match-regex": [2, "^[a-z_]+$", true],
+    "@typescript-eslint/no-unsafe-assignment": "off"
   }
 }

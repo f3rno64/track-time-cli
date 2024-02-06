@@ -1,6 +1,6 @@
 import clID from './id'
-import clText from './text'
 import clDate from './date'
+import clText from './text'
 import clError from './error'
 import clSheet from './sheet'
 import clDuration from './duration'

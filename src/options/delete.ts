@@ -3,8 +3,8 @@ import { type YArgsOptionDefinition } from '../types'
 const DELETE_OPTION: YArgsOptionDefinition = [
   'delete',
   {
-    describe: 'Delete the specified time sheet or time sheet entry',
     alias: ['d', 'del'],
+    describe: 'Delete the specified time sheet or time sheet entry',
     type: 'boolean'
   }
 ]

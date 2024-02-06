@@ -1,8 +1,8 @@
-import * as O from '../../options'
+import { AtOption, DescriptionOption, HelpOption, setup } from '../../options'
 
 export const CONFIG = {
+  aliases: ['i'],
   command: 'in <description..>',
   describe: 'Check in to a time sheet',
-  aliases: ['i'],
-  builder: O.setup.bind(null, [O.AtOption, O.DescriptionOption, O.HelpOption])
+  builder: setup.bind(null, [AtOption, DescriptionOption, HelpOption])
 }

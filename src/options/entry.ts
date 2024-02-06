@@ -3,8 +3,8 @@ import { type YArgsOptionDefinition } from '../types'
 const ENTRY_OPTION: YArgsOptionDefinition = [
   'entry',
   {
-    describe: 'ID of entry to edit',
     alias: 'e',
+    describe: 'ID of entry to edit',
     type: 'number'
   }
 ]

@@ -1,4 +1,5 @@
 import _uniqBy from 'lodash/uniqBy'
+import _isUndefined from 'lodash/isUndefined'
 
 import {
   type TimeSheet,
@@ -7,23 +8,23 @@ import {
 } from '../../../types'
 
 interface PopulateResultsArgs {
-  results: BreakdownResults
-  key: string
   date: Date
+  key: string
   duration: number
   sheet: TimeSheet
   entry: TimeSheetEntry
+  results: BreakdownResults
 }
 
 const populateResults = (args: PopulateResultsArgs): BreakdownResults => {
-  const { results, key, date, duration, sheet, entry } = args
+  const { date, duration, entry, key, results, sheet } = args
 
-  if (typeof results[key] === 'undefined') {
+  if (_isUndefined(results[key])) {
     results[key] = {
       date,
       duration,
-      sheets: [sheet],
-      entries: [entry]
+      entries: [entry],
+      sheets: [sheet]
     }
   } else {
     const resultEntry = results[key]

@@ -34,8 +34,6 @@ describe('commands:sheets:handler', function () {
 
     db.db.sheets = []
 
-    const p = handler(getArgs())
-
-    expect(p).to.be.rejectedWith('No time sheets exist')
+    expect(handler.bind(null, getArgs())).to.throw('No time sheets exist')
   })
 })

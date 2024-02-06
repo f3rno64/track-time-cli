@@ -3,8 +3,8 @@ import { type YArgsOptionDefinition } from '../types'
 const SHEET_OPTION: YArgsOptionDefinition = [
   'sheet',
   {
-    describe: 'Name of time sheet to edit',
     alias: 's',
+    describe: 'Name of time sheet to edit',
     type: 'string'
   }
 ]

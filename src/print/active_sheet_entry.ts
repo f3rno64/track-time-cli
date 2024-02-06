@@ -1,20 +1,20 @@
+import { clDuration, clSheet, clText } from '../color'
 import log from '../log'
-import * as C from '../color'
-import * as U from '../utils'
 import { type TimeSheetEntry } from '../types'
+import { getDurationLangString } from '../utils'
 
 const printActiveSheetEntry = (
   entry: TimeSheetEntry,
   sheetName: string,
   humanize?: boolean
 ): void => {
-  const { start, end, description } = entry
+  const { description, end, start } = entry
   const finalEnd = end === null ? new Date() : end
   const duration = +finalEnd - +start
-  const descriptionUI = C.clText(description)
-  const sheetNameUI = C.clSheet(`${sheetName}:`)
-  const durationUI = C.clDuration(
-    `[running for ${U.getDurationLangString(duration, humanize)}]`
+  const descriptionUI = clText(description)
+  const sheetNameUI = clSheet(`${sheetName}:`)
+  const durationUI = clDuration(
+    `[running for ${getDurationLangString(duration, humanize)}]`
   )
 
   log(`${sheetNameUI} ${durationUI} ${descriptionUI}`.trim())

@@ -1,10 +1,10 @@
-import _sum from 'lodash/sum'
 import _isArray from 'lodash/isArray'
+import _sum from 'lodash/sum'
 
+import { clDuration, clHighlight, clText } from '../color'
 import log from '../log'
-import * as C from '../color'
-import * as U from '../utils'
 import { type TimeSheet } from '../types'
+import { getDurationLangString, getTotalSheetDuration } from '../utils'
 
 /**
  * NOTE: The `appendEmptyLine` arg allows print logic lacking explicit
@@ -14,20 +14,20 @@ const printSummary = (
   sheets: TimeSheet | TimeSheet[],
   humanize?: boolean
 ): void => {
-  const totalDuration = U.getTotalSheetDuration(sheets)
+  const totalDuration = getTotalSheetDuration(sheets)
   const totalEntries = _isArray(sheets)
     ? _sum(sheets.map((sheet) => sheet.entries.length))
     : sheets.entries.length
 
   const sheetCount = _isArray(sheets) ? sheets.length : 1
-  const uiTotalDuration = C.clDuration(
-    `[${U.getDurationLangString(totalDuration, humanize)}]`
+  const uiTotalDuration = clDuration(
+    `[${getDurationLangString(totalDuration, humanize)}]`
   )
-  const uiTotalSheets = C.clHighlight(`${sheetCount} sheets`)
-  const uiTotalEntries = C.clHighlight(`${totalEntries} entries`)
+  const uiTotalSheets = clHighlight(`${sheetCount} sheets`)
+  const uiTotalEntries = clHighlight(`${totalEntries} entries`)
 
   log(
-    `${C.clText('* Summary:')} ${uiTotalSheets}${C.clHighlight(
+    `${clText('* Summary:')} ${uiTotalSheets}${clHighlight(
       ','
     )} ${uiTotalEntries} ${uiTotalDuration}`
   )

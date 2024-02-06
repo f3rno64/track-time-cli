@@ -3,8 +3,8 @@ import { type YArgsOptionDefinition } from '../types'
 const TOTAL_OPTION: YArgsOptionDefinition = [
   'total',
   {
-    describe: 'Display total duration for the week for all sheets',
     alias: 't',
+    describe: 'Display total duration for the week for all sheets',
     type: 'boolean'
   }
 ]

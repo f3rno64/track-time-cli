@@ -5,8 +5,8 @@ import DB from '../../db'
 export interface SheetsCommandArgs {
   db: DB
   yargs: Argv
-  humanize?: boolean
+  help?: boolean
   since?: string
   today?: boolean
-  help?: boolean
+  humanize?: boolean
 }

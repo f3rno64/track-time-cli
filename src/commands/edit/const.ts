@@ -1,15 +1,23 @@
-import * as O from '../../options'
+import {
+  setup,
+  HelpOption,
+  NameOption,
+  SheetOption,
+  EntryOption,
+  DeleteOption,
+  DescriptionOption
+} from '../../options'
 
 export const CONFIG = {
+  aliases: ['e'],
   command: 'edit [description..]',
   describe: 'View, edit, or delete a time sheet entry',
-  aliases: ['e'],
-  builder: O.setup.bind(null, [
-    O.SheetOption,
-    O.NameOption,
-    O.EntryOption,
-    O.DescriptionOption,
-    O.DeleteOption,
-    O.HelpOption
+  builder: setup.bind(null, [
+    SheetOption,
+    NameOption,
+    EntryOption,
+    DescriptionOption,
+    DeleteOption,
+    HelpOption
   ])
 }

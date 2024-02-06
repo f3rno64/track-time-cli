@@ -1,36 +1,37 @@
-import log from '../../log'
-import * as D from '../../dates'
-import * as U from '../../utils'
-import * as P from '../../print'
-import { type TodayCommandArgs } from './types'
+import _isUndefined from 'lodash/isUndefined'
 
-const handler = (args: TodayCommandArgs) => {
-  const { help, yargs, humanize, sheets: inputSheets, all, ago, db } = args
+import log from '../../log'
+import { getStartOfDay } from '../../dates'
+import { type TodayCommandArgs } from './types'
+import { printSheets, printSummary } from '../../print'
+import { getSheetsWithEntriesSinceDate } from '../../utils'
+
+const handler = (args: TodayCommandArgs): void => {
+  const { ago, all, db, help, humanize, sheets: inputSheets, yargs } = args
 
   if (help) {
     yargs.showHelp()
     process.exit(0)
   }
 
-  // prettier-ignore
   const sheets = all
     ? db.getAllSheets()
-    : typeof inputSheets === 'undefined'
+    : _isUndefined(inputSheets)
       ? [db.getActiveSheet()]
       : inputSheets.map((name: string) => db.getSheet(name))
 
-  const sheetsWithEntriesForToday = U.getSheetsWithEntriesSinceDate(
+  const sheetsWithEntriesForToday = getSheetsWithEntriesSinceDate(
     sheets,
-    D.getStartOfDay()
+    getStartOfDay()
   )
 
   if (sheetsWithEntriesForToday.length === 0) {
     throw new Error('No entries for today')
   }
 
-  P.printSummary(sheetsWithEntriesForToday, humanize)
+  printSummary(sheetsWithEntriesForToday, humanize)
   log('')
-  P.printSheets(sheetsWithEntriesForToday, ago, humanize)
+  printSheets(sheetsWithEntriesForToday, ago, humanize)
 }
 
 export default handler

@@ -1,8 +1,10 @@
-import * as P from '../../print'
-import { type NowCommandArgs } from './types'
+import _isUndefined from 'lodash/isUndefined'
 
-const handler = (args: NowCommandArgs) => {
-  const { yargs, help, humanize, db } = args
+import { type NowCommandArgs } from './types'
+import { printActiveSheetEntry } from '../../print'
+
+const handler = (args: NowCommandArgs): void => {
+  const { db, help, humanize, yargs } = args
 
   if (help) {
     yargs.showHelp()
@@ -24,13 +26,13 @@ const handler = (args: NowCommandArgs) => {
 
   const entry = entries.find(({ id }) => id === activeEntryID)
 
-  if (typeof entry === 'undefined') {
+  if (_isUndefined(entry)) {
     throw new Error(
       `Active entry ${activeEntryID} for sheet ${activeSheetName} not found`
     )
   }
 
-  P.printActiveSheetEntry(entry, activeSheetName, humanize)
+  printActiveSheetEntry(entry, activeSheetName, humanize)
 }
 
 export default handler

@@ -1,16 +1,17 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
-import * as D from '../../dates'
+
 import { type TimeSheetEntry } from '../../types'
 import { getEntryDurationInHour } from '../../utils'
+import { getFutureHour, getPastHour } from '../../dates'
 
 describe('utils:get_entry_duration_in_hour', function () {
   it('returns 0 if entry starts and ends prior to the provided hour', function () {
     const date = new Date()
     const entry = {
-      start: D.getPastHour(8),
-      end: D.getPastHour(6)
+      end: getPastHour(6),
+      start: getPastHour(8)
     } as TimeSheetEntry
 
     const duration = getEntryDurationInHour(entry, date, 2)
@@ -21,8 +22,8 @@ describe('utils:get_entry_duration_in_hour', function () {
   it('returns 0 if entry starts and ends after the provided hour', function () {
     const date = new Date()
     const entry = {
-      start: D.getFutureHour(4),
-      end: D.getFutureHour(6)
+      end: getFutureHour(6),
+      start: getFutureHour(4)
     } as TimeSheetEntry
 
     const duration = getEntryDurationInHour(entry, date, 2)

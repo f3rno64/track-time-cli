@@ -1,6 +1,6 @@
-import { type InCommandArgs } from './types'
-import { CONFIG } from './const'
 import handler from './handler'
+import { CONFIG } from './const'
+import { type InCommandArgs } from './types'
 
 export { type InCommandArgs, handler }
 export default {

@@ -1,12 +1,13 @@
 import colors from 'colors'
+import _isNumber from 'lodash/isNumber'
+import _isString from 'lodash/isString'
 
-const clDate = (input: string | number | Date): string => {
-  // prettier-ignore
-  const dateString = typeof input === 'string'
+const clDate = (input: Date | number | string): string => {
+  const dateString = _isString(input)
     ? input
-    : typeof input === 'number'
+    : _isNumber(input)
       ? new Date(input).toLocaleString()
-      : input as unknown as string
+      : (input as unknown as string)
 
   return colors.magenta(dateString)
 }

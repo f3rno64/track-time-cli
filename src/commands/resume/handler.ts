@@ -1,11 +1,9 @@
-import _isFinite from 'lodash/isFinite'
-
 import log from '../../log'
-import * as C from '../../color'
 import { type ResumeCommandArgs } from './types'
+import { clHighlight, clSheet, clText } from '../../color'
 
-const handler = async (args: ResumeCommandArgs) => {
-  const { help, yargs, db } = args
+const handler = async (args: ResumeCommandArgs): Promise<void> => {
+  const { db, help, yargs } = args
 
   if (help) {
     yargs.showHelp()
@@ -14,10 +12,10 @@ const handler = async (args: ResumeCommandArgs) => {
 
   const sheet = db.getActiveSheet()
   const entry = db.getMostRecentlyActiveSheetEntry(sheet)
-  const { id, description, end } = entry
+  const { description, end, id } = entry
   const { name } = sheet
 
-  if (_isFinite(end)) {
+  if (end === null) {
     throw new Error(
       `Sheet ${name} already has an active entry (${id}: ${description})`
     )
@@ -25,11 +23,7 @@ const handler = async (args: ResumeCommandArgs) => {
 
   await db.addActiveSheetEntry(sheet, description)
 
-  log(
-    `${C.clSheet(`${name}:`)} ${C.clText('resumed')} ${C.clHighlight(
-      description
-    )}`
-  )
+  log(`${clSheet(`${name}:`)} ${clText('resumed')} ${clHighlight(description)}`)
 }
 
 export default handler

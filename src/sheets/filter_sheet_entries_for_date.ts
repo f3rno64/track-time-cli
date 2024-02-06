@@ -1,5 +1,7 @@
-import * as U from '../utils'
-import { type TimeSheet } from '../types'
+import _isUndefined from 'lodash/isUndefined'
+
+import { isEntryInDay } from '../utils'
+import { type TimeSheet, type TimeSheetEntry } from '../types'
 
 const filterSheetEntriesForDate = (
   sheets: TimeSheet[],
@@ -7,14 +9,18 @@ const filterSheetEntriesForDate = (
 ): TimeSheet[] =>
   sheets
     .map(({ activeEntryID, entries, ...otherSheetData }) => {
-      const newEntries = entries.filter(U.isEntryInDay.bind(null, date))
-      const isActiveEntryInNewEntries =
-        typeof newEntries.find(({ id }) => id === activeEntryID) !== 'undefined'
+      const newEntries = entries.filter((entry: TimeSheetEntry): boolean =>
+        isEntryInDay(date, entry)
+      )
+
+      const isActiveEntryInNewEntries = !_isUndefined(
+        newEntries.find(({ id }) => id === activeEntryID)
+      )
 
       return {
         ...otherSheetData,
-        entries: newEntries,
-        activeEntryID: isActiveEntryInNewEntries ? activeEntryID : null
+        activeEntryID: isActiveEntryInNewEntries ? activeEntryID : null,
+        entries: newEntries
       }
     })
     .filter(({ entries }) => entries.length > 0)

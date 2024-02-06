@@ -1,14 +1,21 @@
-import * as O from '../../options'
+import {
+  setup,
+  AgoOption,
+  HelpOption,
+  SinceOption,
+  HumanizeOption,
+  AllSheetsOption
+} from '../../options'
 
 export const CONFIG = {
+  aliases: ['b'],
   command: 'breakdown [sheets..]',
   describe: 'Display total durations per day for one or more sheets',
-  aliases: ['b'],
-  builder: O.setup.bind(null, [
-    O.AllSheetsOption,
-    O.AgoOption,
-    O.HumanizeOption,
-    O.SinceOption,
-    O.HelpOption
+  builder: setup.bind(null, [
+    AllSheetsOption,
+    AgoOption,
+    HumanizeOption,
+    SinceOption,
+    HelpOption
   ])
 }

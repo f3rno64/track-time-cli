@@ -3,12 +3,15 @@ import _max from 'lodash/max'
 import _isDate from 'lodash/isDate'
 import { promises as fs } from 'fs'
 import _isEmpty from 'lodash/isEmpty'
+import _isNumber from 'lodash/isNumber'
+import _isString from 'lodash/isString'
+import _isUndefined from 'lodash/isUndefined'
 
 import * as U from './utils'
 import { TEST_DB_PATH, DB_PATH, DEFAULT_SHEET_NAME } from './config'
 import {
-  type TimeTrackerDB,
   type TimeSheet,
+  type TimeTrackerDB,
   type TimeSheetEntry
 } from './types'
 
@@ -35,7 +38,7 @@ class DB {
       throw new Error('New sheet name must not be empty')
     } else if (
       activeEntryID !== null &&
-      typeof entries.find(({ id }) => id === activeEntryID) === 'undefined'
+      _isUndefined(entries.find(({ id }) => id === activeEntryID))
     ) {
       throw new Error('New sheet active entry does not exist')
     }
@@ -56,8 +59,8 @@ class DB {
     return {
       id,
       description,
-      start: start ?? new Date(),
-      end: end ?? null
+      end: end ?? null,
+      start: start ?? new Date()
     } as TimeSheetEntry
   }
 
@@ -73,11 +76,11 @@ class DB {
   }
 
   _parseSheetArg(sheetArg: TimeSheet | string) {
-    return typeof sheetArg === 'string' ? this.getSheet(sheetArg) : sheetArg
+    return _isString(sheetArg) ? this.getSheet(sheetArg) : sheetArg
   }
 
   _parseEntryIDArg(entryArg: TimeSheetEntry | number) {
-    return typeof entryArg === 'number' ? entryArg : entryArg.id
+    return _isNumber(entryArg) ? entryArg : entryArg.id
   }
 
   async doesDBExist(): Promise<boolean> {
@@ -92,7 +95,7 @@ class DB {
   async delete(): Promise<void> {
     try {
       await fs.unlink(this.dbPath)
-    } catch (err: unknown) {
+    } catch (err: any) {
       if (NODE_ENV !== 'test') {
         throw new Error(`Failed to delete DB: ${err}`)
       }
@@ -116,7 +119,7 @@ class DB {
 
       try {
         db = JSON.parse(dbJSON)
-      } catch (err: unknown) {
+      } catch (err: any) {
         throw new Error(`DB at ${this.dbPath} is invalid JSON: ${err}`)
       }
 
@@ -140,7 +143,7 @@ class DB {
 
     try {
       await fs.writeFile(this.dbPath, dbJSON)
-    } catch (err: unknown) {
+    } catch (err: any) {
       throw new Error(`Failed to save DB: ${err}`)
     }
   }
@@ -209,7 +212,7 @@ class DB {
 
     const { sheets } = this.db
 
-    return typeof sheets.find(({ name }) => name === sheetName) !== 'undefined'
+    return !_isUndefined(sheets.find(({ name }) => name === sheetName))
   }
 
   async setActiveSheet(sheet: TimeSheet | string): Promise<void> {
@@ -251,7 +254,7 @@ class DB {
     const { sheets } = this.db
     const sheet = sheets.find(({ name }) => name === sheetName)
 
-    if (typeof sheet === 'undefined') {
+    if (_isUndefined(sheet)) {
       throw new Error(`Sheet ${sheetName} not found`)
     }
 
@@ -282,7 +285,7 @@ class DB {
 
     entries.sort(({ start: a }, { start: b }) => +b - +a)
 
-    if (typeof entries[0] === 'undefined') {
+    if (_isUndefined(entries[0])) {
       throw new Error(`No entries found in sheet ${name}`)
     }
 
@@ -305,7 +308,7 @@ class DB {
     const { name: removedSheetName } = sheet
 
     if (this.getActiveSheetName() === removedSheetName) {
-      this.setActiveSheetName(null)
+      await this.setActiveSheetName(null)
     }
 
     sheets.splice(sheetIndex, 1)
@@ -338,7 +341,7 @@ class DB {
     const { name, entries } = targetSheet
     const result = entries.find(({ id }) => id === targetEntryID)
 
-    if (typeof result === 'undefined') {
+    if (_isUndefined(result)) {
       throw new Error(`Entry ${targetEntryID} not found in sheet ${name}`)
     }
 
@@ -374,8 +377,7 @@ class DB {
 
     const entryID = this._parseEntryIDArg(entry)
     const targetSheet = this._parseSheetArg(sheet)
-    const { name: sheetName } = targetSheet
-    const { entries } = targetSheet
+    const { name: sheetName, entries } = targetSheet
     const entryIndex = entries.findIndex(({ id }) => id === entryID)
 
     if (entryIndex === -1) {

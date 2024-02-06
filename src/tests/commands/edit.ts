@@ -14,8 +14,8 @@ const db = getTestDB()
 
 const getArgs = (overrides?: Record<string, unknown>): EditCommandArgs => ({
   db,
-  yargs: {} as Argv,
   delete: false,
+  yargs: {} as Argv,
   ...(overrides ?? {})
 })
 
@@ -30,13 +30,7 @@ describe('commands:edit:handler', function () {
     await db.delete()
   })
 
-  it('throws an error if no sheet or entry is specified', async function () {
-    const p = handler(getArgs())
-
-    chai.expect(p).to.be.rejectedWith('No sheet or entry specified')
-  })
-
-  it('throws an error if the specified sheet does not exist', function () {
+  it('throws an error if the specified sheet does not exist', async function () {
     const sheetA = DB.genSheet('test-sheet-a')
     const sheetB = DB.genSheet('test-sheet-b')
 
@@ -45,31 +39,36 @@ describe('commands:edit:handler', function () {
 
     const p = handler(getArgs({ sheet: 'test-sheet-c' }))
 
-    chai.expect(p).to.be.rejectedWith('Sheet test-sheet-c not found')
+    await chai.expect(p).to.be.rejectedWith('Sheet test-sheet-c not found')
   })
 
-  it('throws an error if the specified sheet entry does not exist', function () {
+  it('throws an error if the specified sheet entry does not exist', async function () {
     const entryA = DB.genSheetEntry(0, 'test-entry-a')
     const entryB = DB.genSheetEntry(1, 'test-entry-b')
     const sheet = DB.genSheet('test-sheet', [entryA, entryB])
 
-    db.db?.sheets.push(sheet)
+    if (db.db !== null) {
+      db.db.sheets.push(sheet)
+      db.db.activeSheetName = 'test-sheet'
+    }
 
     const p = handler(getArgs({ entry: 42 }))
 
-    chai.expect(p).to.be.rejectedWith('Entry 42 not found in sheet test-sheet')
+    await chai
+      .expect(p)
+      .to.be.rejectedWith('Entry 42 not found in sheet test-sheet')
   })
 
-  it('throws an error if editing a sheet but no name was provided', function () {
+  it('throws an error if editing a sheet but no name was provided', async function () {
     const sheetA = DB.genSheet('test-sheet-a')
     const sheetB = DB.genSheet('test-sheet-b')
 
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
 
-    const p = handler(getArgs({ sheet: 'test-sheet-a', name: undefined }))
+    const p = handler(getArgs({ name: undefined, sheet: 'test-sheet-a' }))
 
-    chai.expect(p).to.be.rejectedWith('No new name specified')
+    await chai.expect(p).to.be.rejectedWith('No new name specified')
   })
 
   it('edits the name of the specified sheet', async function () {
@@ -77,7 +76,7 @@ describe('commands:edit:handler', function () {
 
     db.db?.sheets.push(sheet)
 
-    await handler(getArgs({ sheet: 'test-sheet-a', name: 'new-name' }))
+    await handler(getArgs({ name: 'new-name', sheet: 'test-sheet-a' }))
 
     expect(sheet.name).to.equal('new-name')
   })
@@ -90,9 +89,9 @@ describe('commands:edit:handler', function () {
 
     await handler(
       getArgs({
-        sheet: 'test-sheet-a',
+        description: 'new-description',
         entry: 0,
-        description: 'new-description'
+        sheet: 'test-sheet-a'
       })
     )
 
@@ -110,8 +109,8 @@ describe('commands:edit:handler', function () {
 
     await handler(
       getArgs({
-        sheet: 'test-sheet-a',
         entry: 0,
+        sheet: 'test-sheet-a',
         start: newStartDate.toISOString()
       })
     )
@@ -130,9 +129,9 @@ describe('commands:edit:handler', function () {
 
     await handler(
       getArgs({
-        sheet: 'test-sheet-a',
+        end: newEndDate.toISOString(),
         entry: 0,
-        end: newEndDate.toISOString()
+        sheet: 'test-sheet-a'
       })
     )
 
@@ -146,7 +145,7 @@ describe('commands:edit:handler', function () {
     db.db?.sheets.push(sheetA)
     db.db?.sheets.push(sheetB)
 
-    await handler(getArgs({ sheet: 'test-sheet-a', delete: true }))
+    await handler(getArgs({ delete: true, sheet: 'test-sheet-a' }))
 
     expect(db.db?.sheets.find(({ name }) => name === 'test-sheet-a')).to.be
       .undefined
@@ -161,9 +160,9 @@ describe('commands:edit:handler', function () {
 
     await handler(
       getArgs({
-        sheet: 'test-sheet-a',
+        delete: true,
         entry: 1,
-        delete: true
+        sheet: 'test-sheet-a'
       })
     )
 

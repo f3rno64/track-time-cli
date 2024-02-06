@@ -1,34 +1,40 @@
 import formatDuration from 'format-duration'
 
+import {
+  clDuration,
+  clHighlight,
+  clHighlightRed,
+  clSheet,
+  clText
+} from '../color'
 import log from '../log'
-import * as C from '../color'
-import * as U from '../utils'
 import { type TimeSheet } from '../types'
+import { getDurationLangString, getTotalSheetDuration } from '../utils'
 
 const printSheetHeader = (
   sheet: TimeSheet,
   isActive?: boolean,
   humanize?: boolean
 ): void => {
-  const { name, entries } = sheet
-  const uiPrefix = C.clText('- Sheet')
-  const uiName = C.clSheet(name)
-  const uiEntryCount = `${C.clText('(')}${C.clHighlight(
+  const { entries, name } = sheet
+  const uiPrefix = clText('- Sheet')
+  const uiName = clSheet(name)
+  const uiEntryCount = `${clText('(')}${clHighlight(
     `${entries.length}`
-  )} ${C.clText('entries)')}`
+  )} ${clText('entries)')}`
 
   const uiEntries =
-    entries.length === 0 ? C.clHighlight('(no entries)') : uiEntryCount
+    entries.length === 0 ? clHighlight('(no entries)') : uiEntryCount
 
   const totalDuration =
     humanize === true
-      ? U.getDurationLangString(U.getTotalSheetDuration(sheet))
-      : formatDuration(U.getTotalSheetDuration(sheet))
+      ? getDurationLangString(getTotalSheetDuration(sheet))
+      : formatDuration(getTotalSheetDuration(sheet))
 
   const uiTotalDuration =
-    entries.length === 0 ? '' : C.clDuration(`[${totalDuration}]`)
+    entries.length === 0 ? '' : clDuration(`[${totalDuration}]`)
 
-  const uiActiveStatus = isActive !== true ? '' : C.clHighlightRed('* Active *')
+  const uiActiveStatus = isActive !== true ? '' : clHighlightRed('* Active *')
 
   log(`${uiPrefix} ${uiName} ${uiEntries} ${uiTotalDuration} ${uiActiveStatus}`)
 }

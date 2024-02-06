@@ -5,12 +5,12 @@ import DB from '../../db'
 export interface EditCommandArgs {
   db: DB
   yargs: Argv
-  sheet?: string
+  end?: string
   name?: string
   entry?: string
-  description?: string
-  delete?: boolean
-  start?: string
-  end?: string
   help?: boolean
+  sheet?: string
+  start?: string
+  delete?: boolean
+  description?: string
 }

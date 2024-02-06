@@ -32,7 +32,7 @@ const printJustifiedContent = (
 
         let result = value
 
-        for (let i = 0; i < charsToPad; i += 1) {
+        for (let j = 0; j < charsToPad; j += 1) {
           result += ' '
         }
 

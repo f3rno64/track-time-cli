@@ -1,4 +1,8 @@
-import * as P from '../print'
+import {
+  getSheetEntryColumns,
+  printJustifiedContent,
+  printSheetHeader
+} from '../print'
 import { type TimeSheet, type TimeSheetEntry } from '../types'
 
 const printSheet = (
@@ -10,10 +14,10 @@ const printSheet = (
 ): void => {
   const { activeEntryID, entries } = sheet
 
-  P.printSheetHeader(sheet, isActive)
+  printSheetHeader(sheet, isActive)
 
   const sheetEntryRows = entries.map((entry: TimeSheetEntry): string[] =>
-    P.getSheetEntryColumns(
+    getSheetEntryColumns(
       entry,
       entry.id === activeEntryID,
       '',
@@ -23,7 +27,7 @@ const printSheet = (
     )
   )
 
-  P.printJustifiedContent(sheetEntryRows)
+  printJustifiedContent(sheetEntryRows)
 }
 
 export default printSheet

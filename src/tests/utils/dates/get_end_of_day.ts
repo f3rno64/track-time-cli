@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
+
 import { getEndOfDay } from '../../../dates'
 
 describe('utils:dates:get_end_of_day', function () {
