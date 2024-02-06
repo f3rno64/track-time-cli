@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.39.0](https://github.com/f3rno64/track-time-cli/compare/v1.38.0...v1.39.0) (2024-02-06)
+
+
+### Features
+
+* add many new eslint plugins, fix all resulting errors ([9b912da](https://github.com/f3rno64/track-time-cli/commit/9b912da985bb66f868975eac69ee2a6e2eee1a12))
+
 ## [1.38.0](https://github.com/f3rno64/track-time-cli/compare/v1.37.3...v1.38.0) (2024-02-05)
 
 
