@@ -53,20 +53,20 @@
   ],
   "rules": {
     "indent": ["error", 2],
-    "i18n-text/no-en": "off",
-    "no-invalid-this": "off",
+    "i18n-text/no-en": 0,
+    "no-invalid-this": 0,
     "semi": ["error", "never"],
-    "import/no-namespace": "off",
+    "import/no-namespace": 0,
     "quotes": ["error", "single"],
-    "github/array-foreach": "off",
+    "github/array-foreach": 0,
     "no-secrets/no-secrets": "error",
     "linebreak-style": ["error", "unix"],
-    "lodash/prefer-lodash-method": "off",
-    "sonarjs/no-duplicate-string": "off",
-    "@typescript-eslint/no-unsafe-call": "off",
-    "sonarjs/no-nested-template-literals": "off",
-    "@typescript-eslint/no-explicit-any": "off",
+    "lodash/prefer-lodash-method": 0,
+    "sonarjs/no-duplicate-string": 0,
+    "@typescript-eslint/no-unsafe-call": 0,
+    "sonarjs/no-nested-template-literals": 0,
+    "@typescript-eslint/no-explicit-any": 0,
     "filenames/match-regex": [2, "^[a-z_]+$", true],
-    "@typescript-eslint/no-unsafe-assignment": "off"
+    "@typescript-eslint/no-unsafe-assignment": 0
   }
 }
