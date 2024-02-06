@@ -1,5 +1,5 @@
 {
   "*.{json,js,jsx,ts,tsx}": ["eslint", "prettier --list-different"],
   "*.scss": ["stylelint"],
-  "*.md": ["markdownlint"]
+  "README.md": ["markdownlint"]
 }
