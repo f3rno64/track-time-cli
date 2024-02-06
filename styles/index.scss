@@ -10,7 +10,6 @@
   .tt-ui-header {
     padding: 32px 0;
     line-height: 24px;
-
     display: flex;
     flex-direction: row;
 
@@ -34,35 +33,6 @@
     flex-shrink: 0;
   }
 
-  .tt-ui-sheets-list {
-    > * {
-      margin-bottom: 16px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    .tt-ui-sheet {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 32px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      > * {
-        flex-shrink: 0;
-      }
-
-      p:last-child {
-        width: 100%;
-        text-align: right;
-      }
-    }
-  }
-
   .tt-ui-sheet-entry {
     display: flex;
     flex-direction: column;
@@ -75,17 +45,6 @@
       margin-bottom: 0;
     }
 
-    .tt-ui-sheet-entry-details {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-evenly;
-
-      & + p {
-        padding: 16px 0 8px 0;
-        text-align: left !important;
-      }
-    }
-
     p {
       text-align: left;
       width: 100%;
@@ -94,6 +53,46 @@
         flex-shrink: 0;
         width: auto;
         margin-right: 16px;
+      }
+    }
+
+    .tt-ui-sheet-entry-details {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+
+      &+p {
+        padding: 16px 0 8px;
+        text-align: left !important;
+      }
+    }
+
+    .tt-ui-sheets-list {
+      >* {
+        margin-bottom: 16px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      .tt-ui-sheet {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 32px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        >* {
+          flex-shrink: 0;
+        }
+
+        p:last-child {
+          width: 100%;
+          text-align: right;
+        }
       }
     }
   }
