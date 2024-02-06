@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.39.1](https://github.com/f3rno64/track-time-cli/compare/v1.39.0...v1.39.1) (2024-02-06)
+
+
+### Bug Fixes
+
+* check if at arg is array in out handler ([b464a97](https://github.com/f3rno64/track-time-cli/commit/b464a97fd7034cc3dc9b22b603563c6f03406c94))
+
 ## [1.39.0](https://github.com/f3rno64/track-time-cli/compare/v1.38.0...v1.39.0) (2024-02-06)
 
 

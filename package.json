@@ -1,6 +1,6 @@
 {
   "name": "track-time-cli",
-  "version": "1.39.0",
+  "version": "1.39.1",
   "description": "A CLI utility for tracking tasks in time sheets, inspired by timetrap.",
   "keywords": [
     "time",
