@@ -10,8 +10,8 @@ describe('utils:get_entry_duration_in_hour', function () {
   it('returns 0 if entry starts and ends prior to the provided hour', function () {
     const date = new Date()
     const entry = {
-      end: getPastHour(6),
-      start: getPastHour(8)
+      end: getPastHour(8),
+      start: getPastHour(6)
     } as TimeSheetEntry
 
     const duration = getEntryDurationInHour(entry, date, 2)
