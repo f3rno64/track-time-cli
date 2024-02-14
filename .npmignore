@@ -5,6 +5,7 @@
 /styles
 /templates
 /node_modules
+/dist/tests
 
 .eslintignore
 .eslintrc.json
