@@ -71,7 +71,7 @@ const handler = (args: WeekCommandArgs): void => {
         if (_isUndefined(sheetResults[dateKey])) {
           sheetResults[dateKey] = {
             duration,
-            entries: 1
+            entries: duration === 0 ? 0 : 1
           }
         } else {
           sheetResults[dateKey] = {
@@ -126,8 +126,10 @@ const handler = (args: WeekCommandArgs): void => {
           '-',
           clDate(dateString),
           SHOW_WEEKDAY ? `(${clHighlightRed(dateWeekday)}):` : false,
-          clHighlight(`${entries} entries`),
-          clDuration(`[${getDurationLangString(duration, humanize)}]`)
+          clHighlight(entries === 0 ? 'No entries' : `${entries} entries`),
+          entries === 0
+            ? false
+            : clDuration(`[${getDurationLangString(duration, humanize)}]`)
         ]
           .filter(Boolean)
           .join(' ')
@@ -155,18 +157,27 @@ const handler = (args: WeekCommandArgs): void => {
       )
 
       sheetResultDates.forEach((dateString: string) => {
-        const dateStringUI = ago ? sAgo(new Date(dateString)) : dateString
+        const dateStringUI = ago
+          ? (sAgo(new Date(dateString)) as string)
+          : dateString
+
         const date = new Date(dateString)
-        const dateWeekday = weekday(date.getDay() + 1)
+        const dateWeekday = weekday(date.getDay() + 1) as string
         const result = sheetResults[dateString]
         const { duration, entries } = result
 
         log(
-          `  ${clDate(`- ${dateWeekday}`)} ${clHighlightRed(
-            `(${dateStringUI})`
-          )}: ${clHighlight(`${entries} entries,`)} ${clDuration(
-            `[${getDurationLangString(duration, humanize)}]`
-          )}`
+          [
+            '  -',
+            clDate(dateStringUI),
+            SHOW_WEEKDAY ? `(${clHighlightRed(dateWeekday)}):` : false,
+            clHighlight(entries === 0 ? 'No entries' : `${entries} entries`),
+            entries === 0
+              ? false
+              : clDuration(`[${getDurationLangString(duration, humanize)}]`)
+          ]
+            .filter(Boolean)
+            .join(' ')
         )
       })
 
