@@ -8,7 +8,8 @@ import { eachDayOfInterval, eachHourOfInterval } from 'date-fns'
 import log from '../../log'
 import { populateResults } from './utils'
 import { printJustifiedContent } from '../../print'
-import { type BreakdownCommandArgs } from './types'
+import { type TimeSheet, type TimeSheetEntry } from '../../types'
+import { type BreakdownCommandArgs, type BreakdownResults } from './types'
 import {
   clText,
   clDate,
@@ -17,12 +18,6 @@ import {
   clHighlight,
   clHighlightRed
 } from '../../color'
-
-import {
-  type TimeSheet,
-  type TimeSheetEntry,
-  type BreakdownResults
-} from '../../types'
 
 import {
   getHourString,

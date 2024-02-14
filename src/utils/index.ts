@@ -1,5 +1,4 @@
 import isPlural from './is_plural'
-import getLogger from './get_logger'
 import isEntryInDay from './is_entry_in_day'
 import getHourString from './get_hour_string'
 import ensureDirExists from './ensure_dir_exists'
@@ -14,7 +13,6 @@ import getSheetsWithEntriesInLastWeek from './get_sheets_with_entries_in_last_we
 
 export {
   isPlural,
-  getLogger,
   isEntryInDay,
   getHourString,
   ensureDirExists,

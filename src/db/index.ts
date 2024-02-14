@@ -7,14 +7,20 @@ import _isNumber from 'lodash/isNumber'
 import _isString from 'lodash/isString'
 import _isUndefined from 'lodash/isUndefined'
 
-import * as U from './utils'
-import { TEST_DB_PATH, DB_PATH, DEFAULT_SHEET_NAME } from './config'
+import log from '../log'
+import * as U from '../utils'
+import * as CONFIG from '../config'
+import convertJSONDB from './convert_json_db'
+import migrateJSONDBToVersionTwo from './migrate_json_db_to_version_two'
+import { TEST_DB_PATH, DB_PATH, DEFAULT_SHEET_NAME } from '../config'
 import {
   type TimeSheet,
   type TimeTrackerDB,
-  type TimeSheetEntry
-} from './types'
+  type TimeSheetEntry,
+  type JSONTimeTrackerDB
+} from '../types'
 
+const { DB_VERSION } = CONFIG
 const { NODE_ENV } = process.env
 const DEFAULT_DB_PATH = NODE_ENV === 'test' ? TEST_DB_PATH : DB_PATH
 
@@ -24,6 +30,7 @@ class DB {
 
   static genDB(): TimeTrackerDB {
     return {
+      version: DB_VERSION,
       sheets: [DB.genSheet(DEFAULT_SHEET_NAME)],
       activeSheetName: DEFAULT_SHEET_NAME
     } as TimeTrackerDB
@@ -104,33 +111,40 @@ class DB {
 
   async load(): Promise<void> {
     const dbPathDir = path.dirname(this.dbPath)
-
     await U.ensureDirExists(dbPathDir)
-
     const dbExists = await this.doesDBExist()
 
     if (!dbExists) {
       this.db = DB.genDB()
-
       await this.save()
     } else {
       const dbJSON = await fs.readFile(this.dbPath, 'utf-8')
-      let db: TimeTrackerDB = {} as TimeTrackerDB
+      let jsonDB: JSONTimeTrackerDB = {} as JSONTimeTrackerDB
 
       try {
-        db = JSON.parse(dbJSON)
+        jsonDB = JSON.parse(dbJSON)
       } catch (err: any) {
         throw new Error(`DB at ${this.dbPath} is invalid JSON: ${err}`)
       }
 
-      db.sheets.forEach(({ entries }) => {
-        entries.forEach((entry: TimeSheetEntry) => {
-          entry.start = new Date(entry.start)
-          entry.end = entry.end === null ? null : new Date(entry.end)
-        })
-      })
+      let didMigrate = false
 
-      this.db = db
+      // TODO: Handle an arbitrary number of migrations between multiple
+      //       versions.
+      if (jsonDB.version === 1 || _isUndefined(jsonDB.version)) {
+        jsonDB = migrateJSONDBToVersionTwo(jsonDB)
+        didMigrate = true
+
+        log('Migrated DB to version 2')
+      } else if (jsonDB.version > DB_VERSION || jsonDB.version < 1) {
+        throw new Error(`Unknown DB version ${jsonDB.version}, cannot load.`)
+      }
+
+      this.db = convertJSONDB(jsonDB)
+
+      if (didMigrate) {
+        await this.save()
+      }
     }
   }
 
