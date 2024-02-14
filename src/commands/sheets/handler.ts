@@ -72,6 +72,10 @@ const handler = (args: SheetsCommandArgs): void => {
 
   log('')
 
+  filteredSheets.sort(({ name: nameA }, { name: nameB }) =>
+    nameA.localeCompare(nameB)
+  )
+
   const activeSheetName = db.getActiveSheetName()
   const sheetHeaderRows = filteredSheets.map((sheet: TimeSheet): string[] =>
     getSheetHeaderColumns(sheet, sheet.name === activeSheetName, humanize)
