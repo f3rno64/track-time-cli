@@ -29,6 +29,9 @@ import {
   type WeekCommandArgs
 } from './types'
 
+// TODO: Extract this as an argument
+const SHOW_WEEKDAY = false
+
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const handler = (args: WeekCommandArgs): void => {
   const { ago, db, help, humanize, sheets: inputSheets, total, yargs } = args
@@ -53,18 +56,17 @@ const handler = (args: WeekCommandArgs): void => {
     const sheetResults: Record<string, WeekdayResult> = {}
 
     entries.forEach((entry: TimeSheetEntry) => {
-      for (let i = 0; i < 7; i += 1) {
-        const lastWeekDate = new Date(Date.now() - getDaysMS(7))
+      for (let i = 0; i < 30; i += 1) {
+        const lastWeekDate = new Date(Date.now() - getDaysMS(30))
         const date = new Date(+lastWeekDate + i * getDaysMS(1))
         const dateKey = date.toLocaleDateString()
         const duration = getEntryDurationInDay(entry, date)
 
-        if (duration === 0) {
-          continue
-        }
-
         totalDuration += duration
-        totalEntries += 1
+
+        if (duration > 0) {
+          totalEntries += 1
+        }
 
         if (_isUndefined(sheetResults[dateKey])) {
           sheetResults[dateKey] = {
@@ -99,19 +101,15 @@ const handler = (args: WeekCommandArgs): void => {
         const result = results[sheetName][dateKey]
         const { duration } = result
 
-        if (duration === 0) {
-          return
-        }
-
         if (_isUndefined(totalResults[dateKey])) {
           totalResults[dateKey] = {
             duration,
-            entries: 1
+            entries: duration === 0 ? 0 : 1
           }
         } else {
           totalResults[dateKey] = {
             duration: totalResults[dateKey].duration + duration,
-            entries: totalResults[dateKey].entries + 1
+            entries: totalResults[dateKey].entries + (duration === 0 ? 0 : 1)
           }
         }
       })
@@ -119,14 +117,20 @@ const handler = (args: WeekCommandArgs): void => {
 
     Object.keys(totalResults).forEach((dateString: string) => {
       const date = new Date(dateString)
-      const dateWeekday = weekday(date.getDay() + 1)
+      const dateWeekday = weekday(date.getDay() + 1) as string
       const result = totalResults[dateString]
       const { duration, entries } = result
 
       log(
-        `${clDate(`- ${dateWeekday} ${dateString}`)}: ${clHighlight(
-          `${entries} entries`
-        )} ${clDuration(`[${getDurationLangString(duration, humanize)}]`)}`
+        [
+          '-',
+          clDate(dateString),
+          SHOW_WEEKDAY ? `(${clHighlightRed(dateWeekday)}):` : false,
+          clHighlight(`${entries} entries`),
+          clDuration(`[${getDurationLangString(duration, humanize)}]`)
+        ]
+          .filter(Boolean)
+          .join(' ')
       )
     })
   } else {
@@ -156,10 +160,6 @@ const handler = (args: WeekCommandArgs): void => {
         const dateWeekday = weekday(date.getDay() + 1)
         const result = sheetResults[dateString]
         const { duration, entries } = result
-
-        if (duration === 0) {
-          return
-        }
 
         log(
           `  ${clDate(`- ${dateWeekday}`)} ${clHighlightRed(

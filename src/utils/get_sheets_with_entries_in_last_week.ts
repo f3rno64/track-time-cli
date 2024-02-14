@@ -2,7 +2,7 @@ import { type TimeSheet } from '../types'
 import { getDaysMS, getEndOfDay, getStartOfDay } from '../dates'
 
 const getSheetsWithEntriesInLastWeek = (sheets: TimeSheet[]) => {
-  const date = new Date(Date.now() - getDaysMS(7))
+  const date = new Date(Date.now() - getDaysMS(30))
   const startOfOneWeekAgo = getStartOfDay(date)
   const endOfToday = getEndOfDay()
 
