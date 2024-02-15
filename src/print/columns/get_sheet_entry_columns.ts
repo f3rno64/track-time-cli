@@ -8,6 +8,7 @@ import { type TimeSheetEntry } from '../../types'
 import { getDurationLangString } from '../../utils'
 import {
   clID,
+  clTag,
   clText,
   clDate,
   clSheet,
@@ -23,7 +24,7 @@ const getSheetEntryColumns = (
   humanize?: boolean,
   concise?: boolean
 ): string[] => {
-  const { description, end, id, start } = entry
+  const { tags, description, end, id, start } = entry
   const idUI = clID(`${id}`)
   const startUI = clDate(
     printDateAgo ? (ago(start) as string) : new Date(start).toLocaleString()
@@ -65,7 +66,8 @@ const getSheetEntryColumns = (
         ? clHighlightRed('active')
         : endUI,
 
-    descriptionUI
+    descriptionUI,
+    (tags ?? []).map(clTag).join(' ')
   ]).map((value: string): string => (isActive ? colors.bold(value) : value))
 }
 

@@ -1,4 +1,4 @@
-import { clDuration, clSheet, clText } from '../color'
+import { clDuration, clSheet, clText, clTag } from '../color'
 import log from '../log'
 import { type TimeSheetEntry } from '../types'
 import { getDurationLangString } from '../utils'
@@ -8,7 +8,7 @@ const printActiveSheetEntry = (
   sheetName: string,
   humanize?: boolean
 ): void => {
-  const { description, end, start } = entry
+  const { description, end, start, tags } = entry
   const finalEnd = end === null ? new Date() : end
   const duration = +finalEnd - +start
   const descriptionUI = clText(description)
@@ -17,7 +17,9 @@ const printActiveSheetEntry = (
     `[running for ${getDurationLangString(duration, humanize)}]`
   )
 
-  log(`${sheetNameUI} ${durationUI} ${descriptionUI}`.trim())
+  const tagsUI = tags.map(clTag).join(' ')
+
+  log(`${sheetNameUI} ${durationUI} ${descriptionUI} ${tagsUI}`.trim())
 }
 
 export default printActiveSheetEntry

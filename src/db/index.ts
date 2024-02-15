@@ -7,16 +7,31 @@ import _isNumber from 'lodash/isNumber'
 import _isString from 'lodash/isString'
 import _isUndefined from 'lodash/isUndefined'
 
-import * as U from './utils'
-import { TEST_DB_PATH, DB_PATH, DEFAULT_SHEET_NAME } from './config'
+import log from '../log'
+import * as U from '../utils'
+import * as CONFIG from '../config'
+import convertJSONDB from './convert_json_db'
+import migrateJSONDBToVersionTwo from './migrate_json_db_to_version_two'
+import { TEST_DB_PATH, DB_PATH, DEFAULT_SHEET_NAME } from '../config'
 import {
   type TimeSheet,
   type TimeTrackerDB,
-  type TimeSheetEntry
-} from './types'
+  type TimeSheetEntry,
+  type JSONTimeTrackerDB
+} from '../types'
 
+const { DB_VERSION } = CONFIG
 const { NODE_ENV } = process.env
 const DEFAULT_DB_PATH = NODE_ENV === 'test' ? TEST_DB_PATH : DB_PATH
+
+// TODO: Extract
+interface AddActiveSheetEntryArgs {
+  sheet: TimeSheet | string
+  input?: string
+  description?: string
+  startDate?: Date
+  tags?: string[]
+}
 
 class DB {
   db: TimeTrackerDB | null
@@ -24,6 +39,7 @@ class DB {
 
   static genDB(): TimeTrackerDB {
     return {
+      version: DB_VERSION,
       sheets: [DB.genSheet(DEFAULT_SHEET_NAME)],
       activeSheetName: DEFAULT_SHEET_NAME
     } as TimeTrackerDB
@@ -54,14 +70,16 @@ class DB {
     id: number,
     description: string,
     start?: Date,
-    end?: Date | null
-  ) {
+    end?: Date | null,
+    tags?: string[]
+  ): TimeSheetEntry {
     return {
       id,
       description,
       end: end ?? null,
-      start: start ?? new Date()
-    } as TimeSheetEntry
+      start: start ?? new Date(),
+      tags: tags ?? []
+    }
   }
 
   constructor(dbPath: string = DEFAULT_DB_PATH) {
@@ -104,33 +122,40 @@ class DB {
 
   async load(): Promise<void> {
     const dbPathDir = path.dirname(this.dbPath)
-
     await U.ensureDirExists(dbPathDir)
-
     const dbExists = await this.doesDBExist()
 
     if (!dbExists) {
       this.db = DB.genDB()
-
       await this.save()
     } else {
       const dbJSON = await fs.readFile(this.dbPath, 'utf-8')
-      let db: TimeTrackerDB = {} as TimeTrackerDB
+      let jsonDB: JSONTimeTrackerDB = {} as JSONTimeTrackerDB
 
       try {
-        db = JSON.parse(dbJSON)
+        jsonDB = JSON.parse(dbJSON)
       } catch (err: any) {
         throw new Error(`DB at ${this.dbPath} is invalid JSON: ${err}`)
       }
 
-      db.sheets.forEach(({ entries }) => {
-        entries.forEach((entry: TimeSheetEntry) => {
-          entry.start = new Date(entry.start)
-          entry.end = entry.end === null ? null : new Date(entry.end)
-        })
-      })
+      let didMigrate = false
 
-      this.db = db
+      // TODO: Handle an arbitrary number of migrations between multiple
+      //       versions.
+      if (jsonDB.version === 1 || _isUndefined(jsonDB.version)) {
+        jsonDB = migrateJSONDBToVersionTwo(jsonDB)
+        didMigrate = true
+
+        log('Migrated DB to version 2')
+      } else if (jsonDB.version > DB_VERSION || jsonDB.version < 1) {
+        throw new Error(`Unknown DB version ${jsonDB.version}, cannot load.`)
+      }
+
+      this.db = convertJSONDB(jsonDB)
+
+      if (didMigrate) {
+        await this.save()
+      }
     }
   }
 
@@ -390,25 +415,40 @@ class DB {
   }
 
   async addActiveSheetEntry(
-    sheet: TimeSheet | string,
-    description: string,
-    startDate?: Date
+    args: AddActiveSheetEntryArgs
   ): Promise<TimeSheetEntry> {
     if (this.db === null) {
       throw new Error('DB not loaded')
     }
 
+    const {
+      description: descriptionArg,
+      sheet,
+      input,
+      tags: tagsArg,
+      startDate
+    } = args
+
     const targetSheet = this._parseSheetArg(sheet)
     const { entries } = targetSheet
-    const newEntryID = entries.length
-    const entry = DB.genSheetEntry(
-      newEntryID,
-      description,
-      startDate ?? new Date()
-    )
+    const id = entries.length
+    const start = startDate ?? new Date()
+    const end = null
+
+    let description = descriptionArg as string
+    let tags: string[] = tagsArg ?? []
+
+    if (_isEmpty(tags) && !_isUndefined(input)) {
+      const res = U.parseEntryFromInput(id, input, start)
+
+      tags = res.tags
+      description = res.description
+    }
+
+    const entry = DB.genSheetEntry(id, description, start, end, tags)
 
     entries.push(entry)
-    targetSheet.activeEntryID = newEntryID
+    targetSheet.activeEntryID = id
 
     await this.save()
 

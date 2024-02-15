@@ -1,11 +1,8 @@
 import _uniqBy from 'lodash/uniqBy'
 import _isUndefined from 'lodash/isUndefined'
 
-import {
-  type TimeSheet,
-  type TimeSheetEntry,
-  type BreakdownResults
-} from '../../../types'
+import { type BreakdownResults } from '../types'
+import { type TimeSheet, type TimeSheetEntry } from '../../../types'
 
 interface PopulateResultsArgs {
   date: Date
