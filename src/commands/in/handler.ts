@@ -2,18 +2,17 @@ import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
 import _isUndefined from 'lodash/isUndefined'
 
-import { printCheckedInEntry } from '../../print'
 import { type InCommandArgs } from './types'
+import { printCheckedInEntry } from '../../print'
 
 const handler = async (args: InCommandArgs): Promise<void> => {
-  const { at, db, description, help, yargs } = args
+  const { yargs, db, help } = args
 
   if (help) {
     yargs.showHelp()
     process.exit(0)
   }
 
-  const finalDescription = description.join(' ')
   const activeSheetName = db.getActiveSheetName()
 
   if (activeSheetName === null) {
@@ -30,10 +29,13 @@ const handler = async (args: InCommandArgs): Promise<void> => {
     throw new Error(`An entry is already active (${id}): ${entryDescription}`)
   }
 
+  // TODO: Rename description to input or content (or think of a better name)
+  const { at, description: inputArray } = args
+  const input = inputArray.join(' ')
   const startDate =
     _isUndefined(at) || _isEmpty(at) ? new Date() : new Date(+parseDate(at))
 
-  const entry = await db.addActiveSheetEntry(name, finalDescription, startDate)
+  const entry = await db.addActiveSheetEntry({ sheet: name, input, startDate })
 
   printCheckedInEntry(entry)
 }

@@ -1,6 +1,6 @@
 import log from '../../log'
 import { type ResumeCommandArgs } from './types'
-import { clHighlight, clSheet, clText } from '../../color'
+import { clTag, clHighlight, clSheet, clText } from '../../color'
 
 const handler = async (args: ResumeCommandArgs): Promise<void> => {
   const { db, help, yargs } = args
@@ -12,8 +12,9 @@ const handler = async (args: ResumeCommandArgs): Promise<void> => {
 
   const sheet = db.getActiveSheet()
   const entry = db.getMostRecentlyActiveSheetEntry(sheet)
-  const { description, end, id } = entry
+  const { description, end, tags, id } = entry
   const { name } = sheet
+  const tagsUI = (tags ?? []).map(clTag).join(' ')
 
   if (end === null) {
     throw new Error(
@@ -21,9 +22,11 @@ const handler = async (args: ResumeCommandArgs): Promise<void> => {
     )
   }
 
-  await db.addActiveSheetEntry(sheet, description)
+  await db.addActiveSheetEntry({ sheet, description, tags })
 
-  log(`${clSheet(`${name}:`)} ${clText('resumed')} ${clHighlight(description)}`)
+  log(
+    `${clSheet(`${name}:`)} ${clText('resumed')} ${clHighlight(description)} ${tagsUI}`
+  )
 }
 
 export default handler

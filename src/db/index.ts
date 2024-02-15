@@ -24,6 +24,15 @@ const { DB_VERSION } = CONFIG
 const { NODE_ENV } = process.env
 const DEFAULT_DB_PATH = NODE_ENV === 'test' ? TEST_DB_PATH : DB_PATH
 
+// TODO: Extract
+interface AddActiveSheetEntryArgs {
+  sheet: TimeSheet | string
+  input?: string
+  description?: string
+  startDate?: Date
+  tags?: string[]
+}
+
 class DB {
   db: TimeTrackerDB | null
   dbPath: string
@@ -61,14 +70,16 @@ class DB {
     id: number,
     description: string,
     start?: Date,
-    end?: Date | null
-  ) {
+    end?: Date | null,
+    tags?: string[]
+  ): TimeSheetEntry {
     return {
       id,
       description,
       end: end ?? null,
-      start: start ?? new Date()
-    } as TimeSheetEntry
+      start: start ?? new Date(),
+      tags: tags ?? []
+    }
   }
 
   constructor(dbPath: string = DEFAULT_DB_PATH) {
@@ -404,25 +415,40 @@ class DB {
   }
 
   async addActiveSheetEntry(
-    sheet: TimeSheet | string,
-    description: string,
-    startDate?: Date
+    args: AddActiveSheetEntryArgs
   ): Promise<TimeSheetEntry> {
     if (this.db === null) {
       throw new Error('DB not loaded')
     }
 
+    const {
+      description: descriptionArg,
+      sheet,
+      input,
+      tags: tagsArg,
+      startDate
+    } = args
+
     const targetSheet = this._parseSheetArg(sheet)
     const { entries } = targetSheet
-    const newEntryID = entries.length
-    const entry = DB.genSheetEntry(
-      newEntryID,
-      description,
-      startDate ?? new Date()
-    )
+    const id = entries.length
+    const start = startDate ?? new Date()
+    const end = null
+
+    let description = descriptionArg as string
+    let tags: string[] = tagsArg ?? []
+
+    if (_isEmpty(tags) && !_isUndefined(input)) {
+      const res = U.parseEntryFromInput(id, input, start)
+
+      tags = res.tags
+      description = res.description
+    }
+
+    const entry = DB.genSheetEntry(id, description, start, end, tags)
 
     entries.push(entry)
-    targetSheet.activeEntryID = newEntryID
+    targetSheet.activeEntryID = id
 
     await this.save()
 

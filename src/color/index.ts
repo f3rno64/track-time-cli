@@ -1,4 +1,5 @@
 import clID from './id'
+import clTag from './tag'
 import clDate from './date'
 import clText from './text'
 import clError from './error'
@@ -9,6 +10,7 @@ import clHighlightRed from './highlight_red'
 
 export {
   clID,
+  clTag,
   clText,
   clDate,
   clError,

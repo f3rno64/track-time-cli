@@ -3,6 +3,7 @@ import isEntryInDay from './is_entry_in_day'
 import getHourString from './get_hour_string'
 import ensureDirExists from './ensure_dir_exists'
 import parseVariadicArg from './parse_variadic_arg'
+import parseEntryFromInput from './parse_entry_from_input'
 import getDurationLangString from './get_duration_lang_string'
 import getTotalSheetDuration from './get_total_sheet_duration'
 import getEntryDurationInDay from './get_entry_duration_in_day'
@@ -17,6 +18,7 @@ export {
   getHourString,
   ensureDirExists,
   parseVariadicArg,
+  parseEntryFromInput,
   getDurationLangString,
   getEntryDurationInDay,
   getTotalSheetDuration,
