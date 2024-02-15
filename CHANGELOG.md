@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.42.0](https://github.com/f3rno64/track-time-cli/compare/v1.41.3...v1.42.0) (2024-02-15)
+
+
+### Features
+
+* add db migrations, db version 2 with entry tags ([8885122](https://github.com/f3rno64/track-time-cli/commit/88851225aa664d92385a540f17c5a06c90976a0d))
+* early tags support, prefixed with @; integrated with a few commands ([34a8c1e](https://github.com/f3rno64/track-time-cli/commit/34a8c1e66c8f0d6333aaa675327f73af12aaebbb))
+
 ### [1.41.3](https://github.com/f3rno64/track-time-cli/compare/v1.41.2...v1.41.3) (2024-02-14)
 
 
