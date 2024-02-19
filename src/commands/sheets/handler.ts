@@ -12,6 +12,7 @@ import { clDate, clHighlight, clText } from '../../color'
 import { getSheetHeaderColumns, printJustifiedContent } from '../../print'
 import {
   getDurationLangString,
+  getLastFiveActiveSheets,
   getSheetsWithEntriesSinceDate
 } from '../../utils'
 
@@ -93,12 +94,22 @@ const handler = (args: SheetsCommandArgs): void => {
     )
   )
 
+  const lastFiveActiveSheets = getLastFiveActiveSheets(filteredSheets)
+  const lastFiveActiveSheetHeaderRows = lastFiveActiveSheets.map(
+    (sheet: TimeSheet): string[] =>
+      getSheetHeaderColumns(sheet, sheet.name === activeSheetName, humanize)
+  )
+
   log('')
   log(
     `${clText('Total duration')}: ${`[${clHighlight(
       getDurationLangString(totalDuration, humanize)
     )}]`}`
   )
+  log('')
+  log(clText('* Last 5 active sheets'))
+  log('')
+  printJustifiedContent(lastFiveActiveSheetHeaderRows)
 }
 
 export default handler

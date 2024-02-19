@@ -8,6 +8,7 @@ import getDurationLangString from './get_duration_lang_string'
 import getTotalSheetDuration from './get_total_sheet_duration'
 import getEntryDurationInDay from './get_entry_duration_in_day'
 import getEntryDurationInHour from './get_entry_duration_in_hour'
+import getLastFiveActiveSheets from './get_last_five_active_sheets'
 import getPluralizedArrayLength from './get_pluralized_array_length'
 import getFirstPastDateWithEntries from './get_first_past_date_with_entries'
 import getSheetsWithEntriesSinceDate from './get_sheets_with_entries_since_date'
@@ -24,6 +25,7 @@ export {
   getEntryDurationInDay,
   getTotalSheetDuration,
   getEntryDurationInHour,
+  getLastFiveActiveSheets,
   getPluralizedArrayLength,
   getFirstPastDateWithEntries,
   getSheetsWithEntriesSinceDate,
