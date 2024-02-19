@@ -19,6 +19,7 @@ import {
 
 import {
   getDurationLangString,
+  getFirstPastDateWithEntries,
   getSheetsWithEntriesSinceDate
 } from '../../utils'
 
@@ -76,7 +77,7 @@ const handler = (args: ListCommandArgs): void => {
           ? getStartOfDay(getPastDay(1))
           : all
             ? new Date(0)
-            : getPastDay()
+            : getFirstPastDateWithEntries(sheetsToList)
 
   const sheetsFilteredByDate =
     sinceDate === null
