@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.42.1](https://github.com/f3rno64/track-time-cli/compare/v1.42.0...v1.42.1) (2024-02-19)
+
+
+### Bug Fixes
+
+* rename absolute alias to abs to not clobber all option ([d8b7c2e](https://github.com/f3rno64/track-time-cli/commit/d8b7c2ee2f6c210c1edca7c15279c653b2a7bd36))
+
 ## [1.42.0](https://github.com/f3rno64/track-time-cli/compare/v1.41.3...v1.42.0) (2024-02-15)
 
 
