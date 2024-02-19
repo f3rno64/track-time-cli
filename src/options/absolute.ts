@@ -3,7 +3,7 @@ import { type YArgsOptionDefinition } from '../types'
 const ABSOLUTE_OPTION: YArgsOptionDefinition = [
   'absolute',
   {
-    alias: ['a'],
+    alias: ['abs'],
     describe: 'Print dates as absolute timestamps',
     type: 'boolean'
   }
