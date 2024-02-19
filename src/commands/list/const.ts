@@ -1,6 +1,5 @@
 import {
   setup,
-  AgoOption,
   AllOption,
   HelpOption,
   SinceOption,
@@ -9,6 +8,7 @@ import {
   SheetsOption,
   ConciseOption,
   HumanizeOption,
+  AbsoluteOption,
   YesterdayOption,
   AllSheetsOption
 } from '../../options'
@@ -19,7 +19,7 @@ export const CONFIG = {
   describe: 'List all time sheet entries',
   builder: setup.bind(null, [
     SheetsOption,
-    AgoOption,
+    AbsoluteOption,
     HumanizeOption,
     SinceOption,
     TodayOption,

@@ -26,7 +26,6 @@ import {
 const handler = (args: ListCommandArgs): void => {
   const {
     db,
-    ago,
     all,
     help,
     since,
@@ -35,6 +34,7 @@ const handler = (args: ListCommandArgs): void => {
     filter,
     concise,
     humanize,
+    absolute,
     yesterday,
     allSheets,
     sheets: sheetNames
@@ -117,7 +117,7 @@ const handler = (args: ListCommandArgs): void => {
 
   log('')
 
-  printSheets(filteredSheets, ago === true, humanize, concise)
+  printSheets(filteredSheets, absolute !== true, humanize, concise)
 
   if (!all) {
     const sheetsNotShownCount = dbSheets.length - filteredSheets.length
