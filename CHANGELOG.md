@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.43.0](https://github.com/f3rno64/track-time-cli/compare/v1.42.1...v1.43.0) (2024-02-19)
+
+
+### Features
+
+* **sheets:** list last five active sheets in output ([c5f9f94](https://github.com/f3rno64/track-time-cli/commit/c5f9f944efcb2851f6983c9542390755cbbda79f))
+
 ### [1.42.1](https://github.com/f3rno64/track-time-cli/compare/v1.42.0...v1.42.1) (2024-02-19)
 
 
