@@ -1,4 +1,5 @@
 import sAgo from 's-ago'
+import _map from 'lodash/map'
 import _sum from 'lodash/sum'
 import parseDate from 'time-speak'
 import _isEmpty from 'lodash/isEmpty'
@@ -143,9 +144,16 @@ const handler = (args: ListCommandArgs): void => {
     )
 
     const totalDurationUI = getDurationLangString(totalDuration, humanize)
+    const totalEntryCount = _sum(_map(filteredSheets, 'entries.length'))
 
     log('')
-    log(`${clText('* Total duration:')} ${clDuration(`[${totalDurationUI}]`)}`)
+    log(
+      `${clText('* Total tracked duration:')} ${clDuration(`[${totalDurationUI}]`)}`
+    )
+
+    log(
+      `${clText('* Total entry count:')} ${clHighlight(`${totalEntryCount}`)}`
+    )
   }
 }
 
