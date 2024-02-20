@@ -17,8 +17,6 @@ const handler = (args: YesterdayCommandArgs) => {
 
   if (!_isUndefined(inputSheets) && all) {
     throw new Error('Cannot specify both --all and sheets')
-  } else if (_isUndefined(inputSheets) && !all) {
-    throw new Error('Must specify either --all or sheets')
   }
 
   const sheets =
