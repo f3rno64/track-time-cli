@@ -1,8 +1,8 @@
 import {
   setup,
-  AgoOption,
   HelpOption,
   SheetsOption,
+  AbsoluteOption,
   HumanizeOption,
   AllSheetsOption
 } from '../../options'
@@ -13,7 +13,7 @@ export const CONFIG = {
   describe: 'Display a summary of activity for today',
   builder: setup.bind(null, [
     SheetsOption,
-    AgoOption,
+    AbsoluteOption,
     HumanizeOption,
     AllSheetsOption,
     HelpOption

@@ -8,7 +8,7 @@ import { printSheets, printSummary } from '../../print'
 import { filterSheetEntriesForDate } from '../../sheets'
 
 const handler = (args: YesterdayCommandArgs) => {
-  const { ago, all, db, help, humanize, sheets: inputSheets, yargs } = args
+  const { all, db, help, humanize, absolute, sheets: inputSheets, yargs } = args
 
   if (help) {
     yargs.showHelp()
@@ -36,7 +36,7 @@ const handler = (args: YesterdayCommandArgs) => {
 
   printSummary(sheetsWithEntriesForYesterday, humanize)
   log('')
-  printSheets(sheetsWithEntriesForYesterday, ago, humanize)
+  printSheets(sheetsWithEntriesForYesterday, absolute !== true, humanize)
 }
 
 export default handler
