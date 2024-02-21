@@ -43,6 +43,7 @@ const handler = (args: WeekCommandArgs): void => {
       ? db.getAllSheets()
       : inputSheets.map((name: string): TimeSheet => db.getSheet(name))
 
+  const lastWeekDate = new Date(Date.now() - getDaysMS(7))
   const relevantSheets = getSheetsWithEntriesInLastWeek(selectedSheets)
   const results: WeekdayResults = {}
 
@@ -54,7 +55,6 @@ const handler = (args: WeekCommandArgs): void => {
 
     entries.forEach((entry: TimeSheetEntry) => {
       for (let i = 0; i < 7; i += 1) {
-        const lastWeekDate = new Date(Date.now() - getDaysMS(7))
         const date = new Date(+lastWeekDate + i * getDaysMS(1))
         const dateKey = date.toLocaleDateString()
         const duration = getEntryDurationInDay(entry, date)
@@ -83,6 +83,13 @@ const handler = (args: WeekCommandArgs): void => {
     results[name] = sheetResults
   })
 
+  const lastWeekDateUI = ago
+    ? sAgo(lastWeekDate)
+    : lastWeekDate.toLocaleDateString()
+
+  log(
+    `${clText('* Week Report [showing data since')} ${clDate(`${lastWeekDateUI}`)}${clText(']')}`
+  )
   log(
     `${clText('* Total duration:')} ${clDuration(
       getDurationLangString(totalDuration, humanize)
