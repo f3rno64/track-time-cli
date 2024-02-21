@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.46.0](https://github.com/f3rno64/track-time-cli/compare/v1.45.0...v1.46.0) (2024-02-21)
+
+
+### Features
+
+* add docs submodule and built docs folder ([9234930](https://github.com/f3rno64/track-time-cli/commit/923493011a9cc59bfb338dbea16d9e3445b10568))
+
+
+### Bug Fixes
+
+* **in:** alter description arg requirement to fix --help ([8e37978](https://github.com/f3rno64/track-time-cli/commit/8e37978a8f6499d2870b1157da4df07fb6e1b589))
+
 ## [1.45.0](https://github.com/f3rno64/track-time-cli/compare/v1.43.2...v1.45.0) (2024-02-21)
 
 
