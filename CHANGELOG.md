@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.44.0](https://github.com/f3rno64/track-time-cli/compare/v1.43.2...v1.44.0) (2024-02-21)
+
+
+### Features
+
+* add week report header to week command stating since date ([ab558df](https://github.com/f3rno64/track-time-cli/commit/ab558df2f24ee3d3c6e1bdaff9aa6d3661e84afc))
+
+
+### Bug Fixes
+
+* add docs and docs_build to prettier and eslint ignores ([b9ed659](https://github.com/f3rno64/track-time-cli/commit/b9ed659d777a7be15d8863111f0bb78f3be906cd))
+
 ### [1.43.2](https://github.com/f3rno64/track-time-cli/compare/v1.43.1...v1.43.2) (2024-02-20)
 
 ### [1.43.1](https://github.com/f3rno64/track-time-cli/compare/v1.43.0...v1.43.1) (2024-02-20)
