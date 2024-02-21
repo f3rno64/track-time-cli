@@ -1,0 +1,3 @@
+[submodule "docs-module"]
+	path = docs-module
+	url = https://github.com/f3rno64/track-time-cli-docs.git

@@ -1,5 +1,5 @@
 !.*.json
 **/node_modules
 src/declarations.d.ts
+**/docs-module
 **/docs
-**/docs_build
