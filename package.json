@@ -105,7 +105,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-pure": "github:purely-functional/eslint-plugin-pure",
     "eslint-plugin-regexp": "^2.2.0",
-    "eslint-plugin-sonarjs": "^0.23.0",
+    "eslint-plugin-sonarjs": "^0.24.0",
     "eslint-plugin-switch-case": "^1.1.2",
     "eslint-plugin-unicorn": "^50.0.1",
     "eslint-plugin-write-good-comments": "^0.2.0",
