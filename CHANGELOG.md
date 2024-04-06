@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.46.1](https://github.com/f3rno64/track-time-cli/compare/v1.46.0...v1.46.1) (2024-04-06)
+
+
+### Bug Fixes
+
+* alias all-sheets arg as all for breakdown command ([4ddb383](https://github.com/f3rno64/track-time-cli/commit/4ddb383be7325aa6d2ebb9dd9c3d4e7662245922))
+
 ## [1.46.0](https://github.com/f3rno64/track-time-cli/compare/v1.45.0...v1.46.0) (2024-02-21)
 
 
