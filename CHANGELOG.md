@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.46.2](https://github.com/f3rno64/track-time-cli/compare/v1.46.1...v1.46.2) (2024-07-24)
+
+
+### Bug Fixes
+
+* update edit handler to reset activeEntryID if the entry is deleted ([bf99e56](https://github.com/f3rno64/track-time-cli/commit/bf99e563a27202f009ab87c887d75c3dc6736817))
+
 ### [1.46.1](https://github.com/f3rno64/track-time-cli/compare/v1.46.0...v1.46.1) (2024-04-06)
 
 
