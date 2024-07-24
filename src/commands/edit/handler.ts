@@ -48,6 +48,12 @@ const handler = async (args: EditCommandArgs): Promise<void> => {
     if (del) {
       await db.removeSheetEntry(sheet, entry)
 
+      if (activeEntryID === entry.id) {
+        sheet.activeEntryID = null
+
+        await db.save()
+      }
+
       log(
         `${clText('Deleted entry')} ${clHighlight(
           `${finalEntryID}`

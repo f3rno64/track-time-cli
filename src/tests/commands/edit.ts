@@ -168,4 +168,23 @@ describe('commands:edit:handler', function () {
 
     expect(sheet.entries.find(({ id }) => id === 1)).to.be.undefined
   })
+
+  it('updates the affected sheets active entry ID if the associated entry is deleted', async function () {
+    const entryA = DB.genSheetEntry(0, 'test-entry-a')
+    const sheet = DB.genSheet('test-sheet-a', [entryA], entryA.id)
+
+    expect(sheet.activeEntryID).to.equal(entryA.id)
+
+    db.db?.sheets.push(sheet)
+
+    await handler(
+      getArgs({
+        delete: true,
+        entry: 0,
+        sheet: 'test-sheet-a'
+      })
+    )
+
+    expect(sheet.activeEntryID).to.be.null
+  })
 })
