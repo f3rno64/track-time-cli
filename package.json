@@ -112,7 +112,7 @@
     "husky": "^9.0.10",
     "is-ansi": "^1.0.0",
     "lint-staged": "^15.2.2",
-    "markdownlint-cli": "^0.39.0",
+    "markdownlint-cli": "^0.40.0",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "prettier": "^3.2.5",
